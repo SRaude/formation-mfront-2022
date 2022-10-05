@@ -7,8 +7,8 @@
 
 @DSL Implicit;
 @Author Simon Raude;
-@Date 04/10/2022;
-@Behaviour PPM_MC_NA_MIN;
+@Date 15/09/2022;
+@Behaviour MCBigoniFull;
 
 @Algorithm NewtonRaphson;
 // @Algorithm NewtonRaphson_NumericalJacobian;
@@ -46,6 +46,10 @@ coh.setEntryName("Cohesion");
 @MaterialProperty real at;
 at.setEntryName("TensionCutOff");
 
+// Controls the shapes of the plastic criterion and the plastic flow function in the pi plane (0<=..<1, -)
+@MaterialProperty real gam;
+gam.setEntryName("PiShapeCoef");
+
 // >>>>>>>>>>>>>>>>>>
 // 2. Local Variables
 // <<<<<<<<<<<<<<<<<<
@@ -57,6 +61,10 @@ at.setEntryName("TensionCutOff");
 @LocalVariable real psir;                 // Dilation angle in radians
 @LocalVariable real thetaFm;              // Plastic criterion: Lode angle for which the radius of the MC criterion is the minimum
 @LocalVariable real thetaGm;              // Plastic flow function: Lode angle for which the radius of the MC flow function is the minimum
+@LocalVariable real rF;
+@LocalVariable real rG;
+@LocalVariable real betaF;
+@LocalVariable real betaG;
 @LocalVariable real KFm;                  // Value of the function KF(theta) for Theta=thetaFm
 @LocalVariable real KGm;                  // Value of the function KG(theta) for Theta=thetaGm
 @LocalVariable stress aG;                 // at*tan(phi)/tan(psi) (in the plastic flow function)
@@ -80,11 +88,13 @@ lam.setEntryName("PlastMultiplier");
 @AuxiliaryStateVariable real ip;     // Plastic index
 @AuxiliaryStateVariable strain evp;  // Volumetric plastic strain
 @AuxiliaryStateVariable real inst;   // Time...
+@AuxiliaryStateVariable real lode;   // Lode angle
 
 niter.setEntryName("LocalNewtonIter");
 ip.setEntryName("PlasticIndex");
 evp.setEntryName("PVolumStrain");
 inst.setEntryName("Time");
+lode.setEntryName("LodeAngle");
 
 // >>>>>>>>>>>>>>>>>>>>>>>>
 // 5. Init. local variables
@@ -98,18 +108,26 @@ inst.setEntryName("Time");
 	using namespace tfel::material::lame;
 	local_zero_tolerance=real(1e-12);
 	pi=4.*atan(1.);
+	// >>> FrictionAngle and DilationAngle in radian
 	phir=phi*pi/180.;
 	psir=psi*pi/180.;
+	// >>> Some quantities to define KF and FG
 	thetaFm=atan(-sin(phir)/sqrt(3.));
 	thetaGm=atan(-sin(psir)/sqrt(3.));
-    KFm=(cos(thetaFm)-sin(phir)*sin(thetaFm)/sqrt(3.));
-    KGm=(cos(thetaGm)-sin(psir)*sin(thetaGm)/sqrt(3.));
+	rF=(3.-sin(phir))/(3.+sin(phir));
+	rG=(3.-sin(psir))/(3.+sin(psir));
+	betaF=6./pi*atan((2.*rF-1.)/sqrt(3.));
+	betaG=6./pi*atan((2.*rG-1.)/sqrt(3.));
+    KFm=(cos(thetaFm)-sin(phir)*sin(thetaFm)/sqrt(3.))/cos(betaF*pi/6.-acos(gam*cos(3.*(thetaFm+pi/6.)))/3.);
+    KGm=(cos(thetaGm)-sin(psir)*sin(thetaGm)/sqrt(3.))/cos(betaG*pi/6.-acos(gam*cos(3.*(thetaGm+pi/6.)))/3.);
+    // >>> TensionCutOff Parameters for the plastic flow function
     aG=at*tan(phir)/tan(psir);
+	// >>> Elastic moduli and Hook tensor
 	lambda=computeLambda(young,nu);
 	mu=computeMu(young,nu);
 	ks=lambda+2.*mu/3.;
 	Ce=3.*ks*Stensor4::J()+2.*mu*Stensor4::K();
-	// >>> Initialise elastic strain
+	// >>> Initialise elastic strain (for cases with initial stresses without displacements, e.g. tunnels)
 	if (inst==real(0) && lam==real(0)) {
         const Stensor4 Se=invert(Ce);
         eel=(Se*sig);
@@ -129,9 +147,14 @@ inst.setEntryName("Time");
 	const StressStensor sdel=deviator(sigel);
 	const stress J2el=.5*(sdel|sdel);
 	const stress I1el=trace(sigel);
+	const stress J3el=det(sdel);
+	const real C3Tel=min(max(.5*J3el*pow(3./max(J2el,local_zero_tolerance),1.5),-1.),1.);
 
-	// >>> 6.3 Plastic MC criterion - condition for plasticity
-	const stress RFel=sqrt(J2el*KFm*KFm+at*at*sin(phir)*sin(phir));
+	// >>> 6.3 Compute KF(theta)
+	const real KFel=KFm*cos(betaF*pi/6.-acos(gam*C3Tel)/3.);
+
+	// >>> 6.4 Plastic MC criterion - condition for plasticity
+	const stress RFel=sqrt(J2el*KFel*KFel+at*at*sin(phir)*sin(phir));
 	b=RFel+I1el*sin(phir)/3.-coh*cos(phir)>real(0);
 
 }
@@ -144,9 +167,9 @@ inst.setEntryName("Time");
 	sig=lambda*trace(eel)*StrainStensor::Id()+2.*mu*eel;
 }
 
-// >>>>>>>>>>>>>>>>>>>>>
-// 8. Plastic correction
-// <<<<<<<<<<<<<<<<<<<<<
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// 8. Plastic-Damage correction
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 @Integrator{
 
@@ -157,33 +180,80 @@ inst.setEntryName("Time");
 		const StressStensor sd=deviator(sig);
 		const stress J2=.5*(sd|sd);
 		const stress I1=trace(sig);
+		const stress J3=det(sd);
+		const real C3T=min(max(.5*J3*pow(3./max(J2,local_zero_tolerance),1.5),-1.),1.);
 		
-		// >>>>>> 8.1.2 Compute the plastic criterion
-		const stress RF=sqrt(J2*KFm*KFm+at*at*sin(phir)*sin(phir)); // For the plastic criterion
-		const stress RG=sqrt(J2*KGm*KGm+aG*aG*sin(psir)*sin(psir)); // For the plastic flow function
-		const stress F=RF+I1*sin(phir)/3.-coh*cos(phir);            // The plastic criterion
+		// >>>>>> 8.1.2 Compute K(theta) for the plastic criterion and the plastic flow function
+		const real KF=KFm*cos(betaF*pi/6.-acos(gam*C3T)/3.);
+		const real KG=KGm*cos(betaG*pi/6.-acos(gam*C3T)/3.);
+		
+		// >>>>>> 8.1.3 Compute the plastic criterion
+		const stress RF=sqrt(J2*KF*KF+at*at*sin(phir)*sin(phir));
+		const stress F=RF+I1*sin(phir)/3.-coh*cos(phir);
 
-		// >>>>>> 8.1.3 Compute the plastic flow direction
+		// >>>>>> 8.1.4 Compute the plastic flow direction
+		const stress RG=sqrt(J2*KG*KG+aG*aG*sin(psir)*sin(psir));
+		// >>>>>>>>> Compute dC3T_dJ2 and dC3T_dJ3
+		const real dC3T_dJ2=-2.25*sqrt(3.)*J3*pow(max(J2,local_zero_tolerance),-2.5);
+		const real dC3T_dJ3=1.5*sqrt(3.)*pow(max(J2,local_zero_tolerance),-1.5);
+		// >>>>>>>>> Compute dKG_dJ2 and dKG_dJ3
+		const real dKG_dC3T=-KGm*gam*sin(betaG*pi/6.-acos(gam*C3T)/3.)/3./max(sqrt(1.-gam*gam*C3T*C3T),local_zero_tolerance);
+		const real dKG_dJ2=dKG_dC3T*dC3T_dJ2;
+		const real dKG_dJ3=dKG_dC3T*dC3T_dJ3;
+		// >>>>>>>>> Compute dG_dI1, dG_dJ2, dG_dJ3
 		const real dG_dI1=sin(psir)/3.;
-		const real dG_dJ2=.5*KGm*KGm/max(RG,local_zero_tolerance);
-		const Stensor nG=dG_dI1*Stensor::Id()+dG_dJ2*sd;
+		const real dG_dJ2=.5*KG*(KG+2.*J2*dKG_dJ2)/max(RG,local_zero_tolerance);
+		const stress dG_dJ3=J2*KG*dKG_dJ3/max(RG,local_zero_tolerance);
+		// >>>>>>>>> Compute dI1_dsig, dJ2_dsig, dJ3_dsig
+		const Stensor dI1_dsig=Stensor::Id();
+		const Stensor dJ2_dsig=sd;
+		const Stensor dJ3_dsig=computeJ3Derivative(sig);
+		// >>>>>>>>> Compute nG=dG_dsig
+		const Stensor nG=(dG_dI1*dI1_dsig)+(dG_dJ2*dJ2_dsig)+(dG_dJ3*dJ3_dsig);
 
-		// >>>>>> 8.1.4 Equations to be solved
+		// >>>>>> 8.1.4 Equations to be solvedKGm
 		feel=deel-deto+dlam*nG;
 		flam=F/young;
 		
 		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Comment this block if "@Algorithm NewtonRaphson_NumericalJacobian" >>>>>>>>>>>>>>>>
-
+		
 		// >>>>>> 8.1.5 Jacobian
 
 		// >>>>>>>>> 8.1.5.1 Some tools
 		// >>>>>>>>>>>> Compute dnG_dsig
-		const real dG_ddJ2=-.5*KGm*KGm*dG_dJ2/max(RG,local_zero_tolerance)/max(RG,local_zero_tolerance);
-		const Stensor4 dnG_dsig=dG_ddJ2*(sd^sd)+dG_dJ2*Stensor4::K();
-		// >>>>>>>>>>>> Compute dFp_dsig
+		const real dC3T_ddJ2=5.625*sqrt(3.)*J3*pow(max(J2,local_zero_tolerance),-3.5);
+		const real dC3T_ddJ3=real(0);
+		const real dC3T_dJ3dJ2=-2.25*sqrt(3.)*pow(max(J2,local_zero_tolerance),-2.5);
+		const real dC3T_dJ2dJ3=dC3T_dJ3dJ2;
+		// >>>>>>>>>>>>>>>
+		const real dKG_ddC3T_1=-gam*gam*gam*C3T*sin(betaG*pi/6.-acos(gam*C3T)/3.)/3./pow(max(1.-gam*gam*C3T*C3T,local_zero_tolerance),1.5);
+		const real dKG_ddC3T_2=-gam*gam*cos(betaG*pi/6.-acos(gam*C3T)/3.)/9./max(1.-gam*gam*C3T*C3T,local_zero_tolerance);
+		const real dKG_ddC3T=KGm*(dKG_ddC3T_1+dKG_ddC3T_2);
+		const real dKG_dJ2dC3T=dKG_ddC3T*dC3T_dJ2;
+		const real dKG_ddJ2=dKG_dJ2dC3T*dC3T_dJ2+dKG_dC3T*dC3T_ddJ2;
+		const real dKG_ddJ3=dKG_ddC3T*dC3T_dJ3*dC3T_dJ3+dKG_dC3T*dC3T_ddJ3;
+		const real dKG_dJ3dJ2=dKG_ddC3T*dC3T_dJ3*dC3T_dJ2+dKG_dC3T*dC3T_dJ3dJ2;
+		const real dKG_dJ2dJ3=dKG_ddC3T*dC3T_dJ2*dC3T_dJ3+dKG_dC3T*dC3T_dJ2dJ3;
+		// >>>>>>>>>>>>>>>
+		const real dG_ddJ2=((2.*KG+J2*dKG_dJ2)*dKG_dJ2+KG*J2*dKG_ddJ2-dG_dJ2*dG_dJ2)/max(RG,local_zero_tolerance);
+		const real dG_ddJ3=(J2*(dKG_dJ3*dKG_dJ3+KG*dKG_ddJ3)-dG_dJ3*dG_dJ3)/max(RG,local_zero_tolerance);
+		const real dG_dJ3dJ2=(KG*dKG_dJ3+J2*dKG_dJ2*dKG_dJ3+J2*KG*dKG_dJ3dJ2-dG_dJ2*dG_dJ3)/max(RG,local_zero_tolerance);
+		const real dG_dJ2dJ3=(dKG_dJ3*(KG+J2*dKG_dJ2)+J2*KG*dKG_dJ2dJ3-dG_dJ2*dG_dJ3)/max(RG,local_zero_tolerance);
+		// >>>>>>>>>>>>>>>
+		const Stensor4 dJ2_ddsig=Stensor4::K();
+		const Stensor4 dJ3_ddsig=computeJ3SecondDerivative(sig);
+		// >>>>>>>>>>>>>>>
+		const Stensor4 dnG_dsig=((dG_ddJ2*dJ2_dsig+dG_dJ3dJ2*dJ3_dsig)^dJ2_dsig)+(dG_dJ2*dJ2_ddsig)+((dG_dJ2dJ3*dJ2_dsig+dG_ddJ3*dJ3_dsig)^dJ3_dsig)+(dG_dJ3*dJ3_ddsig);
+		// >>>>>>>>>>>> Compute dF_dsig
+		const real dKF_dC3T=-KFm*gam*sin(betaF*pi/6.-acos(gam*C3T)/3.)/3./max(sqrt(1.-gam*gam*C3T*C3T),local_zero_tolerance);
+		const real dKF_dJ2=dKF_dC3T*dC3T_dJ2;
+		const real dKF_dJ3=dKF_dC3T*dC3T_dJ3;
+		// >>>>>>>>>>>>>>>
 		const real dF_dI1=sin(phir)/3.;
-		const real dF_dJ2=.5*KFm*KFm/max(RF,local_zero_tolerance);
-		const Stensor dF_dsig=dF_dI1*Stensor::Id()+dF_dJ2*sd;
+		const real dF_dJ2=.5*KF*(KF+2.*J2*dKF_dJ2)/max(RF,local_zero_tolerance);
+		const stress dF_dJ3=J2*KF*dKF_dJ3/max(RF,local_zero_tolerance);
+		// >>>>>>>>>>>>>>>
+		const Stensor dF_dsig=(dF_dI1*dI1_dsig)+(dF_dJ2*dJ2_dsig)+(dF_dJ3*dJ3_dsig);
 		
 		// >>>>>>>>> 8.1.5.2 First line
 		dfeel_ddeel=Stensor4::Id()+dlam*(dnG_dsig*Ce);
@@ -192,7 +262,7 @@ inst.setEntryName("Time");
 		// >>>>>>>>> 8.1.5.3 Third line
 		dflam_ddeel=(dF_dsig|Ce)/young;
 		dflam_ddlam=real(0);
-
+		
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		
 	}
@@ -211,6 +281,11 @@ inst.setEntryName("Time");
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 @UpdateAuxiliaryStateVariables{
+	const StressStensor sd=deviator(sig);
+	const stress J2=.5*(sd|sd);
+	const stress J3=det(sd);
+	const real C3T=min(max(.5*J3*pow(3./max(J2,local_zero_tolerance),1.5),-1.),1.);
+	lode=acos(C3T)/3.*180./pi;
 	inst+=dt;
 	niter=iter;
 	if (dlam>0) {
