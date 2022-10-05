@@ -8,15 +8,15 @@ Les objectifs de cette formation sont :
 
 ### Organisation
 - __11/10 AM__
-    - *Introduction aux principes de `MFront` et aux propriétés matériaux __(M. Wangermez)__*
-    - *Généralités sur les lois de comportement mécaniques, le `DSL Implicit` et la brique `StandardElasticity` __(T. Helfer)__*
+    - *Introduction aux principes de `MFront` et aux propriétés matériaux (M. Wangermez)*
+    - *Généralités sur les lois de comportement mécaniques, le `DSL Implicit` et la brique `StandardElasticity` (T. Helfer)*
 - __11/10 PM__
-    - *Intégration de lois de comportement simples, utilisation de `MTest` pour les premiers cas-test (point matériel) et le débogage (utilisation de `@CompareToNumericalJacobian`, mode debug, etc...) __(T. Helfer, M. Wangermez, S. Raude__)*
+    - *Intégration de lois de comportement simples, utilisation de `MTest` pour les premiers cas-test (point matériel) et le débogage; utilisation de `@CompareToNumericalJacobian`, mode debug, etc... (T. Helfer, M. Wangermez, S. Raude)*
 - __12/10 AM__
-    - *Finalisation de l'intégration des lois de comportement proposées, variantes - __T. Helfer, M. Wangermez, S. Raude__*
-    - *Point rapide sur l'interface entre Code_Aster et MFront, MGIS, ... - __T. Helfer, M. Wangermez, J. Dalphin, S. Raude__*
+    - *Finalisation de l'intégration des lois de comportement proposées, variantes (T. Helfer, M. Wangermez, S. Raude)*
 - __12/10 PM__
-    - *Cas de calcul sur structure (`Code_Aster` + `MFront`) - __S. Raude__*
+    - *Point rapide sur l'interface entre Code_Aster et MFront, MGIS, etc... (T. Helfer, M. Wangermez, J. Dalphin, S. Raude)*
+    - *Calcul sur structure (S. Raude)*
 
 ### Contenu de ce dépôt
 - `hmc-criterion-python-scripts`
