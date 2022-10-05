@@ -1,1 +1,1 @@
-# formation-mfront-2022
+# Formation MFront (EDF-EMRES/MMC) 2022
