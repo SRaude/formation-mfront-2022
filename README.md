@@ -6,15 +6,22 @@
 - Réaliser des calculs sur structure avec `Code_Aster`
 
 ### Organisation
-- 11/10 (AM)
-    - Introduction aux principes de `MFront` et aux propriétés matériaux&nbsp;-&nbsp;*M.&nbsp;Wangermez*
-    - Généralités sur les ldc mécaniques, le `DSL Implicit` et la brique `StandardElasticity`&nbsp;-&nbsp;*T.&nbsp;Helfer*
-- 11/10 (PM)
-    - Intégration de ldc simples, utilisation de `MTest`&nbsp;-&nbsp;*T.&nbsp;Helfer, M.&nbsp;Wangermez, S.&nbsp;Raude*
-- 12/10 (AM)
-    - Finalisation de l'intégration des ldc étudiées&nbsp;+&nbsp;variantes&nbsp;-&nbsp;*T.&nbsp;Helfer, M.&nbsp;Wangermez, S.&nbsp;Raude*
-- 12/10 (PM)
-    - Calcul sur structure&nbsp;-&nbsp;*S.&nbsp;Raude*
+- `11/10 - AM`
+
+    > - Introduction aux principes de `MFront` et aux propriétés matériaux&nbsp;-&nbsp;*M.&nbsp;Wangermez*
+    > - Généralités sur les ldc mécaniques, le `DSL Implicit` et la brique `StandardElasticity`&nbsp;-&nbsp;*T.&nbsp;Helfer*
+
+- `11/10 PM`
+
+    > - Intégration de ldc simples, utilisation de `MTest`&nbsp;-&nbsp;*T.&nbsp;Helfer, M.&nbsp;Wangermez, S.&nbsp;Raude*
+
+- `12/10 - AM`
+    
+    > - Finalisation de l'intégration des ldc étudiées&nbsp;+&nbsp;variantes&nbsp;-&nbsp;*T.&nbsp;Helfer, M.&nbsp;Wangermez, S.&nbsp;Raude*
+
+- `12/10 - PM`
+
+    > - Calcul sur structure&nbsp;-&nbsp;*S.&nbsp;Raude*
 
 ### Contenu de ce dépôt
 - `hmc-criterion-python-scripts`
