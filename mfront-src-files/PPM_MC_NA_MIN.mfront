@@ -1,0 +1,241 @@
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// Perfectly-plastic (non-associated plastic flow) model based on:
+//    * http://tfel.sourceforge.net/MohrCoulomb.html
+//    * https://doi.org/10.1016/j.compstruc.2016.11.010
+//    * https://doi.org/10.1016/0045-7949(94)00339-5
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+@DSL Implicit;
+@Author Simon Raude;
+@Date 04/10/2022;
+@Behaviour PPM_MC_NA_MIN;
+
+@Algorithm NewtonRaphson;
+// @Algorithm NewtonRaphson_NumericalJacobian;
+// @CompareToNumericalJacobian true;
+// @PerturbationValueForNumericalJacobianComputation 1.e-8;
+
+@Theta 1.; 
+@Epsilon 1.e-14;
+
+// >>>>>>>>>>>>>>>>>>>>>
+// 1. Material Constants
+// <<<<<<<<<<<<<<<<<<<<<
+
+// Young modulus (>0, Pa)
+@MaterialProperty stress young;
+young.setGlossaryName("YoungModulus");
+
+// Poisson ratio (-1<..<0.5, -)
+@MaterialProperty real nu;
+nu.setGlossaryName("PoissonRatio");
+
+// Friction angle (>0, °)
+@MaterialProperty real phi;
+phi.setEntryName("FrictionAngle");
+
+// Dilation angle (>0, °)
+@MaterialProperty real psi;
+psi.setEntryName("DilationAngle");
+
+// Cohesion (>=0, Pa)
+@MaterialProperty stress coh;
+coh.setEntryName("Cohesion");
+
+// Controls the intersection of the hyperbolic branch of the plastic criterion with the I1 axis (0<..<=C/tan(phi), Pa)
+@MaterialProperty real at;
+at.setEntryName("TensionCutOff");
+
+// >>>>>>>>>>>>>>>>>>
+// 2. Local Variables
+// <<<<<<<<<<<<<<<<<<
+
+@LocalVariable bool b;
+@LocalVariable real local_zero_tolerance; // Local zero tolerance
+@LocalVariable real pi;                   // Real pi=3.14....
+@LocalVariable real phir;                 // Friction angle in radians
+@LocalVariable real psir;                 // Dilation angle in radians
+@LocalVariable real thetaFm;              // Plastic criterion: Lode angle for which the radius of the MC criterion is the minimum
+@LocalVariable real thetaGm;              // Plastic flow function: Lode angle for which the radius of the MC flow function is the minimum
+@LocalVariable real KFm;                  // Value of the function KF(theta) for Theta=thetaFm
+@LocalVariable real KGm;                  // Value of the function KG(theta) for Theta=thetaGm
+@LocalVariable stress aG;                 // at*tan(phi)/tan(psi) (in the plastic flow function)
+@LocalVariable Stensor4 Ce;               // Elastic stiffness tensor
+@LocalVariable stress lambda;             // First Lame modulus
+@LocalVariable stress mu;                 // Shear modulus
+@LocalVariable stress ks;                 // Bulk modulus
+
+// >>>>>>>>>>>>>>>>>
+// 3. State Variable
+// <<<<<<<<<<<<<<<<<
+
+@StateVariable real lam; // Plastic multiplier
+lam.setEntryName("PlastMultiplier");
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// 4. Auxilliary state variables
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+@AuxiliaryStateVariable real niter;  // Number of Newton iterations
+@AuxiliaryStateVariable real ip;     // Plastic index
+@AuxiliaryStateVariable strain evp;  // Volumetric plastic strain
+@AuxiliaryStateVariable real inst;   // Time...
+
+niter.setEntryName("LocalNewtonIter");
+ip.setEntryName("PlasticIndex");
+evp.setEntryName("PVolumStrain");
+inst.setEntryName("Time");
+
+// >>>>>>>>>>>>>>>>>>>>>>>>
+// 5. Init. local variables
+// <<<<<<<<<<<<<<<<<<<<<<<<
+
+@Includes{
+	#include"TFEL/Material/Lame.hxx"
+}
+
+@InitLocalVariables{
+	using namespace tfel::material::lame;
+	local_zero_tolerance=real(1e-12);
+	pi=4.*atan(1.);
+	phir=phi*pi/180.;
+	psir=psi*pi/180.;
+	thetaFm=atan(-sin(phir)/sqrt(3.));
+	thetaGm=atan(-sin(psir)/sqrt(3.));
+    KFm=(cos(thetaFm)-sin(phir)*sin(thetaFm)/sqrt(3.));
+    KGm=(cos(thetaGm)-sin(psir)*sin(thetaGm)/sqrt(3.));
+    aG=at*tan(phir)/tan(psir);
+	lambda=computeLambda(young,nu);
+	mu=computeMu(young,nu);
+	ks=lambda+2.*mu/3.;
+	Ce=3.*ks*Stensor4::J()+2.*mu*Stensor4::K();
+	// >>> Initialise elastic strain
+	if (inst==real(0) && lam==real(0)) {
+        const Stensor4 Se=invert(Ce);
+        eel=(Se*sig);
+    }
+}
+
+// >>>>>>>>>>>>>>>>>>>>>
+// 6. Elastic Prediction
+// <<<<<<<<<<<<<<<<<<<<<
+
+@Predictor{
+	
+	// >>> 6.1 Compute the elastic trial stress
+	StressStensor sigel(lambda*trace(eel+deto)*Stensor::Id()+2.*mu*(eel+deto));
+
+	// >>> 6.2 Compute the invariants of sigel
+	const StressStensor sdel=deviator(sigel);
+	const stress J2el=.5*(sdel|sdel);
+	const stress I1el=trace(sigel);
+
+	// >>> 6.3 Plastic MC criterion - condition for plasticity
+	const stress RFel=sqrt(J2el*KFm*KFm+at*at*sin(phir)*sin(phir));
+	b=RFel+I1el*sin(phir)/3.-coh*cos(phir)>real(0);
+
+}
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>
+// 7. Update the stress tensor
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+@ComputeStress{
+	sig=lambda*trace(eel)*StrainStensor::Id()+2.*mu*eel;
+}
+
+// >>>>>>>>>>>>>>>>>>>>>
+// 8. Plastic correction
+// <<<<<<<<<<<<<<<<<<<<<
+
+@Integrator{
+
+	// >>> 8.1 Integration if plastic loading
+	if (b){
+
+		// >>>>>> 8.1.1 Compute the invariants of sig
+		const StressStensor sd=deviator(sig);
+		const stress J2=.5*(sd|sd);
+		const stress I1=trace(sig);
+		
+		// >>>>>> 8.1.2 Compute the plastic criterion
+		const stress RF=sqrt(J2*KFm*KFm+at*at*sin(phir)*sin(phir)); // For the plastic criterion
+		const stress RG=sqrt(J2*KGm*KGm+aG*aG*sin(psir)*sin(psir)); // For the plastic flow function
+		const stress F=RF+I1*sin(phir)/3.-coh*cos(phir);            // The plastic criterion
+
+		// >>>>>> 8.1.3 Compute the plastic flow direction
+		const real dG_dI1=sin(psir)/3.;
+		const real dG_dJ2=.5*KGm*KGm/max(RG,local_zero_tolerance);
+		const Stensor nG=dG_dI1*Stensor::Id()+dG_dJ2*sd;
+
+		// >>>>>> 8.1.4 Equations to be solved
+		feel=deel-deto+dlam*nG;
+		flam=F/young;
+		
+		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Comment this block if "@Algorithm NewtonRaphson_NumericalJacobian" >>>>>>>>>>>>>>>>
+
+		// >>>>>> 8.1.5 Jacobian
+
+		// >>>>>>>>> 8.1.5.1 Some tools
+		// >>>>>>>>>>>> Compute dnG_dsig
+		const real dG_ddJ2=-.5*KGm*KGm*dG_dJ2/max(RG,local_zero_tolerance)/max(RG,local_zero_tolerance);
+		const Stensor4 dnG_dsig=dG_ddJ2*(sd^sd)+dG_dJ2*Stensor4::K();
+		// >>>>>>>>>>>> Compute dFp_dsig
+		const real dF_dI1=sin(phir)/3.;
+		const real dF_dJ2=.5*KFm*KFm/max(RF,local_zero_tolerance);
+		const Stensor dF_dsig=dF_dI1*Stensor::Id()+dF_dJ2*sd;
+		
+		// >>>>>>>>> 8.1.5.2 First line
+		dfeel_ddeel=Stensor4::Id()+dlam*(dnG_dsig*Ce);
+		dfeel_ddlam=nG;
+		
+		// >>>>>>>>> 8.1.5.3 Third line
+		dflam_ddeel=(dF_dsig|Ce)/young;
+		dflam_ddlam=real(0);
+
+		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		
+	}
+
+	// >>> 8.2 Elasticity
+	else {
+
+		feel=deel-deto;
+		flam=dlam;
+
+	}
+}
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// 9. Update Auxilliary State Variables
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+@UpdateAuxiliaryStateVariables{
+	inst+=dt;
+	niter=iter;
+	if (dlam>0) {
+		ip=1;
+		evp+=dlam*sin(psir);
+	} else {
+		ip=0;
+	}
+
+}
+
+// >>>>>>>>>>>>>>>>>>>>
+// 10. Tangent Operator
+// <<<<<<<<<<<<<<<<<<<<
+
+@TangentOperator{
+	if((smt==ELASTIC)||(smt==SECANTOPERATOR)) {
+		computeElasticStiffness<N,Type>::exe(Dt,lambda,mu);
+	}
+	else if (smt==CONSISTENTTANGENTOPERATOR) {
+		Stensor4 Je;
+		getPartialJacobianInvert(Je);
+		Dt=Ce*Je;
+	} 
+	else {
+		return false;
+	}
+}
