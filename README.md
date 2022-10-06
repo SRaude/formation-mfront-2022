@@ -33,4 +33,7 @@
 
 - `advanced-mtests`
 
-    > *Répertoire*
+    > *Répertoire contenant un certain nombre de scripts Python permettant de réaliser des études de sensibilité aux paramètres matériau avec MTest*  
+    > *`mc-bigoni-mini` : cas-tests réalisés avec la ldc MCBigoniMini*  
+    > *`mc-bigoni-mini-ih` : cas-tests réalisés avec la ldc MCBigoniMiniIH*  
+    > *`mc-bigoni-full` : cas-tests réalisés avec la ldc MCBigoniFull*
