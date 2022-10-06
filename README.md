@@ -24,3 +24,13 @@
 - `mfront-src-files`
 
     > *Répertoire contenant les fichiers sources des ldc étudiées.*
+
+- `code-aster`
+
+    > *Répertoire contenant les fichiers des cas d'applications sur structure (Code_Aster)*  
+    > *`bc-strip-foundation` : calcul de la capacité portante d'un sol sous une fondation superficielle rigide*  
+    > *`excavation` : creusement d'une galerie souterraine*
+
+- `advanced-mtests`
+
+    > *Répertoire*
