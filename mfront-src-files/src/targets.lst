@@ -1,0 +1,50 @@
+{
+library : {
+name   : "AsterBehaviour";
+type   : SHARED_LIBRARY;
+prefix : "lib";
+suffix : "so";
+install_path : "";
+sources : {
+"asterMCBigoniMiniIH.cxx",
+"MCBigoniMiniIH.cxx",
+"asterMCBigoniMini.cxx",
+"MCBigoniMini.cxx",
+"asterMCBigoniFull.cxx",
+"MCBigoniFull.cxx"
+};
+cppflags : {
+"$(shell tfel-config-3.4.0 --cppflags --compiler-flags)",
+"-DASTER_ARCH=64"
+};
+include_directories : {
+"$(shell tfel-config-3.4.0 --include-path)"
+};
+link_directories : {
+"$(shell tfel-config-3.4.0 --library-path)"
+};
+link_libraries : {
+"AsterInterface-3.4.0",
+"$(shell tfel-config-3.4.0 --library-dependency --material --mfront-profiling --physical-constants)"
+};
+epts : {
+"astermcbigoniminiih",
+"astermcbigonimini",
+"astermcbigonifull"
+};
+};
+headers : {
+"MFront/Aster/asterMCBigoniMiniIH.hxx",
+"TFEL/Material/MCBigoniMiniIH.hxx",
+"TFEL/Material/MCBigoniMiniIHBehaviourData.hxx",
+"TFEL/Material/MCBigoniMiniIHIntegrationData.hxx",
+"MFront/Aster/asterMCBigoniMini.hxx",
+"TFEL/Material/MCBigoniMini.hxx",
+"TFEL/Material/MCBigoniMiniBehaviourData.hxx",
+"TFEL/Material/MCBigoniMiniIntegrationData.hxx",
+"MFront/Aster/asterMCBigoniFull.hxx",
+"TFEL/Material/MCBigoniFull.hxx",
+"TFEL/Material/MCBigoniFullBehaviourData.hxx",
+"TFEL/Material/MCBigoniFullIntegrationData.hxx"
+};
+};
