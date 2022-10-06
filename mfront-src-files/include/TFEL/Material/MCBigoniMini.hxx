@@ -55,7 +55,7 @@
 #include"TFEL/Math/Stensor/StensorFromTinyMatrixRowView2.hxx"
 #include"TFEL/Math/Vector/TinyVectorOfStensorFromTinyVectorView.hxx"
 #include"TFEL/Math/Vector/TinyVectorOfStensorFromTinyVectorViewIO.hxx"
-#line 94 "MCBigoniMini.mfront"
+#line 97 "MCBigoniMini.mfront"
 #include"TFEL/Material/Lame.hxx"
 
 #include"MFront/Aster/Aster.hxx"
@@ -208,7 +208,7 @@ private :
 
 
 typename tfel::math::StensorFromTinyVectorView<N,1+StensorSize,0,real>::type deel;
-#line 72 "MCBigoniMini.mfront"
+#line 73 "MCBigoniMini.mfront"
 real& dlam;
 
 #line 53 "MCBigoniMini.mfront"
@@ -239,6 +239,8 @@ stress lambda;
 stress mu;
 #line 66 "MCBigoniMini.mfront"
 stress ks;
+#line 67 "MCBigoniMini.mfront"
+Stensor nGtmp;
 
 real theta;
 real epsilon;
@@ -337,7 +339,7 @@ void computeThermodynamicForces(){
 using namespace std;
 using namespace tfel::math;
 using std::vector;
-#line 144 "MCBigoniMini.mfront"
+#line 147 "MCBigoniMini.mfront"
 this->sig=this->lambda*trace((this->eel+(this->theta)*(this->deel)))*StrainStensor::Id()+2.*this->mu*(this->eel+(this->theta)*(this->deel));
 } // end of MCBigoniMini::computeThermodynamicForces
 
@@ -345,7 +347,7 @@ void computeFinalThermodynamicForces(){
 using namespace std;
 using namespace tfel::math;
 using std::vector;
-#line 144 "MCBigoniMini.mfront"
+#line 147 "MCBigoniMini.mfront"
 this->sig=this->lambda*trace(this->eel)*StrainStensor::Id()+2.*this->mu*this->eel;
 } // end of MCBigoniMini::computeFinalThermodynamicForces
 
@@ -369,21 +371,23 @@ this->lam += this->dlam;
 void updateAuxiliaryStateVariables(){
 using namespace std;
 using namespace tfel::math;
-#line 214 "MCBigoniMini.mfront"
-this->inst+=this->dt;
-#line 215 "MCBigoniMini.mfront"
-this->niter=iter;
-#line 216 "MCBigoniMini.mfront"
-if (this->dlam>0) {
-#line 217 "MCBigoniMini.mfront"
-this->ip=1;
 #line 218 "MCBigoniMini.mfront"
-this->evp+=this->dlam*sin(this->psir);
+this->inst+=this->dt;
 #line 219 "MCBigoniMini.mfront"
-} else {
+this->niter=iter;
 #line 220 "MCBigoniMini.mfront"
-this->ip=0;
+if (this->dlam>0) {
 #line 221 "MCBigoniMini.mfront"
+this->ip=1;
+#line 222 "MCBigoniMini.mfront"
+this->evp+=this->dlam*sin(this->psir);
+#line 223 "MCBigoniMini.mfront"
+this->gap+=this->dlam*sqrt(2.*deviator(this->nGtmp)|deviator(this->nGtmp)/3.);
+#line 224 "MCBigoniMini.mfront"
+} else {
+#line 225 "MCBigoniMini.mfront"
+this->ip=0;
+#line 226 "MCBigoniMini.mfront"
 }
 }
 
@@ -464,41 +468,41 @@ void initialize(){
 using namespace std;
 using namespace tfel::math;
 using std::vector;
-#line 98 "MCBigoniMini.mfront"
-using namespace tfel::material::lame;
-#line 99 "MCBigoniMini.mfront"
-this->local_zero_tolerance=real(1e-12);
-#line 100 "MCBigoniMini.mfront"
-this->pi=4.*atan(1.);
 #line 101 "MCBigoniMini.mfront"
-this->phir=this->phi*this->pi/180.;
+using namespace tfel::material::lame;
 #line 102 "MCBigoniMini.mfront"
-this->psir=this->psi*this->pi/180.;
+this->local_zero_tolerance=real(1e-12);
 #line 103 "MCBigoniMini.mfront"
-this->thetaFm=atan(-sin(this->phir)/sqrt(3.));
+this->pi=4.*atan(1.);
 #line 104 "MCBigoniMini.mfront"
-this->thetaGm=atan(-sin(this->psir)/sqrt(3.));
+this->phir=this->phi*this->pi/180.;
 #line 105 "MCBigoniMini.mfront"
-this->KFm=(cos(this->thetaFm)-sin(this->phir)*sin(this->thetaFm)/sqrt(3.));
+this->psir=this->psi*this->pi/180.;
 #line 106 "MCBigoniMini.mfront"
-this->KGm=(cos(this->thetaGm)-sin(this->psir)*sin(this->thetaGm)/sqrt(3.));
+this->thetaFm=atan(-sin(this->phir)/sqrt(3.));
 #line 107 "MCBigoniMini.mfront"
-this->aG=this->at*tan(this->phir)/tan(this->psir);
+this->thetaGm=atan(-sin(this->psir)/sqrt(3.));
 #line 108 "MCBigoniMini.mfront"
-this->lambda=computeLambda(this->young,this->nu);
+this->KFm=(cos(this->thetaFm)-sin(this->phir)*sin(this->thetaFm)/sqrt(3.));
 #line 109 "MCBigoniMini.mfront"
-this->mu=computeMu(this->young,this->nu);
+this->KGm=(cos(this->thetaGm)-sin(this->psir)*sin(this->thetaGm)/sqrt(3.));
 #line 110 "MCBigoniMini.mfront"
-this->ks=this->lambda+2.*this->mu/3.;
+this->aG=this->at*tan(this->phir)/tan(this->psir);
 #line 111 "MCBigoniMini.mfront"
-this->Ce=3.*this->ks*Stensor4::J()+2.*this->mu*Stensor4::K();
+this->lambda=computeLambda(this->young,this->nu);
+#line 112 "MCBigoniMini.mfront"
+this->mu=computeMu(this->young,this->nu);
 #line 113 "MCBigoniMini.mfront"
-if (this->inst==real(0) && this->lam==real(0)) {
+this->ks=this->lambda+2.*this->mu/3.;
 #line 114 "MCBigoniMini.mfront"
-const Stensor4 Se=invert(this->Ce);
-#line 115 "MCBigoniMini.mfront"
-this->eel=(Se*this->sig);
+this->Ce=3.*this->ks*Stensor4::J()+2.*this->mu*Stensor4::K();
 #line 116 "MCBigoniMini.mfront"
+if (this->inst==real(0) && this->lam==real(0)) {
+#line 117 "MCBigoniMini.mfront"
+const Stensor4 Se=invert(this->Ce);
+#line 118 "MCBigoniMini.mfront"
+this->eel=(Se*this->sig);
+#line 119 "MCBigoniMini.mfront"
 }
 }
 
@@ -551,17 +555,17 @@ using namespace std;
 using namespace tfel::math;
 tfel::raise_if(smflag!=MechanicalBehaviour<MechanicalBehaviourBase::STANDARDSTRAINBASEDBEHAVIOUR,hypothesis,Type,false>::STANDARDTANGENTOPERATOR,
 "invalid tangent operator flag");
-#line 126 "MCBigoniMini.mfront"
-StressStensor sigel(this->lambda*trace(this->eel+this->deto)*Stensor::Id()+2.*this->mu*(this->eel+this->deto));
 #line 129 "MCBigoniMini.mfront"
+StressStensor sigel(this->lambda*trace(this->eel+this->deto)*Stensor::Id()+2.*this->mu*(this->eel+this->deto));
+#line 132 "MCBigoniMini.mfront"
 const StressStensor sdel=deviator(sigel);
-#line 130 "MCBigoniMini.mfront"
+#line 133 "MCBigoniMini.mfront"
 const stress J2el=.5*(sdel|sdel);
-#line 131 "MCBigoniMini.mfront"
-const stress I1el=trace(sigel);
 #line 134 "MCBigoniMini.mfront"
+const stress I1el=trace(sigel);
+#line 137 "MCBigoniMini.mfront"
 const stress RFel=sqrt(J2el*this->KFm*this->KFm+this->at*this->at*sin(this->phir)*sin(this->phir));
-#line 135 "MCBigoniMini.mfront"
+#line 138 "MCBigoniMini.mfront"
 this->b=RFel+I1el*sin(this->phir)/3.-this->coh*cos(this->phir)>real(0);
 auto error = real{};
 bool converged=false;
@@ -648,57 +652,59 @@ this->jacobian(idx,idx)= real(1);
 }
 // setting f values to zeros
 this->fzeros = this->zeros;
-#line 154 "MCBigoniMini.mfront"
-if ((this->b)){
 #line 157 "MCBigoniMini.mfront"
+if ((this->b)){
+#line 160 "MCBigoniMini.mfront"
 const StressStensor sd=deviator((this->sig));
-#line 158 "MCBigoniMini.mfront"
+#line 161 "MCBigoniMini.mfront"
 const stress J2=.5*(sd|sd);
-#line 159 "MCBigoniMini.mfront"
-const stress I1=trace((this->sig));
 #line 162 "MCBigoniMini.mfront"
+const stress I1=trace((this->sig));
+#line 165 "MCBigoniMini.mfront"
 const stress RF=sqrt(J2*(this->KFm)*(this->KFm)+(this->at)*(this->at)*sin((this->phir))*sin((this->phir)));
-#line 163 "MCBigoniMini.mfront"
+#line 166 "MCBigoniMini.mfront"
 const stress RG=sqrt(J2*(this->KGm)*(this->KGm)+(this->aG)*(this->aG)*sin((this->psir))*sin((this->psir)));
-#line 164 "MCBigoniMini.mfront"
-const stress F=RF+I1*sin((this->phir))/3.-(this->coh)*cos((this->phir));
 #line 167 "MCBigoniMini.mfront"
+const stress F=RF+I1*sin((this->phir))/3.-(this->coh)*cos((this->phir));
+#line 170 "MCBigoniMini.mfront"
 const real dG_dI1=sin((this->psir))/3.;
-#line 168 "MCBigoniMini.mfront"
+#line 171 "MCBigoniMini.mfront"
 const real dG_dJ2=.5*(this->KGm)*(this->KGm)/max(RG,(this->local_zero_tolerance));
-#line 169 "MCBigoniMini.mfront"
-const Stensor nG=dG_dI1*Stensor::Id()+dG_dJ2*sd;
 #line 172 "MCBigoniMini.mfront"
-feel=(this->deel)-(this->deto)+(this->dlam)*nG;
+const Stensor nG=dG_dI1*Stensor::Id()+dG_dJ2*sd;
 #line 173 "MCBigoniMini.mfront"
+(this->nGtmp)=nG;
+#line 176 "MCBigoniMini.mfront"
+feel=(this->deel)-(this->deto)+(this->dlam)*nG;
+#line 177 "MCBigoniMini.mfront"
 flam=F/(this->young);
-#line 181 "MCBigoniMini.mfront"
-const real dG_ddJ2=-.5*(this->KGm)*(this->KGm)*dG_dJ2/max(RG,(this->local_zero_tolerance))/max(RG,(this->local_zero_tolerance));
-#line 182 "MCBigoniMini.mfront"
-const Stensor4 dnG_dsig=dG_ddJ2*(sd^sd)+dG_dJ2*Stensor4::K();
-#line 184 "MCBigoniMini.mfront"
-const real dF_dI1=sin((this->phir))/3.;
 #line 185 "MCBigoniMini.mfront"
-const real dF_dJ2=.5*(this->KFm)*(this->KFm)/max(RF,(this->local_zero_tolerance));
+const real dG_ddJ2=-.5*(this->KGm)*(this->KGm)*dG_dJ2/max(RG,(this->local_zero_tolerance))/max(RG,(this->local_zero_tolerance));
 #line 186 "MCBigoniMini.mfront"
-const Stensor dF_dsig=dF_dI1*Stensor::Id()+dF_dJ2*sd;
+const Stensor4 dnG_dsig=dG_ddJ2*(sd^sd)+dG_dJ2*Stensor4::K();
+#line 188 "MCBigoniMini.mfront"
+const real dF_dI1=sin((this->phir))/3.;
 #line 189 "MCBigoniMini.mfront"
-dfeel_ddeel=Stensor4::Id()+(this->dlam)*(dnG_dsig*(this->Ce));
+const real dF_dJ2=.5*(this->KFm)*(this->KFm)/max(RF,(this->local_zero_tolerance));
 #line 190 "MCBigoniMini.mfront"
-dfeel_ddlam=nG;
+const Stensor dF_dsig=dF_dI1*Stensor::Id()+dF_dJ2*sd;
 #line 193 "MCBigoniMini.mfront"
-dflam_ddeel=(dF_dsig|(this->Ce))/(this->young);
+dfeel_ddeel=Stensor4::Id()+(this->dlam)*(dnG_dsig*(this->Ce));
 #line 194 "MCBigoniMini.mfront"
-dflam_ddlam=real(0);
+dfeel_ddlam=nG;
+#line 197 "MCBigoniMini.mfront"
+dflam_ddeel=(dF_dsig|(this->Ce))/(this->young);
 #line 198 "MCBigoniMini.mfront"
+dflam_ddlam=real(0);
+#line 202 "MCBigoniMini.mfront"
 }
-#line 201 "MCBigoniMini.mfront"
+#line 205 "MCBigoniMini.mfront"
 else {
-#line 203 "MCBigoniMini.mfront"
+#line 207 "MCBigoniMini.mfront"
 feel=(this->deel)-(this->deto);
-#line 204 "MCBigoniMini.mfront"
+#line 208 "MCBigoniMini.mfront"
 flam=(this->dlam);
-#line 206 "MCBigoniMini.mfront"
+#line 210 "MCBigoniMini.mfront"
 }
 static_cast<void>(dfeel_ddeel); /* suppress potential warnings */
 static_cast<void>(dfeel_ddlam); /* suppress potential warnings */
@@ -760,27 +766,27 @@ MCBigoniMini& behaviour;
 const tfel::math::TinyPermutation<1+StensorSize>& permutation;
 }; // end of struct GetPartialJacobianInvert
 GetPartialJacobianInvert getPartialJacobianInvert(*this, jacobian_permutation);
-#line 230 "MCBigoniMini.mfront"
-if((smt==ELASTIC)||(smt==SECANTOPERATOR)) {
-#line 231 "MCBigoniMini.mfront"
-computeElasticStiffness<N,Type>::exe((this->Dt),(this->lambda),(this->mu));
-#line 232 "MCBigoniMini.mfront"
-}
-#line 233 "MCBigoniMini.mfront"
-else if (smt==CONSISTENTTANGENTOPERATOR) {
-#line 234 "MCBigoniMini.mfront"
-Stensor4 Je;
 #line 235 "MCBigoniMini.mfront"
-getPartialJacobianInvert(Je);
+if((smt==ELASTIC)||(smt==SECANTOPERATOR)) {
 #line 236 "MCBigoniMini.mfront"
-(this->Dt)=(this->Ce)*Je;
+computeElasticStiffness<N,Type>::exe((this->Dt),(this->lambda),(this->mu));
 #line 237 "MCBigoniMini.mfront"
 }
 #line 238 "MCBigoniMini.mfront"
-else {
+else if (smt==CONSISTENTTANGENTOPERATOR) {
 #line 239 "MCBigoniMini.mfront"
-return false;
+Stensor4 Je;
 #line 240 "MCBigoniMini.mfront"
+getPartialJacobianInvert(Je);
+#line 241 "MCBigoniMini.mfront"
+(this->Dt)=(this->Ce)*Je;
+#line 242 "MCBigoniMini.mfront"
+}
+#line 243 "MCBigoniMini.mfront"
+else {
+#line 244 "MCBigoniMini.mfront"
+return false;
+#line 245 "MCBigoniMini.mfront"
 }
 return true;
 }
@@ -833,10 +839,12 @@ os << "Δlam : " << b.dlam << '\n';
 os << "niter : " << b.niter << '\n';
 os << "ip : " << b.ip << '\n';
 os << "evp : " << b.evp << '\n';
+os << "gap : " << b.gap << '\n';
 os << "inst : " << b.inst << '\n';
 os << "T : " << b.T << '\n';
 os << "ΔT : " << b.dT << '\n';
 os << "Ce : " << b.Ce << '\n';
+os << "nGtmp : " << b.nGtmp << '\n';
 os << "θ : " << b.theta << '\n';
 os << "ε : " << b.epsilon << '\n';
 os << "minimal_time_step_scaling_factor : " << b.minimal_time_step_scaling_factor << '\n';
@@ -866,7 +874,7 @@ static constexpr bool handlesThermalExpansion = false;
 static constexpr unsigned short dimension = N;
 typedef Type NumType;
 static constexpr unsigned short material_properties_nb = 6;
-static constexpr unsigned short internal_variables_nb  = 5+StensorSize;
+static constexpr unsigned short internal_variables_nb  = 6+StensorSize;
 static constexpr unsigned short external_variables_nb  = 1;
 static constexpr unsigned short external_variables_nb2 = 0;
 static constexpr bool hasConsistentTangentOperator = true;

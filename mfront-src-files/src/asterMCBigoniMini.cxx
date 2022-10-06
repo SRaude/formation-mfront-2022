@@ -82,10 +82,11 @@ MFRONT_SHAREDOBJ const char *astermcbigonimini_MaterialProperties[6u] = {"YoungM
 "Cohesion",
 "TensionCutOff"};
 
-MFRONT_SHAREDOBJ unsigned short astermcbigonimini_nInternalStateVariables = 6;
-MFRONT_SHAREDOBJ const char * astermcbigonimini_InternalStateVariables[6] = {"ElasticStrain",
-"PlastMultiplier","LocalNewtonIter","PlasticIndex","PVolumStrain","Time"};
-MFRONT_SHAREDOBJ int astermcbigonimini_InternalStateVariablesTypes [] = {1,0,0,0,0,0};
+MFRONT_SHAREDOBJ unsigned short astermcbigonimini_nInternalStateVariables = 7;
+MFRONT_SHAREDOBJ const char * astermcbigonimini_InternalStateVariables[7] = {"ElasticStrain",
+"PlastMultiplier","LocalNewtonIter","PlasticIndex","PVolumStrain","EquiPlastStrain",
+"Time"};
+MFRONT_SHAREDOBJ int astermcbigonimini_InternalStateVariablesTypes [] = {1,0,0,0,0,0,0};
 
 MFRONT_SHAREDOBJ unsigned short astermcbigonimini_nExternalStateVariables = 0;
 MFRONT_SHAREDOBJ const char * const * astermcbigonimini_ExternalStateVariables = nullptr;

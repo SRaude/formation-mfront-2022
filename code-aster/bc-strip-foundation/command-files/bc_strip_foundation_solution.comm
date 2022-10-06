@@ -57,13 +57,13 @@ MODMEC1=AFFE_MODELE(INFO=1,
 ### >>> Material <<<
 ### <<<<<<<<<<<<<<<<
 
-ldc="MCBigoniMini"
+ldc="MCBigoniMiniIH"
 
 DefaultDicPara=OrderedDict()
 DefaultDicPara["YoungModulus"]=9.e9
 DefaultDicPara["PoissonRatio"]=.25
 DefaultDicPara["FrictionAngle"]=32.07
-DefaultDicPara["DilationAngle"]=5.07
+DefaultDicPara["DilationAngle"]=32.07
 DefaultDicPara["Cohesion"]=4.21e6
 DefaultDicPara["TensionCutOff"]=.1*DefaultDicPara["Cohesion"]/tan(DefaultDicPara["FrictionAngle"]*pi/180.)
 
@@ -71,7 +71,7 @@ if ldc=="MCBigoniFull":
    DefaultDicPara["PiShapeCoef"]=.99
 
 if ldc=="MCBigoniMiniIH":
-   DefaultDicPara["HardeningCoef"]=0.
+   DefaultDicPara["HardeningCoef"]=0.1
 
 
 gravi=9.81
@@ -210,7 +210,8 @@ RESU1=STAT_NON_LINE(MODELE=MODMEC1,
                                  INST_FIN=TF,),
                     SOLVEUR=_F(METHODE="MUMPS",),
                     NEWTON=_F(MATRICE='TANGENTE',
-                              PREDICTION='EXTRAPOLE',),
+                              # PREDICTION='EXTRAPOLE',
+                              ),
                     CONVERGENCE=_F(RESI_GLOB_RELA=1.e-8,
                                    ITER_GLOB_MAXI=20,),
                     ARCHIVAGE=_F(LIST_INST=TARCH),)

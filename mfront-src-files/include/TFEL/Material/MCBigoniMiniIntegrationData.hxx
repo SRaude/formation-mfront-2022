@@ -27,7 +27,7 @@
 #include"TFEL/Math/General/IEEE754.hxx"
 #include"TFEL/Math/stensor.hxx"
 #include"TFEL/Math/st2tost2.hxx"
-#line 94 "MCBigoniMini.mfront"
+#line 97 "MCBigoniMini.mfront"
 #include"TFEL/Material/Lame.hxx"
 
 #include"MFront/Aster/Aster.hxx"

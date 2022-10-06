@@ -59,7 +59,7 @@ RootToOutputFiles="/home/simon/dev/formation-mfront-2022/advanced-mtests/mc-bigo
 ggm.NameOfTheModel="MCBigoniMini"
 ggm.DStateVariables=OrderedDict()
 ggm.DStateVariables["PlastMultiplier"]=["LAMBDA"]
-ggm.AuxiliaryStateVariables=['NITER','IP','EVP','TIME']
+ggm.AuxiliaryStateVariables=['NITER','IP','EVP','GAMMAP','TIME']
 
 ### MTest options
 ggm.MTestNumberOfLoadingSteps=2

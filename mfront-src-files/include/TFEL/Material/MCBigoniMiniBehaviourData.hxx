@@ -34,7 +34,7 @@
 #include"TFEL/Math/ST2toST2/ST2toST2View.hxx"
 #include"TFEL/Material/ModellingHypothesis.hxx"
 
-#line 94 "MCBigoniMini.mfront"
+#line 97 "MCBigoniMini.mfront"
 #include"TFEL/Material/Lame.hxx"
 
 #include"MFront/Aster/Aster.hxx"
@@ -133,15 +133,17 @@ stress coh;
 real at;
 
 StrainStensor eel;
-#line 72 "MCBigoniMini.mfront"
+#line 73 "MCBigoniMini.mfront"
 real lam;
-#line 79 "MCBigoniMini.mfront"
-real niter;
 #line 80 "MCBigoniMini.mfront"
-real ip;
+real niter;
 #line 81 "MCBigoniMini.mfront"
-strain evp;
+real ip;
 #line 82 "MCBigoniMini.mfront"
+strain evp;
+#line 83 "MCBigoniMini.mfront"
+strain gap;
+#line 84 "MCBigoniMini.mfront"
 real inst;
 temperature T;
 
@@ -170,6 +172,7 @@ lam(src.lam),
 niter(src.niter),
 ip(src.ip),
 evp(src.evp),
+gap(src.gap),
 inst(src.inst),
 T(src.T)
 {}
@@ -195,7 +198,8 @@ lam(ASTERint_vars[StensorSize]),
 niter(ASTERint_vars[1+StensorSize]),
 ip(ASTERint_vars[2+StensorSize]),
 evp(ASTERint_vars[3+StensorSize]),
-inst(ASTERint_vars[4+StensorSize]),
+gap(ASTERint_vars[4+StensorSize]),
+inst(ASTERint_vars[5+StensorSize]),
 T(*ASTERT_)
 {
 }
@@ -229,6 +233,7 @@ this->lam = src.lam;
 this->niter = src.niter;
 this->ip = src.ip;
 this->evp = src.evp;
+this->gap = src.gap;
 this->inst = src.inst;
 this->T = src.T;
 return *this;
@@ -244,7 +249,8 @@ ASTERstatev[StensorSize] = this->lam;
 ASTERstatev[1+StensorSize] = this->niter;
 ASTERstatev[2+StensorSize] = this->ip;
 ASTERstatev[3+StensorSize] = this->evp;
-ASTERstatev[4+StensorSize] = this->inst;
+ASTERstatev[4+StensorSize] = this->gap;
+ASTERstatev[5+StensorSize] = this->inst;
 } // end of ASTERexportStateData
 
 }; // end of MCBigoniMiniBehaviourDataclass
@@ -266,6 +272,7 @@ os << "lam : " << b.lam << '\n';
 os << "niter : " << b.niter << '\n';
 os << "ip : " << b.ip << '\n';
 os << "evp : " << b.evp << '\n';
+os << "gap : " << b.gap << '\n';
 os << "inst : " << b.inst << '\n';
 os << "T : " << b.T << '\n';
 return os;
