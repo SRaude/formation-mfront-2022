@@ -64,6 +64,7 @@ at.setEntryName("TensionCutOff");
 @LocalVariable stress lambda;             // First Lame modulus
 @LocalVariable stress mu;                 // Shear modulus
 @LocalVariable stress ks;                 // Bulk modulus
+@LocalVariable Stensor nGtmp;
 
 // >>>>>>>>>>>>>>>>>
 // 3. State Variable
@@ -79,11 +80,13 @@ lam.setEntryName("PlastMultiplier");
 @AuxiliaryStateVariable real niter;  // Number of Newton iterations
 @AuxiliaryStateVariable real ip;     // Plastic index
 @AuxiliaryStateVariable strain evp;  // Volumetric plastic strain
+@AuxiliaryStateVariable strain gap;  // Equivalent plastic strain
 @AuxiliaryStateVariable real inst;   // Time...
 
 niter.setEntryName("LocalNewtonIter");
 ip.setEntryName("PlasticIndex");
 evp.setEntryName("PVolumStrain");
+gap.setEntryName("EquiPlastStrain");
 inst.setEntryName("Time");
 
 // >>>>>>>>>>>>>>>>>>>>>>>>
@@ -149,7 +152,7 @@ inst.setEntryName("Time");
 // <<<<<<<<<<<<<<<<<<<<<
 
 @Integrator{
-
+	
 	// >>> 8.1 Integration if plastic loading
 	if (b){
 
@@ -167,6 +170,7 @@ inst.setEntryName("Time");
 		const real dG_dI1=sin(psir)/3.;
 		const real dG_dJ2=.5*KGm*KGm/max(RG,local_zero_tolerance);
 		const Stensor nG=dG_dI1*Stensor::Id()+dG_dJ2*sd;
+		nGtmp=nG;
 
 		// >>>>>> 8.1.4 Equations to be solved
 		feel=deel-deto+dlam*nG;
@@ -216,6 +220,7 @@ inst.setEntryName("Time");
 	if (dlam>0) {
 		ip=1;
 		evp+=dlam*sin(psir);
+		gap+=dlam*sqrt(2.*deviator(nGtmp)|deviator(nGtmp)/3.);
 	} else {
 		ip=0;
 	}
