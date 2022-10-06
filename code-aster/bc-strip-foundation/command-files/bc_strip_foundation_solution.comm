@@ -1,0 +1,262 @@
+### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+### BEARING CAPACITY OF A STRIP FOUNDATION
+### <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+from collections import OrderedDict
+
+DEBUT(PAR_LOT='NON')
+
+### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+### >>> Compile the MFront source file <<<
+### <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+CREA_LIB_MFRONT(DEBUG='NON',
+                UNITE_MFRONT=38,
+                UNITE_LIBRAIRIE=39,)
+
+### >>>>>>>>>>>>
+### >>> Mesh <<<
+### <<<<<<<<<<<<
+
+MAIL=LIRE_MAILLAGE(FORMAT='MED')
+
+MAILLAGE=CREA_MAILLAGE(MAILLAGE=MAIL,
+                       LINE_QUAD=_F(TOUT='OUI',),)
+
+MAILLAGE=DEFI_GROUP(reuse=MAILLAGE,
+                    MAILLAGE=MAILLAGE,
+                    CREA_GROUP_MA=(_F(NOM="GrEdgeLeft",
+                                      UNION=("GrEdgeBelowFoundationL","GrEdgeSoilL"),),
+                                   _F(NOM="GrEdgeBottom",
+                                      GROUP_MA="GrEdgeSoilB",),
+                                   _F(NOM="GrEdgeRight",
+                                      GROUP_MA="GrEdgeSoilR",),
+                                   _F(NOM="GrEdgeTopFree",
+                                      UNION=("GrEdgeSoilT","GrEdgeBelowFoundationTR",),),
+                                   _F(NOM="GrEdgeFoundation",
+                                      GROUP_MA="GrEdgeBelowFoundationTG",),
+                                   _F(NOM="GrFaceAll",
+                                      UNION=("GrFaceSoil","GrFaceBelowFoundation"),),),
+                    CREA_GROUP_NO=(_F(TOUT_GROUP_MA='OUI',),),)
+
+MAILLAGE=MODI_MAILLAGE(reuse=MAILLAGE,
+                       MAILLAGE=MAILLAGE,
+                       ORIE_PEAU=_F(GROUP_MA_PEAU=("GrEdgeTopFree"),),)
+
+### >>>>>>>>>>>>>>>>>>>>>>>>
+### >>> Define the model <<<
+### <<<<<<<<<<<<<<<<<<<<<<<<
+
+MODMEC1=AFFE_MODELE(INFO=1,
+                    MAILLAGE=MAILLAGE,
+                    AFFE=_F(GROUP_MA=("GrFaceAll","GrEdgeTopFree"),
+                            PHENOMENE='MECANIQUE',
+                            MODELISATION='D_PLAN',),)
+
+### >>>>>>>>>>>>>>>>
+### >>> Material <<<
+### <<<<<<<<<<<<<<<<
+
+DefaultDicPara=OrderedDict()
+DefaultDicPara["YoungModulus"]=9.e9
+DefaultDicPara["PoissonRatio"]=.3
+DefaultDicPara["FrictionAngle"]=32.07
+DefaultDicPara["DilationAngle"]=32.07
+DefaultDicPara["Cohesion"]=4.21e6
+DefaultDicPara["TensionCutOff"]=.1*DefaultDicPara["Cohesion"]/tan(DefaultDicPara["FrictionAngle"]*pi/180.)
+DefaultDicPara["PiShapeCoef"]=.99
+
+gravi=9.81
+vol_weight=20000.
+rho=vol_weight/gravi
+
+SOL=DEFI_MATERIAU(ELAS=_F(E=DefaultDicPara["YoungModulus"],
+                          NU=DefaultDicPara["PoissonRatio"],
+                          RHO=rho),
+                  MFRONT=_F(LISTE_COEF=tuple(DefaultDicPara.values())),)
+
+CHMAT=AFFE_MATERIAU(MAILLAGE=MAILLAGE,
+                    AFFE=_F(GROUP_MA="GrFaceAll",
+                            MATER=SOL,),)
+
+### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+### >>> Boundary conditions and gravity <<<
+### <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+DDLIMP0=AFFE_CHAR_MECA(MODELE=MODMEC1,
+                       DDL_IMPO=(_F(GROUP_MA=("GrEdgeBottom"),
+                                    DY=0.,),
+                                 _F(GROUP_MA=("GrEdgeLeft","GrEdgeRight"),
+                                    DX=0.,),),)
+
+PESE=AFFE_CHAR_MECA(MODELE=MODMEC1,
+                    PESANTEUR=_F(GRAVITE=gravi,
+                                 DIRECTION=(0.0,-1.0,0.0,),),)
+
+Depl=2.e-1
+DDLIMP1=AFFE_CHAR_CINE(MODELE=MODMEC1,
+                       MECA_IMPO=(_F(GROUP_NO="GrEdgeFoundation",
+                                     DY=-Depl,),),)
+
+### >>>>>>>>>>>>
+### >>> Time <<<
+### <<<<<<<<<<<<
+
+T0=0.
+TEQ=1.
+TF=2.
+
+FEVOL=DEFI_FONCTION(NOM_PARA='INST',
+                    VALE=(TEQ,0.,TF,1.),
+                    PROL_DROITE='LINEAIRE',
+                    PROL_GAUCHE='LINEAIRE',)
+
+TEMPS=DEFI_LIST_REEL(DEBUT=T0,
+                     INTERVALLE=(_F(JUSQU_A=TEQ,
+                                    NOMBRE=1,),
+                                 _F(JUSQU_A=TF,
+                                    NOMBRE=100,),),)
+
+DEFLIST=DEFI_LIST_INST(DEFI_LIST=_F(LIST_INST =TEMPS,),
+                       ECHEC=_F(EVENEMENT='ERREUR',
+                                ACTION='DECOUPE',
+                                SUBD_METHODE='AUTO',),)
+
+TARCH=DEFI_LIST_REEL(DEBUT=T0,
+                     INTERVALLE=(_F(JUSQU_A=TEQ,
+                                    NOMBRE=1,),
+                                 _F(JUSQU_A=TF,
+                                    NOMBRE=100,),),)
+
+### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+### >>> Solution for the equilibrium <<<
+### <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+RESU0=STAT_NON_LINE(MODELE=MODMEC1,
+                    CHAM_MATER=CHMAT,
+                    EXCIT=(_F(CHARGE=DDLIMP0,),
+                           _F(CHARGE=PESE,),),
+                    COMPORTEMENT=(_F(RELATION='MFRONT',
+                                     UNITE_LIBRAIRIE=39,
+                                     # NOM_ROUTINE='asterppm_mc_na_min',
+                                     NOM_ROUTINE='asterppm_mc_na_full',
+                                     RESI_INTE_MAXI=1.e-14,
+                                     ITER_INTE_MAXI=100,
+                                     SYME_MATR_TANG='NON',
+                                     GROUP_MA="GrFaceAll",),),
+                    SOLVEUR=_F(METHODE="MUMPS"),
+                    INCREMENT=_F(LIST_INST=TEMPS,
+                                 INST_FIN=TEQ,),
+                    NEWTON=_F(MATRICE='TANGENTE'),
+                    CONVERGENCE=_F(RESI_GLOB_RELA=1.e-10,
+                                   ITER_GLOB_MAXI=20,),)
+
+IMPR_RESU(FORMAT='MED',
+          UNITE=80,
+          RESU=(_F(RESULTAT=RESU0,
+                   TOUT="OUI",
+                   IMPR_NOM_VARI='NON',),),)
+
+### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+### >>> Get the initial fields for the next phase <<<
+### <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+SIEF0=CREA_CHAMP(OPERATION="EXTR",
+                 TYPE_CHAM="ELGA_SIEF_R",
+                 RESULTAT=RESU0,
+                 NOM_CHAM="SIEF_ELGA",
+                 INST=TEQ,)
+
+VARI0=CREA_CHAMP(OPERATION="EXTR",
+                 TYPE_CHAM="ELGA_VARI_R",
+                 RESULTAT=RESU0,
+                 NOM_CHAM="VARI_ELGA",
+                 INST=TEQ,)
+
+### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+### >>> Solution for the phase with prescribed displacement <<<
+### <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+RESU1=STAT_NON_LINE(MODELE=MODMEC1,
+                    CHAM_MATER=CHMAT,
+                    EXCIT=(_F(CHARGE=DDLIMP0,),
+                           _F(CHARGE=PESE,),
+                           _F(CHARGE=DDLIMP1,
+                              FONC_MULT=FEVOL,),),
+                    COMPORTEMENT=(_F(RELATION='MFRONT',
+                                     UNITE_LIBRAIRIE=39,
+                                     # NOM_ROUTINE='asterppm_mc_na_min',
+                                     NOM_ROUTINE='asterppm_mc_na_full',
+                                     RESI_INTE_MAXI=1.e-14,
+                                     ITER_INTE_MAXI=200,
+                                     SYME_MATR_TANG='NON',
+                                     GROUP_MA="GrFaceAll",),),
+                    ETAT_INIT=_F(SIGM=SIEF0,
+                                 VARI=VARI0,),
+                    INCREMENT=_F(LIST_INST=DEFLIST,
+                                 INST_INIT=TEQ,
+                                 INST_FIN=TF,),
+                    SOLVEUR=_F(METHODE="MUMPS",),
+                    NEWTON=_F(MATRICE='TANGENTE',
+                              PREDICTION='EXTRAPOLE',),
+                    CONVERGENCE=_F(RESI_GLOB_RELA=1.e-8,
+                                   ITER_GLOB_MAXI=20,),
+                    ARCHIVAGE=_F(LIST_INST=TARCH),)
+
+### >>>>>>>>>>>>>>>>>>>>>>>
+### >>> Post-processing <<<
+### <<<<<<<<<<<<<<<<<<<<<<<
+
+RESU1=CALC_CHAMP(reuse=RESU1,
+                RESULTAT=RESU1,
+                MODELE=MODMEC1,
+                GROUP_MA=("GrFaceAll"),
+                CRITERES=('EPEQ_ELGA','SIEQ_ELGA'),
+                FORCE=('FORC_NODA'),)
+
+TAB_F=POST_RELEVE_T(ACTION=_F(INTITULE="TAB_F",
+                              OPERATION="EXTRACTION",
+                              GROUP_NO='GrEdgeFoundation',
+                              RESULTAT=RESU1,
+                              NOM_CHAM='FORC_NODA',
+                              TOUT_ORDRE='OUI',
+                              RESULTANTE='DY',),)
+
+IMPR_TABLE(FORMAT='TABLEAU',
+           SEPARATEUR=',',
+           TABLE=TAB_F,
+           UNITE=8,)
+
+IMPR_RESU(FORMAT='MED',
+          UNITE=81,
+          RESU=(_F(RESULTAT=RESU1,
+                   TOUT="OUI",
+                   NOM_CHAM="DEPL",
+                   IMPR_NOM_VARI='NON',),
+                _F(RESULTAT=RESU1,
+                   TOUT="OUI",
+                   NOM_CHAM="FORC_NODA",
+                   IMPR_NOM_VARI='NON',),
+                _F(RESULTAT=RESU1,
+                   TOUT="OUI",
+                   NOM_CHAM="SIEF_ELGA",
+                   IMPR_NOM_VARI='NON',),
+                _F(RESULTAT=RESU1,
+                   TOUT="OUI",
+                   NOM_CHAM="VARI_ELGA",
+                   IMPR_NOM_VARI='NON',),
+                _F(RESULTAT=RESU1,
+                   TOUT="OUI",
+                   NOM_CHAM="EPEQ_ELGA",
+                   IMPR_NOM_VARI='NON',
+                   NOM_CMP=("INVA_2","PRIN_1","PRIN_2","PRIN_3"),),
+                _F(RESULTAT=RESU1,
+                   TOUT="OUI",
+                   NOM_CHAM="SIEQ_ELGA",
+                   IMPR_NOM_VARI='NON',
+                   NOM_CMP=("VMIS"),),),)
+
+FIN()
+
+
+
