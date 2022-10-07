@@ -50,13 +50,13 @@ at.setEntryName("TensionCutOff");
 // 2. Local Variables
 // <<<<<<<<<<<<<<<<<<
 
-@LocalVariable bool b;
+@LocalVariable bool b;                    // True if plastic loading
 @LocalVariable real local_zero_tolerance; // Local zero tolerance
 @LocalVariable real pi;                   // Real pi=3.14....
 @LocalVariable real phir;                 // Friction angle in radians
 @LocalVariable real psir;                 // Dilation angle in radians
-@LocalVariable real thetaFm;              // Plastic criterion: Lode angle for which the radius of the MC criterion is the minimum
-@LocalVariable real thetaGm;              // Plastic flow function: Lode angle for which the radius of the MC flow function is the minimum
+@LocalVariable real thetaFm;              // Plastic criterion: Lode angle for which the radius of the MC criterion reach a minimum
+@LocalVariable real thetaGm;              // Plastic flow function: Lode angle for which the radius of the MC flow function reach a minimum
 @LocalVariable real KFm;                  // Value of the function KF(theta) for Theta=thetaFm
 @LocalVariable real KGm;                  // Value of the function KG(theta) for Theta=thetaGm
 @LocalVariable stress aG;                 // at*tan(phi)/tan(psi) (in the plastic flow function)
@@ -64,7 +64,7 @@ at.setEntryName("TensionCutOff");
 @LocalVariable stress lambda;             // First Lame modulus
 @LocalVariable stress mu;                 // Shear modulus
 @LocalVariable stress ks;                 // Bulk modulus
-@LocalVariable Stensor nGtmp;
+@LocalVariable Stensor nGtmp;             // Local variable which is actually the plastic flow direction used to update the auxiliary variable gap
 
 // >>>>>>>>>>>>>>>>>
 // 3. State Variable
