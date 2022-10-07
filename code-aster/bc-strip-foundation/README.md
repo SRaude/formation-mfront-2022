@@ -73,7 +73,7 @@ N_c = \frac{N_q - 1}{\tan{\varphi}}
 \end{cases}
 $$
 
-## Post-traitement
+## Post-traitements
 
 L'évolution de la résultante des efforts verticaux en fonction du temps est tracée pour chaque cas de calcul. La valeur finale est confrontée aux solutions de référence présentées ci-dessus. Un exemple est donné sur la figure ci-dessous (ldc `MCBigoniMini`, sensibilité à l'angle de dilatance $\psi$)
 
@@ -81,6 +81,9 @@ L'évolution de la résultante des efforts verticaux en fonction du temps est tr
   <img width="60%" src="https://user-images.githubusercontent.com/68728185/194506578-7b9e582e-be3f-4706-9b56-4810cce05fd8.svg">
 </p>
 
-Le *mode de rupture* peut également être observé en récupérant le champ de déformation équivalente plastique, $\gamma^p$, (par exemple) au dernier instant de calcul (ldc `MCBigoniMini`, cas de référence)
+Le *mode de rupture* peut être observé en récupérant le champ de déformation équivalente plastique, $\gamma^p$, (par exemple) au dernier instant de calcul (ldc `MCBigoniMini`, cas de référence)
 
+<p align="center">
+  <img width="60%" src="https://user-images.githubusercontent.com/68728185/194511876-e3925d0d-98d1-4e12-9b4e-81e1e53eef33.png">
+</p>
 
