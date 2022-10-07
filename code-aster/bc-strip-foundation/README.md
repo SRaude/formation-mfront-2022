@@ -37,7 +37,7 @@ Pour ${\varphi=\psi}$, deux solutions de références sont disponibles dans la l
 
 ### Solution de Prandtl
 
-Le mode de rupture est présenté sur la figure ci-dessous,
+Le mode de rupture est présenté sur la figure ci-dessous
 
 <p align="center">
   <img width="60%" src="https://user-images.githubusercontent.com/68728185/194495658-cd6e671d-c297-4407-b7d7-9c3c0abe4275.png">
@@ -51,7 +51,7 @@ $$
 
 ### Solution de Terzaghi
 
-Le mode de rupture est présenté sur la figure ci-dessous,
+Le mode de rupture est présenté sur la figure ci-dessous
 
 <p align="center">
   <img width="60%" src="https://user-images.githubusercontent.com/68728185/194498016-27334df6-628b-455b-b017-9308e072b6b1.png">
@@ -74,3 +74,7 @@ N_c = \frac{N_q - 1}{\tan{\varphi}}
 $$
 
 ## Post-traitement
+
+L'évolution de la résultante des efforts verticaux en fonction du temps est tracée pour chaque cas de calcul. La valeur finale est confrontée aux solutions de référence présentées ci-dessus. Un exemple est donné sur la figure ci-dessous
+
+
