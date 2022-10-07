@@ -75,6 +75,12 @@ $$
 
 ## Post-traitement
 
-L'évolution de la résultante des efforts verticaux en fonction du temps est tracée pour chaque cas de calcul. La valeur finale est confrontée aux solutions de référence présentées ci-dessus. Un exemple est donné sur la figure ci-dessous
+L'évolution de la résultante des efforts verticaux en fonction du temps est tracée pour chaque cas de calcul. La valeur finale est confrontée aux solutions de référence présentées ci-dessus. Un exemple est donné sur la figure ci-dessous (ldc `MCBigoniMini`, sensibilité à l'angle de dilatance $\psi$)
+
+<p align="center">
+  <img width="60%" src="https://user-images.githubusercontent.com/68728185/194506578-7b9e582e-be3f-4706-9b56-4810cce05fd8.svg">
+</p>
+
+Le *mode de rupture* peut également être observé en récupérant le champ de déformation équivalente plastique, $\gamma^p$, (par exemple) au dernier instant de calcul (ldc `MCBigoniMini`, cas de référence)
 
 
