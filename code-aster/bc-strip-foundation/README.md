@@ -33,3 +33,44 @@ La réponse mécanique du domaine étudié est modélisée par l'une des lois de
 
 ## Solutions de référence
 
+Pour ${\varphi=\psi}$, deux solutions de références sont disponibles dans la littérature&nbsp;; celle de Prandtl, et celle de Terzaghi (cas limite).
+
+### Solution de Prandtl
+
+Le mode de rupture est présenté sur la figure ci-dessous,
+
+<p align="center">
+  <img width="60%" src="https://user-images.githubusercontent.com/68728185/194495658-cd6e671d-c297-4407-b7d7-9c3c0abe4275.png">
+</p>
+
+La charge limite admissible est donnée par,
+
+$$
+q_u = \frac{C}{\tan{\varphi}} \left[ \tan^2{\left( \frac{\pi}{4} + \frac{\varphi}{2} \right)} e^{\pi\tan{\varphi}} - 1 \right] = 300.6\ \text{MN/m}
+$$
+
+### Solution de Terzaghi
+
+Le mode de rupture est présenté sur la figure ci-dessous,
+
+<p align="center">
+  <img width="60%" src="https://user-images.githubusercontent.com/68728185/194498016-27334df6-628b-455b-b017-9308e072b6b1.png">
+</p>
+
+La charge limite admissible est donnée par,
+
+$$
+q_u = \frac{1}{2} \gamma b^2 N_\gamma + qbN_q + cbN_c = 308.8\ \text{MN/m}
+$$
+
+Avec,
+
+$$
+\begin{cases}
+N_q = e^{\pi\tan{\varphi}}\left(\frac{1+\sin{\varphi}}{1-\sin{\varphi}}\right)\\
+N_\gamma = \frac{1}{4}{\left[ \left(N_q - 1\right)\cos{\varphi} \right]}^{\frac{3}{2}}\\
+N_c = \frac{N_q - 1}{\tan{\varphi}}
+\end{cases}
+$$
+
+## Post-traitement
