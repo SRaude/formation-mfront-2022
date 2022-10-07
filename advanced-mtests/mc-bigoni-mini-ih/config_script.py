@@ -60,7 +60,7 @@ RootToOutputFiles="/home/simon/dev/formation-mfront-2022/advanced-mtests/mc-bigo
 ggm.NameOfTheModel="MCBigoniMiniIH"
 ggm.DStateVariables=OrderedDict()
 ggm.DStateVariables["PlastMultiplier"]=["LAMBDA"]
-ggm.DStateVariables["EquivPlasStrain"]=["GAMMAP"]
+ggm.DStateVariables["EquiPlastStrain"]=["GAMMAP"]
 ggm.AuxiliaryStateVariables=['NITER','IP','EVP','TIME']
 
 ### MTest options

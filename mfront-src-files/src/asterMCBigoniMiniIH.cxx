@@ -2,7 +2,7 @@
 * \file   src/asterMCBigoniMiniIH.cxx
 * \brief  This file implements the aster interface for the MCBigoniMiniIH behaviour law
 * \author Simon Raude
-* \date   04 / 10 / 2022
+* \date   07 / 10 / 2022
 */
 
 #include<iostream>
@@ -85,7 +85,7 @@ MFRONT_SHAREDOBJ const char *astermcbigoniminiih_MaterialProperties[7u] = {"Youn
 
 MFRONT_SHAREDOBJ unsigned short astermcbigoniminiih_nInternalStateVariables = 7;
 MFRONT_SHAREDOBJ const char * astermcbigoniminiih_InternalStateVariables[7] = {"ElasticStrain",
-"PlastMultiplier","EquivPlasStrain","LocalNewtonIter","PlasticIndex","PVolumStrain",
+"PlastMultiplier","EquiPlastStrain","LocalNewtonIter","PlasticIndex","PVolumStrain",
 "Time"};
 MFRONT_SHAREDOBJ int astermcbigoniminiih_InternalStateVariablesTypes [] = {1,0,0,0,0,0,0};
 

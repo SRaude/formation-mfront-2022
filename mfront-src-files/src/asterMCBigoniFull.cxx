@@ -2,7 +2,7 @@
 * \file   src/asterMCBigoniFull.cxx
 * \brief  This file implements the aster interface for the MCBigoniFull behaviour law
 * \author Simon Raude
-* \date   15 / 09 / 2022
+* \date   07 / 10 / 2022
 */
 
 #include<iostream>
@@ -83,11 +83,11 @@ MFRONT_SHAREDOBJ const char *astermcbigonifull_MaterialProperties[7u] = {"YoungM
 "TensionCutOff",
 "PiShapeCoef"};
 
-MFRONT_SHAREDOBJ unsigned short astermcbigonifull_nInternalStateVariables = 7;
-MFRONT_SHAREDOBJ const char * astermcbigonifull_InternalStateVariables[7] = {"ElasticStrain",
-"PlastMultiplier","LocalNewtonIter","PlasticIndex","PVolumStrain","Time",
-"LodeAngle"};
-MFRONT_SHAREDOBJ int astermcbigonifull_InternalStateVariablesTypes [] = {1,0,0,0,0,0,0};
+MFRONT_SHAREDOBJ unsigned short astermcbigonifull_nInternalStateVariables = 8;
+MFRONT_SHAREDOBJ const char * astermcbigonifull_InternalStateVariables[8] = {"ElasticStrain",
+"PlastMultiplier","LocalNewtonIter","PlasticIndex","PVolumStrain","EquiPlastStrain",
+"Time","LodeAngle"};
+MFRONT_SHAREDOBJ int astermcbigonifull_InternalStateVariablesTypes [] = {1,0,0,0,0,0,0,0};
 
 MFRONT_SHAREDOBJ unsigned short astermcbigonifull_nExternalStateVariables = 0;
 MFRONT_SHAREDOBJ const char * const * astermcbigonifull_ExternalStateVariables = nullptr;

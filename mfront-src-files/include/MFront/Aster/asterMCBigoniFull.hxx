@@ -2,7 +2,7 @@
 * \file   include/MFront/Aster/asterMCBigoniFull.hxx
 * \brief  This file declares the aster interface for the MCBigoniFull behaviour law
 * \author Simon Raude
-* \date   15 / 09 / 2022
+* \date   07 / 10 / 2022
 */
 
 #ifndef LIB_ASTER_MCBIGONIFULL_HXX

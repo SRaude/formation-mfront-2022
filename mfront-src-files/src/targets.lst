@@ -6,10 +6,10 @@ prefix : "lib";
 suffix : "so";
 install_path : "";
 sources : {
-"asterMCBigoniMiniIH.cxx",
-"MCBigoniMiniIH.cxx",
 "asterMCBigoniMini.cxx",
 "MCBigoniMini.cxx",
+"asterMCBigoniMiniIH.cxx",
+"MCBigoniMiniIH.cxx",
 "asterMCBigoniFull.cxx",
 "MCBigoniFull.cxx"
 };
@@ -28,20 +28,20 @@ link_libraries : {
 "$(shell tfel-config-3.4.0 --library-dependency --material --mfront-profiling --physical-constants)"
 };
 epts : {
-"astermcbigoniminiih",
 "astermcbigonimini",
+"astermcbigoniminiih",
 "astermcbigonifull"
 };
 };
 headers : {
-"MFront/Aster/asterMCBigoniMiniIH.hxx",
-"TFEL/Material/MCBigoniMiniIH.hxx",
-"TFEL/Material/MCBigoniMiniIHBehaviourData.hxx",
-"TFEL/Material/MCBigoniMiniIHIntegrationData.hxx",
 "MFront/Aster/asterMCBigoniMini.hxx",
 "TFEL/Material/MCBigoniMini.hxx",
 "TFEL/Material/MCBigoniMiniBehaviourData.hxx",
 "TFEL/Material/MCBigoniMiniIntegrationData.hxx",
+"MFront/Aster/asterMCBigoniMiniIH.hxx",
+"TFEL/Material/MCBigoniMiniIH.hxx",
+"TFEL/Material/MCBigoniMiniIHBehaviourData.hxx",
+"TFEL/Material/MCBigoniMiniIHIntegrationData.hxx",
 "MFront/Aster/asterMCBigoniFull.hxx",
 "TFEL/Material/MCBigoniFull.hxx",
 "TFEL/Material/MCBigoniFullBehaviourData.hxx",

@@ -2,7 +2,7 @@
 * \file   include/MFront/Aster/asterMCBigoniMiniIH.hxx
 * \brief  This file declares the aster interface for the MCBigoniMiniIH behaviour law
 * \author Simon Raude
-* \date   04 / 10 / 2022
+* \date   07 / 10 / 2022
 */
 
 #ifndef LIB_ASTER_MCBIGONIMINIIH_HXX

@@ -2,7 +2,7 @@
 * \file   src/asterMCBigoniMini.cxx
 * \brief  This file implements the aster interface for the MCBigoniMini behaviour law
 * \author Simon Raude
-* \date   04 / 10 / 2022
+* \date   07 / 10 / 2022
 */
 
 #include<iostream>

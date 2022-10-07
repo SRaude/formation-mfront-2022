@@ -23,7 +23,7 @@ makefiles  = $(makefiles2)
 
 all : libAsterBehaviour.so 
 
-libAsterBehaviour.so : asterMCBigoniMiniIH.o MCBigoniMiniIH.o asterMCBigoniMini.o MCBigoniMini.o asterMCBigoniFull.o MCBigoniFull.o 
+libAsterBehaviour.so : asterMCBigoniMini.o MCBigoniMini.o asterMCBigoniMiniIH.o MCBigoniMiniIH.o asterMCBigoniFull.o MCBigoniFull.o 
 	@$(CXX) -shared $^  -o $@ -L"$(strip $(shell tfel-config-3.4.0 --library-path))" -lAsterInterface-3.4.0 $(patsubst %,-l%,$(shell tfel-config-3.4.0 --library-dependency --material --mfront-profiling --physical-constants)) 
 
 install : 
