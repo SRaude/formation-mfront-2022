@@ -1,0 +1,1 @@
+# Calcul de la capacité portante d'un sol soumis à la charge d'une fondation superficielle
