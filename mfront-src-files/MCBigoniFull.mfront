@@ -7,7 +7,7 @@
 
 @DSL Implicit;
 @Author Simon Raude;
-@Date 15/09/2022;
+@Date 07/10/2022;
 @Behaviour MCBigoniFull;
 
 @Algorithm NewtonRaphson;
@@ -42,7 +42,7 @@ psi.setEntryName("DilationAngle");
 @MaterialProperty stress coh;
 coh.setEntryName("Cohesion");
 
-// Controls the intersection of the hyperbolic branch of the plastic criterion with the I1 axis (0<..<=C/tan(phi), Pa)
+// Controls the intersection of the hyperbolic branch of the plastic criterion with the hydrostatic axis (0<..<=C/tan(phi), Pa)
 @MaterialProperty real at;
 at.setEntryName("TensionCutOff");
 
@@ -54,17 +54,17 @@ gam.setEntryName("PiShapeCoef");
 // 2. Local Variables
 // <<<<<<<<<<<<<<<<<<
 
-@LocalVariable bool b;
+@LocalVariable bool b;                    // True if plastic loading
 @LocalVariable real local_zero_tolerance; // Local zero tolerance
 @LocalVariable real pi;                   // Real pi=3.14....
 @LocalVariable real phir;                 // Friction angle in radians
 @LocalVariable real psir;                 // Dilation angle in radians
-@LocalVariable real thetaFm;              // Plastic criterion: Lode angle for which the radius of the MC criterion is the minimum
-@LocalVariable real thetaGm;              // Plastic flow function: Lode angle for which the radius of the MC flow function is the minimum
-@LocalVariable real rF;
-@LocalVariable real rG;
-@LocalVariable real betaF;
-@LocalVariable real betaG;
+@LocalVariable real thetaFm;              // Plastic criterion: Lode angle for which the radius of the MC criterion reach a minimum
+@LocalVariable real thetaGm;              // Plastic flow function: Lode angle for which the radius of the MC flow function reach a minimum
+@LocalVariable real rF;                   // Ratio between the tension strength and the compression strength
+@LocalVariable real rG;                   // Equivalent of rF for G (with psi instead of phi)
+@LocalVariable real betaF;                // Coefficient beta in the function KF(theta): plastic criterion
+@LocalVariable real betaG;                // Coefficient beta in the function KG(theta): plastic flow function
 @LocalVariable real KFm;                  // Value of the function KF(theta) for Theta=thetaFm
 @LocalVariable real KGm;                  // Value of the function KG(theta) for Theta=thetaGm
 @LocalVariable stress aG;                 // at*tan(phi)/tan(psi) (in the plastic flow function)
@@ -72,6 +72,7 @@ gam.setEntryName("PiShapeCoef");
 @LocalVariable stress lambda;             // First Lame modulus
 @LocalVariable stress mu;                 // Shear modulus
 @LocalVariable stress ks;                 // Bulk modulus
+@LocalVariable Stensor nGtmp;             // Local variable which is actually the plastic flow direction used to update the auxiliary variable gap
 
 // >>>>>>>>>>>>>>>>>
 // 3. State Variable
@@ -87,12 +88,14 @@ lam.setEntryName("PlastMultiplier");
 @AuxiliaryStateVariable real niter;  // Number of Newton iterations
 @AuxiliaryStateVariable real ip;     // Plastic index
 @AuxiliaryStateVariable strain evp;  // Volumetric plastic strain
-@AuxiliaryStateVariable real inst;   // Time...
+@AuxiliaryStateVariable strain gap;  // Equivalent plastic strain
+@AuxiliaryStateVariable real inst;   // Time
 @AuxiliaryStateVariable real lode;   // Lode angle
 
 niter.setEntryName("LocalNewtonIter");
 ip.setEntryName("PlasticIndex");
 evp.setEntryName("PVolumStrain");
+gap.setEntryName("EquiPlastStrain");
 inst.setEntryName("Time");
 lode.setEntryName("LodeAngle");
 
@@ -108,10 +111,10 @@ lode.setEntryName("LodeAngle");
 	using namespace tfel::material::lame;
 	local_zero_tolerance=real(1e-12);
 	pi=4.*atan(1.);
-	// >>> FrictionAngle and DilationAngle in radian
+	// >>> Convert the FrictionAngle and the DilationAngle to radians
 	phir=phi*pi/180.;
 	psir=psi*pi/180.;
-	// >>> Some quantities to define KF and FG
+	// >>> Compute KFm and KGm
 	thetaFm=atan(-sin(phir)/sqrt(3.));
 	thetaGm=atan(-sin(psir)/sqrt(3.));
 	rF=(3.-sin(phir))/(3.+sin(phir));
@@ -120,14 +123,14 @@ lode.setEntryName("LodeAngle");
 	betaG=6./pi*atan((2.*rG-1.)/sqrt(3.));
     KFm=(cos(thetaFm)-sin(phir)*sin(thetaFm)/sqrt(3.))/cos(betaF*pi/6.-acos(gam*cos(3.*(thetaFm+pi/6.)))/3.);
     KGm=(cos(thetaGm)-sin(psir)*sin(thetaGm)/sqrt(3.))/cos(betaG*pi/6.-acos(gam*cos(3.*(thetaGm+pi/6.)))/3.);
-    // >>> TensionCutOff Parameters for the plastic flow function
+    // >>> Compute aG
     aG=at*tan(phir)/tan(psir);
-	// >>> Elastic moduli and Hook tensor
+	// >>> Compute the elastic moduli and the Hooke tensor
 	lambda=computeLambda(young,nu);
 	mu=computeMu(young,nu);
 	ks=lambda+2.*mu/3.;
 	Ce=3.*ks*Stensor4::J()+2.*mu*Stensor4::K();
-	// >>> Initialise elastic strain (for cases with initial stresses without displacements, e.g. tunnels)
+	// >>> Initialise elastic strain (for cases with initial stresses without displacements, e.g. tunnels) /!\
 	if (inst==real(0) && lam==real(0)) {
         const Stensor4 Se=invert(Ce);
         eel=(Se*sig);
@@ -210,6 +213,7 @@ lode.setEntryName("LodeAngle");
 		const Stensor dJ3_dsig=computeJ3Derivative(sig);
 		// >>>>>>>>> Compute nG=dG_dsig
 		const Stensor nG=(dG_dI1*dI1_dsig)+(dG_dJ2*dJ2_dsig)+(dG_dJ3*dJ3_dsig);
+		nGtmp=nG;
 
 		// >>>>>> 8.1.4 Equations to be solvedKGm
 		feel=deel-deto+dlam*nG;
@@ -259,7 +263,7 @@ lode.setEntryName("LodeAngle");
 		dfeel_ddeel=Stensor4::Id()+dlam*(dnG_dsig*Ce);
 		dfeel_ddlam=nG;
 		
-		// >>>>>>>>> 8.1.5.3 Third line
+		// >>>>>>>>> 8.1.5.3 Second line
 		dflam_ddeel=(dF_dsig|Ce)/young;
 		dflam_ddlam=real(0);
 		
@@ -291,6 +295,7 @@ lode.setEntryName("LodeAngle");
 	if (dlam>0) {
 		ip=1;
 		evp+=dlam*sin(psir);
+		gap+=dlam*sqrt(2.*deviator(nGtmp)|deviator(nGtmp)/3.);
 	} else {
 		ip=0;
 	}
