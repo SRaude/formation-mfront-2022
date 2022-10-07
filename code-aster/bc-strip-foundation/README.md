@@ -14,21 +14,22 @@ Une phase d'équilibre précède la phase de chargement de la semelle. Pendant c
 
 ## Matériaux
 
-La réponse mécanique du domaine étudié est modélisée par l'une des lois de comportement dévelopées dans le cadre de cette formation. Les paramètres matériau par défaut sont présentés dans le tableau ci-dessous
+La réponse mécanique du domaine étudié est modélisée par l'une des lois de comportement dévelopées dans le cadre de cette formation, `MCBigoniMini`, `MCBigoniMiniIH`, `MCBigoniFull`. Les paramètres matériau par défaut sont présentés dans le tableau ci-dessous
 
-<center>
-
-| Symbole   | Nom           | Valeur par défaut           |
-|  :----    | :----         | :----:                      |
-| $E$       | YoungModulus  | $9\times 10^9$              |
-| $\nu$     | PoissonRatio  | $0.25$                      |
-| $\varphi$ | FrictionAngle | $32.07$                     |
-| $\psi$    | DilationAngle | $32.07$                     |
-| $C$       | Cohesion      | $4.21\times 10^6$           |
-| $a$       | TensionCutOff | $\frac{C}{20\tan{\varphi}}$ |
-| $h_c$     | HardeningCoef | $0$                         |
-| $\gamma$  | PiShapeCoef   | $0.99$                      |
-
-</center>
-
+<div align="center">
+  
+| Symbole   | Nom             | Valeur par défaut           | Unité |
+|  :------: | :-------------: | :-------------------------: | :---: |
+| $E$       | `YoungModulus`  | $9\times 10^9$              | Pa    |
+| $\nu$     | `PoissonRatio`  | $0.25$                      | -     |
+| $\varphi$ | `FrictionAngle` | $32.07$                     | °     |
+| $\psi$    | `DilationAngle` | $32.07$                     | °     |
+| $C$       | `Cohesion`      | $4.21\times 10^6$           | Pa    |
+| $a$       | `TensionCutOff` | $\frac{C}{20\tan{\varphi}}$ | Pa    |
+| $h_c$     | `HardeningCoef` | $0$                         | -     |
+| $\gamma$  | `PiShapeCoef`   | $0.99$                      | -     |
  
+</div>
+
+## Solutions de référence
+
