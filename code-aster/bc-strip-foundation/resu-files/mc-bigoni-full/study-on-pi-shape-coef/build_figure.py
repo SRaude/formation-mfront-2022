@@ -54,6 +54,6 @@ norm=mpl.colors.Normalize(vmin=0.,vmax=1.)
 cb=fig.colorbar(mpl.cm.ScalarMappable(norm=norm,cmap=MyCMap),ax=ax,location='top',shrink=.5,aspect=30)
 cb.set_ticks(np.linspace(0.,1.,len(lFILES)))
 cb.set_ticklabels(['{level:.2g}'.format(level=float(l)) for l in lLABEL])
-t=cb.set_label(r"$h_c$ (-)",va="bottom")
+t=cb.set_label(r"$\gamma$ (-)",va="bottom")
 
 plt.savefig('bc.pdf',dpi=600,bbox_inches='tight')

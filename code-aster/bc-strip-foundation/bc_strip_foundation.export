@@ -39,6 +39,8 @@ P corefilesize unlimited
 F comm /home/simon/dev/formation-mfront-2022/code-aster/bc-strip-foundation/command-files/bc_strip_foundation_solution.comm D 1
 F mmed /home/simon/dev/formation-mfront-2022/code-aster/bc-strip-foundation/mesh-files/mesh_1069_nodes.med D 20
 F libr /home/simon/dev/formation-mfront-2022/mfront-src-files/MCBigoniMiniIH.mfront D 38
+F resu /home/simon/dev/formation-mfront-2022/code-aster/bc-strip-foundation/resu-files/mc-bigoni-mini-ih/study-on-hardening-coef/hc_10.00.resu R 8
+F rmed /home/simon/dev/formation-mfront-2022/code-aster/bc-strip-foundation/resu-files/mc-bigoni-mini-ih/study-on-hardening-coef/hc_10.00.med R 81
 P consbtc oui
 P soumbtc oui
 P actions make_etude

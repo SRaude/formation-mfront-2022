@@ -1,0 +1,47 @@
+P profastk simon@debian:/home/simon/dev/formation-mfront-2022/code-aster/excavation/excavation.astk
+P serveur localhost
+P username simon
+P aster_root /opt/salome_meca/Salome-V2021-s9/tools/Code_aster_frontend-202110
+P platform Linux64
+P protocol_exec asrun.plugins.server.SSHServer
+P protocol_copyto asrun.plugins.server.SCPServer
+P protocol_copyfrom asrun.plugins.server.SCPServer
+P proxy_dir /tmp
+P noeud localhost
+P mclient debian
+P uclient simon
+P version mpi
+P lang en
+P debug nodebug
+P mode interactif
+P ncpus 
+P mpi_nbcpu 4
+P mpi_nbnoeud 1
+P classe 
+P depart 
+P after_job 
+P distrib 
+P exectool 
+P multiple 
+P nomjob excavation
+P origine ASTK 2021.0.final
+P display debian:0
+A args 
+A memjeveux 128.0
+A tpmax 1200
+P memjob 1048576
+P tpsjob 20
+P nbmaxnook 5
+P cpresok RESNOOK
+P only_nook 
+P facmtps 1
+P corefilesize unlimited
+F comm /home/simon/dev/formation-mfront-2022/code-aster/excavation/command-files/excavation.comm D 1
+F mmed /home/simon/dev/formation-mfront-2022/code-aster/excavation/mesh-files/mesh_gal.med D 20
+F libr /home/simon/dev/formation-mfront-2022/mfront-src-files/MCBigoniFull.mfront D 38
+F rmed /home/simon/dev/formation-mfront-2022/code-aster/excavation/resu-files/mc-bigoni-full/study-on-pi-shape-coef/gamma_0.000.med R 81
+F resu /home/simon/dev/formation-mfront-2022/code-aster/excavation/resu-files/mc-bigoni-full/study-on-pi-shape-coef/gamma_0.000_dx.resu R 8
+F resu /home/simon/dev/formation-mfront-2022/code-aster/excavation/resu-files/mc-bigoni-full/study-on-pi-shape-coef/gamma_0.000_dy.resu R 9
+P consbtc oui
+P soumbtc oui
+P actions make_etude

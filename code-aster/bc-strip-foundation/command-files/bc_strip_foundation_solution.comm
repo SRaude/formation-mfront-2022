@@ -68,10 +68,10 @@ DefaultDicPara["Cohesion"]=4.21e6
 DefaultDicPara["TensionCutOff"]=.1*DefaultDicPara["Cohesion"]/tan(DefaultDicPara["FrictionAngle"]*pi/180.)
 
 if ldc=="MCBigoniFull":
-   DefaultDicPara["PiShapeCoef"]=.99
+   DefaultDicPara["PiShapeCoef"]=0.995
 
 if ldc=="MCBigoniMiniIH":
-   DefaultDicPara["HardeningCoef"]=0.1
+   DefaultDicPara["HardeningCoef"]=10.
 
 
 gravi=9.81
@@ -210,7 +210,7 @@ RESU1=STAT_NON_LINE(MODELE=MODMEC1,
                                  INST_FIN=TF,),
                     SOLVEUR=_F(METHODE="MUMPS",),
                     NEWTON=_F(MATRICE='TANGENTE',
-                              # PREDICTION='EXTRAPOLE',
+                              PREDICTION='EXTRAPOLE',
                               ),
                     CONVERGENCE=_F(RESI_GLOB_RELA=1.e-8,
                                    ITER_GLOB_MAXI=20,),
@@ -252,6 +252,3 @@ IMPR_RESU(FORMAT='MED',
                    NOM_CMP=("V5","V6","V7","V8","V9","V10"),),),)
 
 FIN()
-
-
-

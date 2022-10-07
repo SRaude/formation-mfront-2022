@@ -1,0 +1,410 @@
+#
+#--------------------------------------------------------------------------------
+##ASTER 16.02.09 CONCEPT 0000001c CALCULE LE 07/10/2022 A 23:43:55 DE TYPE        
+#TABLE_SDASTER                                                                   
+INTITULE,RESU,NOM_CHAM,NUME_ORDRE,INST,EXTREMA,NOEUD,CMP,VALE
+TAB_DX          ,0000001b,DEPL            ,           0, 1.00000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           0, 1.00000E+00,MIN     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           0, 1.00000E+00,MAXI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           0, 1.00000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           1, 1.01000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           1, 1.01000E+00,MIN     ,N22     ,DX      ,-6.44754E-05
+TAB_DX          ,0000001b,DEPL            ,           1, 1.01000E+00,MAXI_ABS,N22     ,DX      , 6.44754E-05
+TAB_DX          ,0000001b,DEPL            ,           1, 1.01000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           2, 1.02000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           2, 1.02000E+00,MIN     ,N22     ,DX      ,-1.28951E-04
+TAB_DX          ,0000001b,DEPL            ,           2, 1.02000E+00,MAXI_ABS,N22     ,DX      , 1.28951E-04
+TAB_DX          ,0000001b,DEPL            ,           2, 1.02000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           3, 1.03000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           3, 1.03000E+00,MIN     ,N22     ,DX      ,-1.93426E-04
+TAB_DX          ,0000001b,DEPL            ,           3, 1.03000E+00,MAXI_ABS,N22     ,DX      , 1.93426E-04
+TAB_DX          ,0000001b,DEPL            ,           3, 1.03000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           4, 1.04000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           4, 1.04000E+00,MIN     ,N22     ,DX      ,-2.57901E-04
+TAB_DX          ,0000001b,DEPL            ,           4, 1.04000E+00,MAXI_ABS,N22     ,DX      , 2.57901E-04
+TAB_DX          ,0000001b,DEPL            ,           4, 1.04000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           5, 1.05000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           5, 1.05000E+00,MIN     ,N22     ,DX      ,-3.22377E-04
+TAB_DX          ,0000001b,DEPL            ,           5, 1.05000E+00,MAXI_ABS,N22     ,DX      , 3.22377E-04
+TAB_DX          ,0000001b,DEPL            ,           5, 1.05000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           6, 1.06000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           6, 1.06000E+00,MIN     ,N22     ,DX      ,-3.86852E-04
+TAB_DX          ,0000001b,DEPL            ,           6, 1.06000E+00,MAXI_ABS,N22     ,DX      , 3.86852E-04
+TAB_DX          ,0000001b,DEPL            ,           6, 1.06000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           7, 1.07000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           7, 1.07000E+00,MIN     ,N22     ,DX      ,-4.51328E-04
+TAB_DX          ,0000001b,DEPL            ,           7, 1.07000E+00,MAXI_ABS,N22     ,DX      , 4.51328E-04
+TAB_DX          ,0000001b,DEPL            ,           7, 1.07000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           8, 1.08000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           8, 1.08000E+00,MIN     ,N22     ,DX      ,-5.15803E-04
+TAB_DX          ,0000001b,DEPL            ,           8, 1.08000E+00,MAXI_ABS,N22     ,DX      , 5.15803E-04
+TAB_DX          ,0000001b,DEPL            ,           8, 1.08000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           9, 1.09000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,           9, 1.09000E+00,MIN     ,N22     ,DX      ,-5.80278E-04
+TAB_DX          ,0000001b,DEPL            ,           9, 1.09000E+00,MAXI_ABS,N22     ,DX      , 5.80278E-04
+TAB_DX          ,0000001b,DEPL            ,           9, 1.09000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          10, 1.10000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          10, 1.10000E+00,MIN     ,N22     ,DX      ,-6.44754E-04
+TAB_DX          ,0000001b,DEPL            ,          10, 1.10000E+00,MAXI_ABS,N22     ,DX      , 6.44754E-04
+TAB_DX          ,0000001b,DEPL            ,          10, 1.10000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          11, 1.11000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          11, 1.11000E+00,MIN     ,N22     ,DX      ,-7.09229E-04
+TAB_DX          ,0000001b,DEPL            ,          11, 1.11000E+00,MAXI_ABS,N22     ,DX      , 7.09229E-04
+TAB_DX          ,0000001b,DEPL            ,          11, 1.11000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          12, 1.12000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          12, 1.12000E+00,MIN     ,N22     ,DX      ,-7.73704E-04
+TAB_DX          ,0000001b,DEPL            ,          12, 1.12000E+00,MAXI_ABS,N22     ,DX      , 7.73704E-04
+TAB_DX          ,0000001b,DEPL            ,          12, 1.12000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          13, 1.13000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          13, 1.13000E+00,MIN     ,N22     ,DX      ,-8.38180E-04
+TAB_DX          ,0000001b,DEPL            ,          13, 1.13000E+00,MAXI_ABS,N22     ,DX      , 8.38180E-04
+TAB_DX          ,0000001b,DEPL            ,          13, 1.13000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          14, 1.14000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          14, 1.14000E+00,MIN     ,N22     ,DX      ,-9.02655E-04
+TAB_DX          ,0000001b,DEPL            ,          14, 1.14000E+00,MAXI_ABS,N22     ,DX      , 9.02655E-04
+TAB_DX          ,0000001b,DEPL            ,          14, 1.14000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          15, 1.15000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          15, 1.15000E+00,MIN     ,N22     ,DX      ,-9.67131E-04
+TAB_DX          ,0000001b,DEPL            ,          15, 1.15000E+00,MAXI_ABS,N22     ,DX      , 9.67131E-04
+TAB_DX          ,0000001b,DEPL            ,          15, 1.15000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          16, 1.16000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          16, 1.16000E+00,MIN     ,N22     ,DX      ,-1.03161E-03
+TAB_DX          ,0000001b,DEPL            ,          16, 1.16000E+00,MAXI_ABS,N22     ,DX      , 1.03161E-03
+TAB_DX          ,0000001b,DEPL            ,          16, 1.16000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          17, 1.17000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          17, 1.17000E+00,MIN     ,N22     ,DX      ,-1.09608E-03
+TAB_DX          ,0000001b,DEPL            ,          17, 1.17000E+00,MAXI_ABS,N22     ,DX      , 1.09608E-03
+TAB_DX          ,0000001b,DEPL            ,          17, 1.17000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          18, 1.18000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          18, 1.18000E+00,MIN     ,N22     ,DX      ,-1.16056E-03
+TAB_DX          ,0000001b,DEPL            ,          18, 1.18000E+00,MAXI_ABS,N22     ,DX      , 1.16056E-03
+TAB_DX          ,0000001b,DEPL            ,          18, 1.18000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          19, 1.19000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          19, 1.19000E+00,MIN     ,N22     ,DX      ,-1.22503E-03
+TAB_DX          ,0000001b,DEPL            ,          19, 1.19000E+00,MAXI_ABS,N22     ,DX      , 1.22503E-03
+TAB_DX          ,0000001b,DEPL            ,          19, 1.19000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          20, 1.20000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          20, 1.20000E+00,MIN     ,N22     ,DX      ,-1.28951E-03
+TAB_DX          ,0000001b,DEPL            ,          20, 1.20000E+00,MAXI_ABS,N22     ,DX      , 1.28951E-03
+TAB_DX          ,0000001b,DEPL            ,          20, 1.20000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          21, 1.21000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          21, 1.21000E+00,MIN     ,N22     ,DX      ,-1.35398E-03
+TAB_DX          ,0000001b,DEPL            ,          21, 1.21000E+00,MAXI_ABS,N22     ,DX      , 1.35398E-03
+TAB_DX          ,0000001b,DEPL            ,          21, 1.21000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          22, 1.22000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          22, 1.22000E+00,MIN     ,N22     ,DX      ,-1.41846E-03
+TAB_DX          ,0000001b,DEPL            ,          22, 1.22000E+00,MAXI_ABS,N22     ,DX      , 1.41846E-03
+TAB_DX          ,0000001b,DEPL            ,          22, 1.22000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          23, 1.23000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          23, 1.23000E+00,MIN     ,N22     ,DX      ,-1.48293E-03
+TAB_DX          ,0000001b,DEPL            ,          23, 1.23000E+00,MAXI_ABS,N22     ,DX      , 1.48293E-03
+TAB_DX          ,0000001b,DEPL            ,          23, 1.23000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          24, 1.24000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          24, 1.24000E+00,MIN     ,N22     ,DX      ,-1.54741E-03
+TAB_DX          ,0000001b,DEPL            ,          24, 1.24000E+00,MAXI_ABS,N22     ,DX      , 1.54741E-03
+TAB_DX          ,0000001b,DEPL            ,          24, 1.24000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          25, 1.25000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          25, 1.25000E+00,MIN     ,N22     ,DX      ,-1.61188E-03
+TAB_DX          ,0000001b,DEPL            ,          25, 1.25000E+00,MAXI_ABS,N22     ,DX      , 1.61188E-03
+TAB_DX          ,0000001b,DEPL            ,          25, 1.25000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          26, 1.26000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          26, 1.26000E+00,MIN     ,N22     ,DX      ,-1.67636E-03
+TAB_DX          ,0000001b,DEPL            ,          26, 1.26000E+00,MAXI_ABS,N22     ,DX      , 1.67636E-03
+TAB_DX          ,0000001b,DEPL            ,          26, 1.26000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          27, 1.27000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          27, 1.27000E+00,MIN     ,N22     ,DX      ,-1.74084E-03
+TAB_DX          ,0000001b,DEPL            ,          27, 1.27000E+00,MAXI_ABS,N22     ,DX      , 1.74084E-03
+TAB_DX          ,0000001b,DEPL            ,          27, 1.27000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          28, 1.28000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          28, 1.28000E+00,MIN     ,N22     ,DX      ,-1.80531E-03
+TAB_DX          ,0000001b,DEPL            ,          28, 1.28000E+00,MAXI_ABS,N22     ,DX      , 1.80531E-03
+TAB_DX          ,0000001b,DEPL            ,          28, 1.28000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          29, 1.29000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          29, 1.29000E+00,MIN     ,N22     ,DX      ,-1.86979E-03
+TAB_DX          ,0000001b,DEPL            ,          29, 1.29000E+00,MAXI_ABS,N22     ,DX      , 1.86979E-03
+TAB_DX          ,0000001b,DEPL            ,          29, 1.29000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          30, 1.30000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          30, 1.30000E+00,MIN     ,N22     ,DX      ,-1.93426E-03
+TAB_DX          ,0000001b,DEPL            ,          30, 1.30000E+00,MAXI_ABS,N22     ,DX      , 1.93426E-03
+TAB_DX          ,0000001b,DEPL            ,          30, 1.30000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          31, 1.31000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          31, 1.31000E+00,MIN     ,N22     ,DX      ,-1.99874E-03
+TAB_DX          ,0000001b,DEPL            ,          31, 1.31000E+00,MAXI_ABS,N22     ,DX      , 1.99874E-03
+TAB_DX          ,0000001b,DEPL            ,          31, 1.31000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          32, 1.32000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          32, 1.32000E+00,MIN     ,N22     ,DX      ,-2.06321E-03
+TAB_DX          ,0000001b,DEPL            ,          32, 1.32000E+00,MAXI_ABS,N22     ,DX      , 2.06321E-03
+TAB_DX          ,0000001b,DEPL            ,          32, 1.32000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          33, 1.33000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          33, 1.33000E+00,MIN     ,N22     ,DX      ,-2.12769E-03
+TAB_DX          ,0000001b,DEPL            ,          33, 1.33000E+00,MAXI_ABS,N22     ,DX      , 2.12769E-03
+TAB_DX          ,0000001b,DEPL            ,          33, 1.33000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          34, 1.34000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          34, 1.34000E+00,MIN     ,N22     ,DX      ,-2.19216E-03
+TAB_DX          ,0000001b,DEPL            ,          34, 1.34000E+00,MAXI_ABS,N22     ,DX      , 2.19216E-03
+TAB_DX          ,0000001b,DEPL            ,          34, 1.34000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          35, 1.35000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          35, 1.35000E+00,MIN     ,N22     ,DX      ,-2.25664E-03
+TAB_DX          ,0000001b,DEPL            ,          35, 1.35000E+00,MAXI_ABS,N22     ,DX      , 2.25664E-03
+TAB_DX          ,0000001b,DEPL            ,          35, 1.35000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          36, 1.36000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          36, 1.36000E+00,MIN     ,N22     ,DX      ,-2.32111E-03
+TAB_DX          ,0000001b,DEPL            ,          36, 1.36000E+00,MAXI_ABS,N22     ,DX      , 2.32111E-03
+TAB_DX          ,0000001b,DEPL            ,          36, 1.36000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          37, 1.37000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          37, 1.37000E+00,MIN     ,N22     ,DX      ,-2.38559E-03
+TAB_DX          ,0000001b,DEPL            ,          37, 1.37000E+00,MAXI_ABS,N22     ,DX      , 2.38559E-03
+TAB_DX          ,0000001b,DEPL            ,          37, 1.37000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          38, 1.38000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          38, 1.38000E+00,MIN     ,N22     ,DX      ,-2.45006E-03
+TAB_DX          ,0000001b,DEPL            ,          38, 1.38000E+00,MAXI_ABS,N22     ,DX      , 2.45006E-03
+TAB_DX          ,0000001b,DEPL            ,          38, 1.38000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          39, 1.39000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          39, 1.39000E+00,MIN     ,N22     ,DX      ,-2.51454E-03
+TAB_DX          ,0000001b,DEPL            ,          39, 1.39000E+00,MAXI_ABS,N22     ,DX      , 2.51454E-03
+TAB_DX          ,0000001b,DEPL            ,          39, 1.39000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          40, 1.40000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          40, 1.40000E+00,MIN     ,N22     ,DX      ,-2.57901E-03
+TAB_DX          ,0000001b,DEPL            ,          40, 1.40000E+00,MAXI_ABS,N22     ,DX      , 2.57901E-03
+TAB_DX          ,0000001b,DEPL            ,          40, 1.40000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          41, 1.41000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          41, 1.41000E+00,MIN     ,N22     ,DX      ,-2.64349E-03
+TAB_DX          ,0000001b,DEPL            ,          41, 1.41000E+00,MAXI_ABS,N22     ,DX      , 2.64349E-03
+TAB_DX          ,0000001b,DEPL            ,          41, 1.41000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          42, 1.42000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          42, 1.42000E+00,MIN     ,N22     ,DX      ,-2.70797E-03
+TAB_DX          ,0000001b,DEPL            ,          42, 1.42000E+00,MAXI_ABS,N22     ,DX      , 2.70797E-03
+TAB_DX          ,0000001b,DEPL            ,          42, 1.42000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          43, 1.43000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          43, 1.43000E+00,MIN     ,N22     ,DX      ,-2.77244E-03
+TAB_DX          ,0000001b,DEPL            ,          43, 1.43000E+00,MAXI_ABS,N22     ,DX      , 2.77244E-03
+TAB_DX          ,0000001b,DEPL            ,          43, 1.43000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          44, 1.44000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          44, 1.44000E+00,MIN     ,N22     ,DX      ,-2.83692E-03
+TAB_DX          ,0000001b,DEPL            ,          44, 1.44000E+00,MAXI_ABS,N22     ,DX      , 2.83692E-03
+TAB_DX          ,0000001b,DEPL            ,          44, 1.44000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          45, 1.45000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          45, 1.45000E+00,MIN     ,N22     ,DX      ,-2.90139E-03
+TAB_DX          ,0000001b,DEPL            ,          45, 1.45000E+00,MAXI_ABS,N22     ,DX      , 2.90139E-03
+TAB_DX          ,0000001b,DEPL            ,          45, 1.45000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          46, 1.46000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          46, 1.46000E+00,MIN     ,N22     ,DX      ,-2.96587E-03
+TAB_DX          ,0000001b,DEPL            ,          46, 1.46000E+00,MAXI_ABS,N22     ,DX      , 2.96587E-03
+TAB_DX          ,0000001b,DEPL            ,          46, 1.46000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          47, 1.47000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          47, 1.47000E+00,MIN     ,N22     ,DX      ,-3.03034E-03
+TAB_DX          ,0000001b,DEPL            ,          47, 1.47000E+00,MAXI_ABS,N22     ,DX      , 3.03034E-03
+TAB_DX          ,0000001b,DEPL            ,          47, 1.47000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          48, 1.48000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          48, 1.48000E+00,MIN     ,N22     ,DX      ,-3.09482E-03
+TAB_DX          ,0000001b,DEPL            ,          48, 1.48000E+00,MAXI_ABS,N22     ,DX      , 3.09482E-03
+TAB_DX          ,0000001b,DEPL            ,          48, 1.48000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          49, 1.49000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          49, 1.49000E+00,MIN     ,N22     ,DX      ,-3.15929E-03
+TAB_DX          ,0000001b,DEPL            ,          49, 1.49000E+00,MAXI_ABS,N22     ,DX      , 3.15929E-03
+TAB_DX          ,0000001b,DEPL            ,          49, 1.49000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          50, 1.50000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          50, 1.50000E+00,MIN     ,N22     ,DX      ,-3.22377E-03
+TAB_DX          ,0000001b,DEPL            ,          50, 1.50000E+00,MAXI_ABS,N22     ,DX      , 3.22377E-03
+TAB_DX          ,0000001b,DEPL            ,          50, 1.50000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          51, 1.51000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          51, 1.51000E+00,MIN     ,N22     ,DX      ,-3.28824E-03
+TAB_DX          ,0000001b,DEPL            ,          51, 1.51000E+00,MAXI_ABS,N22     ,DX      , 3.28824E-03
+TAB_DX          ,0000001b,DEPL            ,          51, 1.51000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          52, 1.52000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          52, 1.52000E+00,MIN     ,N22     ,DX      ,-3.35272E-03
+TAB_DX          ,0000001b,DEPL            ,          52, 1.52000E+00,MAXI_ABS,N22     ,DX      , 3.35272E-03
+TAB_DX          ,0000001b,DEPL            ,          52, 1.52000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          53, 1.53000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          53, 1.53000E+00,MIN     ,N22     ,DX      ,-3.41719E-03
+TAB_DX          ,0000001b,DEPL            ,          53, 1.53000E+00,MAXI_ABS,N22     ,DX      , 3.41719E-03
+TAB_DX          ,0000001b,DEPL            ,          53, 1.53000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          54, 1.54000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          54, 1.54000E+00,MIN     ,N22     ,DX      ,-3.48167E-03
+TAB_DX          ,0000001b,DEPL            ,          54, 1.54000E+00,MAXI_ABS,N22     ,DX      , 3.48167E-03
+TAB_DX          ,0000001b,DEPL            ,          54, 1.54000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          55, 1.55000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          55, 1.55000E+00,MIN     ,N22     ,DX      ,-3.54615E-03
+TAB_DX          ,0000001b,DEPL            ,          55, 1.55000E+00,MAXI_ABS,N22     ,DX      , 3.54615E-03
+TAB_DX          ,0000001b,DEPL            ,          55, 1.55000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          56, 1.56000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          56, 1.56000E+00,MIN     ,N22     ,DX      ,-3.61062E-03
+TAB_DX          ,0000001b,DEPL            ,          56, 1.56000E+00,MAXI_ABS,N22     ,DX      , 3.61062E-03
+TAB_DX          ,0000001b,DEPL            ,          56, 1.56000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          57, 1.57000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          57, 1.57000E+00,MIN     ,N22     ,DX      ,-3.67510E-03
+TAB_DX          ,0000001b,DEPL            ,          57, 1.57000E+00,MAXI_ABS,N22     ,DX      , 3.67510E-03
+TAB_DX          ,0000001b,DEPL            ,          57, 1.57000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          58, 1.58000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          58, 1.58000E+00,MIN     ,N22     ,DX      ,-3.73957E-03
+TAB_DX          ,0000001b,DEPL            ,          58, 1.58000E+00,MAXI_ABS,N22     ,DX      , 3.73957E-03
+TAB_DX          ,0000001b,DEPL            ,          58, 1.58000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          59, 1.59000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          59, 1.59000E+00,MIN     ,N22     ,DX      ,-3.80405E-03
+TAB_DX          ,0000001b,DEPL            ,          59, 1.59000E+00,MAXI_ABS,N22     ,DX      , 3.80405E-03
+TAB_DX          ,0000001b,DEPL            ,          59, 1.59000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          60, 1.60000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          60, 1.60000E+00,MIN     ,N22     ,DX      ,-3.86857E-03
+TAB_DX          ,0000001b,DEPL            ,          60, 1.60000E+00,MAXI_ABS,N22     ,DX      , 3.86857E-03
+TAB_DX          ,0000001b,DEPL            ,          60, 1.60000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          61, 1.61000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          61, 1.61000E+00,MIN     ,N22     ,DX      ,-3.93329E-03
+TAB_DX          ,0000001b,DEPL            ,          61, 1.61000E+00,MAXI_ABS,N22     ,DX      , 3.93329E-03
+TAB_DX          ,0000001b,DEPL            ,          61, 1.61000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          62, 1.62000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          62, 1.62000E+00,MIN     ,N22     ,DX      ,-3.99812E-03
+TAB_DX          ,0000001b,DEPL            ,          62, 1.62000E+00,MAXI_ABS,N22     ,DX      , 3.99812E-03
+TAB_DX          ,0000001b,DEPL            ,          62, 1.62000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          63, 1.63000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          63, 1.63000E+00,MIN     ,N22     ,DX      ,-4.06323E-03
+TAB_DX          ,0000001b,DEPL            ,          63, 1.63000E+00,MAXI_ABS,N22     ,DX      , 4.06323E-03
+TAB_DX          ,0000001b,DEPL            ,          63, 1.63000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          64, 1.64000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          64, 1.64000E+00,MIN     ,N22     ,DX      ,-4.12903E-03
+TAB_DX          ,0000001b,DEPL            ,          64, 1.64000E+00,MAXI_ABS,N22     ,DX      , 4.12903E-03
+TAB_DX          ,0000001b,DEPL            ,          64, 1.64000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          65, 1.65000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          65, 1.65000E+00,MIN     ,N22     ,DX      ,-4.19528E-03
+TAB_DX          ,0000001b,DEPL            ,          65, 1.65000E+00,MAXI_ABS,N22     ,DX      , 4.19528E-03
+TAB_DX          ,0000001b,DEPL            ,          65, 1.65000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          66, 1.66000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          66, 1.66000E+00,MIN     ,N22     ,DX      ,-4.26187E-03
+TAB_DX          ,0000001b,DEPL            ,          66, 1.66000E+00,MAXI_ABS,N22     ,DX      , 4.26187E-03
+TAB_DX          ,0000001b,DEPL            ,          66, 1.66000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          67, 1.67000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          67, 1.67000E+00,MIN     ,N22     ,DX      ,-4.32882E-03
+TAB_DX          ,0000001b,DEPL            ,          67, 1.67000E+00,MAXI_ABS,N22     ,DX      , 4.32882E-03
+TAB_DX          ,0000001b,DEPL            ,          67, 1.67000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          68, 1.68000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          68, 1.68000E+00,MIN     ,N22     ,DX      ,-4.39608E-03
+TAB_DX          ,0000001b,DEPL            ,          68, 1.68000E+00,MAXI_ABS,N22     ,DX      , 4.39608E-03
+TAB_DX          ,0000001b,DEPL            ,          68, 1.68000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          69, 1.69000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          69, 1.69000E+00,MIN     ,N22     ,DX      ,-4.46379E-03
+TAB_DX          ,0000001b,DEPL            ,          69, 1.69000E+00,MAXI_ABS,N22     ,DX      , 4.46379E-03
+TAB_DX          ,0000001b,DEPL            ,          69, 1.69000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          70, 1.70000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          70, 1.70000E+00,MIN     ,N22     ,DX      ,-4.53215E-03
+TAB_DX          ,0000001b,DEPL            ,          70, 1.70000E+00,MAXI_ABS,N22     ,DX      , 4.53215E-03
+TAB_DX          ,0000001b,DEPL            ,          70, 1.70000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          71, 1.71000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          71, 1.71000E+00,MIN     ,N22     ,DX      ,-4.60105E-03
+TAB_DX          ,0000001b,DEPL            ,          71, 1.71000E+00,MAXI_ABS,N22     ,DX      , 4.60105E-03
+TAB_DX          ,0000001b,DEPL            ,          71, 1.71000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          72, 1.72000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          72, 1.72000E+00,MIN     ,N22     ,DX      ,-4.67063E-03
+TAB_DX          ,0000001b,DEPL            ,          72, 1.72000E+00,MAXI_ABS,N22     ,DX      , 4.67063E-03
+TAB_DX          ,0000001b,DEPL            ,          72, 1.72000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          73, 1.73000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          73, 1.73000E+00,MIN     ,N22     ,DX      ,-4.74085E-03
+TAB_DX          ,0000001b,DEPL            ,          73, 1.73000E+00,MAXI_ABS,N22     ,DX      , 4.74085E-03
+TAB_DX          ,0000001b,DEPL            ,          73, 1.73000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          74, 1.74000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          74, 1.74000E+00,MIN     ,N22     ,DX      ,-4.81171E-03
+TAB_DX          ,0000001b,DEPL            ,          74, 1.74000E+00,MAXI_ABS,N22     ,DX      , 4.81171E-03
+TAB_DX          ,0000001b,DEPL            ,          74, 1.74000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          75, 1.75000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          75, 1.75000E+00,MIN     ,N22     ,DX      ,-4.88381E-03
+TAB_DX          ,0000001b,DEPL            ,          75, 1.75000E+00,MAXI_ABS,N22     ,DX      , 4.88381E-03
+TAB_DX          ,0000001b,DEPL            ,          75, 1.75000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          76, 1.76000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          76, 1.76000E+00,MIN     ,N22     ,DX      ,-4.95696E-03
+TAB_DX          ,0000001b,DEPL            ,          76, 1.76000E+00,MAXI_ABS,N22     ,DX      , 4.95696E-03
+TAB_DX          ,0000001b,DEPL            ,          76, 1.76000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          77, 1.77000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          77, 1.77000E+00,MIN     ,N22     ,DX      ,-5.03108E-03
+TAB_DX          ,0000001b,DEPL            ,          77, 1.77000E+00,MAXI_ABS,N22     ,DX      , 5.03108E-03
+TAB_DX          ,0000001b,DEPL            ,          77, 1.77000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          78, 1.78000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          78, 1.78000E+00,MIN     ,N22     ,DX      ,-5.10616E-03
+TAB_DX          ,0000001b,DEPL            ,          78, 1.78000E+00,MAXI_ABS,N22     ,DX      , 5.10616E-03
+TAB_DX          ,0000001b,DEPL            ,          78, 1.78000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          79, 1.79000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          79, 1.79000E+00,MIN     ,N22     ,DX      ,-5.18220E-03
+TAB_DX          ,0000001b,DEPL            ,          79, 1.79000E+00,MAXI_ABS,N22     ,DX      , 5.18220E-03
+TAB_DX          ,0000001b,DEPL            ,          79, 1.79000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          80, 1.80000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          80, 1.80000E+00,MIN     ,N22     ,DX      ,-5.25927E-03
+TAB_DX          ,0000001b,DEPL            ,          80, 1.80000E+00,MAXI_ABS,N22     ,DX      , 5.25927E-03
+TAB_DX          ,0000001b,DEPL            ,          80, 1.80000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          81, 1.81000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          81, 1.81000E+00,MIN     ,N22     ,DX      ,-5.33780E-03
+TAB_DX          ,0000001b,DEPL            ,          81, 1.81000E+00,MAXI_ABS,N22     ,DX      , 5.33780E-03
+TAB_DX          ,0000001b,DEPL            ,          81, 1.81000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          82, 1.82000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          82, 1.82000E+00,MIN     ,N22     ,DX      ,-5.41764E-03
+TAB_DX          ,0000001b,DEPL            ,          82, 1.82000E+00,MAXI_ABS,N22     ,DX      , 5.41764E-03
+TAB_DX          ,0000001b,DEPL            ,          82, 1.82000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          83, 1.83000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          83, 1.83000E+00,MIN     ,N22     ,DX      ,-5.49901E-03
+TAB_DX          ,0000001b,DEPL            ,          83, 1.83000E+00,MAXI_ABS,N22     ,DX      , 5.49901E-03
+TAB_DX          ,0000001b,DEPL            ,          83, 1.83000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          84, 1.84000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          84, 1.84000E+00,MIN     ,N22     ,DX      ,-5.58193E-03
+TAB_DX          ,0000001b,DEPL            ,          84, 1.84000E+00,MAXI_ABS,N22     ,DX      , 5.58193E-03
+TAB_DX          ,0000001b,DEPL            ,          84, 1.84000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          85, 1.85000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          85, 1.85000E+00,MIN     ,N22     ,DX      ,-5.66645E-03
+TAB_DX          ,0000001b,DEPL            ,          85, 1.85000E+00,MAXI_ABS,N22     ,DX      , 5.66645E-03
+TAB_DX          ,0000001b,DEPL            ,          85, 1.85000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          86, 1.86000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          86, 1.86000E+00,MIN     ,N22     ,DX      ,-5.75326E-03
+TAB_DX          ,0000001b,DEPL            ,          86, 1.86000E+00,MAXI_ABS,N22     ,DX      , 5.75326E-03
+TAB_DX          ,0000001b,DEPL            ,          86, 1.86000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          87, 1.87000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          87, 1.87000E+00,MIN     ,N22     ,DX      ,-5.84239E-03
+TAB_DX          ,0000001b,DEPL            ,          87, 1.87000E+00,MAXI_ABS,N22     ,DX      , 5.84239E-03
+TAB_DX          ,0000001b,DEPL            ,          87, 1.87000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          88, 1.88000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          88, 1.88000E+00,MIN     ,N22     ,DX      ,-5.93366E-03
+TAB_DX          ,0000001b,DEPL            ,          88, 1.88000E+00,MAXI_ABS,N22     ,DX      , 5.93366E-03
+TAB_DX          ,0000001b,DEPL            ,          88, 1.88000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          89, 1.89000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          89, 1.89000E+00,MIN     ,N22     ,DX      ,-6.02720E-03
+TAB_DX          ,0000001b,DEPL            ,          89, 1.89000E+00,MAXI_ABS,N22     ,DX      , 6.02720E-03
+TAB_DX          ,0000001b,DEPL            ,          89, 1.89000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          90, 1.90000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          90, 1.90000E+00,MIN     ,NS21    ,DX      ,-6.12388E-03
+TAB_DX          ,0000001b,DEPL            ,          90, 1.90000E+00,MAXI_ABS,NS21    ,DX      , 6.12388E-03
+TAB_DX          ,0000001b,DEPL            ,          90, 1.90000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          91, 1.91000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          91, 1.91000E+00,MIN     ,NS21    ,DX      ,-6.22383E-03
+TAB_DX          ,0000001b,DEPL            ,          91, 1.91000E+00,MAXI_ABS,NS21    ,DX      , 6.22383E-03
+TAB_DX          ,0000001b,DEPL            ,          91, 1.91000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          92, 1.92000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          92, 1.92000E+00,MIN     ,NS21    ,DX      ,-6.32860E-03
+TAB_DX          ,0000001b,DEPL            ,          92, 1.92000E+00,MAXI_ABS,NS21    ,DX      , 6.32860E-03
+TAB_DX          ,0000001b,DEPL            ,          92, 1.92000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          93, 1.93000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          93, 1.93000E+00,MIN     ,NS21    ,DX      ,-6.44314E-03
+TAB_DX          ,0000001b,DEPL            ,          93, 1.93000E+00,MAXI_ABS,NS21    ,DX      , 6.44314E-03
+TAB_DX          ,0000001b,DEPL            ,          93, 1.93000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          94, 1.94000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          94, 1.94000E+00,MIN     ,NS21    ,DX      ,-6.56114E-03
+TAB_DX          ,0000001b,DEPL            ,          94, 1.94000E+00,MAXI_ABS,NS21    ,DX      , 6.56114E-03
+TAB_DX          ,0000001b,DEPL            ,          94, 1.94000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          95, 1.95000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          95, 1.95000E+00,MIN     ,NS21    ,DX      ,-6.68241E-03
+TAB_DX          ,0000001b,DEPL            ,          95, 1.95000E+00,MAXI_ABS,NS21    ,DX      , 6.68241E-03
+TAB_DX          ,0000001b,DEPL            ,          95, 1.95000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          96, 1.96000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          96, 1.96000E+00,MIN     ,NS21    ,DX      ,-6.80748E-03
+TAB_DX          ,0000001b,DEPL            ,          96, 1.96000E+00,MAXI_ABS,NS21    ,DX      , 6.80748E-03
+TAB_DX          ,0000001b,DEPL            ,          96, 1.96000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          97, 1.97000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          97, 1.97000E+00,MIN     ,NS21    ,DX      ,-6.94168E-03
+TAB_DX          ,0000001b,DEPL            ,          97, 1.97000E+00,MAXI_ABS,NS21    ,DX      , 6.94168E-03
+TAB_DX          ,0000001b,DEPL            ,          97, 1.97000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          98, 1.98000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          98, 1.98000E+00,MIN     ,NS21    ,DX      ,-7.08331E-03
+TAB_DX          ,0000001b,DEPL            ,          98, 1.98000E+00,MAXI_ABS,NS21    ,DX      , 7.08331E-03
+TAB_DX          ,0000001b,DEPL            ,          98, 1.98000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          99, 1.99000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,          99, 1.99000E+00,MIN     ,NS21    ,DX      ,-7.23236E-03
+TAB_DX          ,0000001b,DEPL            ,          99, 1.99000E+00,MAXI_ABS,NS21    ,DX      , 7.23236E-03
+TAB_DX          ,0000001b,DEPL            ,          99, 1.99000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,         100, 2.00000E+00,MAX     ,N1      ,DX      , 0.00000E+00
+TAB_DX          ,0000001b,DEPL            ,         100, 2.00000E+00,MIN     ,NS21    ,DX      ,-7.39023E-03
+TAB_DX          ,0000001b,DEPL            ,         100, 2.00000E+00,MAXI_ABS,NS21    ,DX      , 7.39023E-03
+TAB_DX          ,0000001b,DEPL            ,         100, 2.00000E+00,MINI_ABS,N1      ,DX      , 0.00000E+00
+
