@@ -8,8 +8,8 @@
 
 @DSL Implicit;
 @Author Simon Raude;
-@Date 15/09/2022;
-@Behaviour PDM_KH_MC_NA;
+@Date 08/10/2022;
+@Behaviour MCBigoniMiniKHD;
 
 @Algorithm NewtonRaphson;
 // @Algorithm NewtonRaphson_NumericalJacobian;
@@ -43,7 +43,7 @@ psi.setEntryName("DilationAngle");
 @MaterialProperty stress coh;
 coh.setEntryName("Cohesion");
 
-// Controls the intersection of the hyperbolic branch of the plastic criterion with the "Xm" axis (<0..<=1, -)
+// Controls the intersection of the hyperbolic branch of the plastic criterion with hydrostatic axis (0<..<=C/tan(phi), Pa)
 @MaterialProperty real at;
 at.setEntryName("TensionCutOff");
 
@@ -63,25 +63,26 @@ qD.setEntryName("QDamageFactor");
 // 2. Local Variables
 // <<<<<<<<<<<<<<<<<<
 
-@LocalVariable bool b[2];     // Boolean b[0] for plasticity condition, b[1] for damage condition
-@LocalVariable real tol;      // Local zero tolerance
-@LocalVariable stress stol;   // Local zero tolerance for stresses
-@LocalVariable real pi;       // Real pi=3.14....
-@LocalVariable real phir;     // Friction angle in radians
-@LocalVariable real psir;     // Dilation angle in radians
-@LocalVariable stress ptphi;  // Theoretical tension strength from the Mohr-Coulomb criterion (compression, not extension) = C/tan(phi)
-@LocalVariable stress ptpsi;  // Theoretical tension strength from the Mohr-Coulomb criterion (applied in the plastic flow function) = C/tan(psi)
-@LocalVariable real kphi;     // Friction coefficient in the Mohr-Coulomb criterion = 6*sin(phi)/(3-sin(phi))
-@LocalVariable real kpsi;     // Friction coefficient in the plastic flow function = 6*sin(psi)/(3-sin(psi))
-@LocalVariable real bK;       // Homogenisation factor for the bulk modulus in the expression of the tensor for the kinematical hardening
-@LocalVariable real bMu;      // Homogenisation factor for the shear modulus in the expression of the tensor for the kinematical hardening
-@LocalVariable real alpc;     // Critical value for the damage variable ~1 but <1
-@LocalVariable real rD;       // Regularisation coefficient for the damage function fh
-@LocalVariable Stensor4 Ce;   // Elastic stiffness tensor
-@LocalVariable Stensor4 Ckin; // Reduced elastic stiffness tensor for the kinematical hardening
-@LocalVariable stress lambda; // First Lame modulus
-@LocalVariable stress mu;     // Shear modulus
-@LocalVariable stress ks;     // Bulk modulus
+@LocalVariable bool b[2];                 // Boolean b[0] for plasticity condition, b[1] for damage condition
+@LocalVariable real local_zero_tolerance; // Local zero tolerance
+@LocalVariable real pi;                   // Real pi=3.14....
+@LocalVariable real phir;                 // Friction angle in radians
+@LocalVariable real psir;                 // Dilation angle in radians
+@LocalVariable real thetaFm;              // Plastic criterion: Lode angle for which the radius of the MC criterion reach a minimum
+@LocalVariable real thetaGm;              // Plastic flow function: Lode angle for which the radius of the MC flow function reach a minimum
+@LocalVariable real KFm;                  // Value of the function KF(theta) for Theta=thetaFm
+@LocalVariable real KGm;                  // Value of the function KG(theta) for Theta=thetaGm
+@LocalVariable stress aG;                 // at*tan(phi)/tan(psi) (in the plastic flow function)
+@LocalVariable real bK;                   // Homogenisation factor for the bulk modulus in the expression of the tensor for the kinematical hardening
+@LocalVariable real bMu;                  // Homogenisation factor for the shear modulus in the expression of the tensor for the kinematical hardening
+@LocalVariable real alpc;                 // Critical value for the damage variable ~1 but <1
+@LocalVariable real rD;                   // Regularisation coefficient for the damage function fh
+@LocalVariable Stensor4 Ce;               // Elastic stiffness tensor
+@LocalVariable Stensor4 Ckin;             // Reduced elastic stiffness tensor for the kinematical hardening
+@LocalVariable stress lambda;             // First Lame modulus
+@LocalVariable stress mu;                 // Shear modulus
+@LocalVariable stress ks;                 // Bulk modulus
+@LocalVariable Stensor nGtmp;             // Local variable which is actually the plastic flow direction used to update the auxiliary variable gap
 
 // >>>>>>>>>>>>>>>>>
 // 3. State Variable
@@ -99,15 +100,21 @@ alp.setEntryName("DamageVariable");
 // 4. Auxilliary state variables
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-@AuxiliaryStateVariable real niter;            // Number of Newton iterations
-@AuxiliaryStateVariable real ip;               // Plastic index
-@AuxiliaryStateVariable real domain;           // Domain
-@AuxiliaryStateVariable stress XeqASV;         // Equivalent shear stress associated to plastic strain
-@AuxiliaryStateVariable stress XmASV;          // Mean stress associated to plastic strain
-@AuxiliaryStateVariable stress YASV;           // Damage stress
+@AuxiliaryStateVariable real niter;    // Number of Newton iterations
+@AuxiliaryStateVariable real ip;       // Plastic index
+@AuxiliaryStateVariable strain evp;    // Volumetric plastic strain
+@AuxiliaryStateVariable strain gap;    // Equivalent plastic strain
+@AuxiliaryStateVariable real inst;     // Time
+@AuxiliaryStateVariable real domain;   // Domain
+@AuxiliaryStateVariable stress XeqASV; // Equivalent shear stress associated to plastic strain
+@AuxiliaryStateVariable stress XmASV;  // Mean stress associated to plastic strain
+@AuxiliaryStateVariable stress YASV;   // Damage stress
 
 niter.setEntryName("LocalNewtonIter");
 ip.setEntryName("PlasticIndex");
+evp.setEntryName("PVolumStrain");
+gap.setEntryName("EquiPlastStrain");
+inst.setEntryName("Time");
 domain.setEntryName("PDDomain");
 XeqASV.setEntryName("EquiPlastStress");
 XmASV.setEntryName("MeanPlastStress");
@@ -123,24 +130,35 @@ YASV.setEntryName("DamageStress");
 
 @InitLocalVariables{
 	using namespace tfel::material::lame;
-	tol=real(1e-12);
-	stol=young*tol;
+	local_zero_tolerance=real(1e-12);
+	// >>> Convert the FrictionAngle and the DilationAngle to radians
 	pi=4.*atan(1.);
 	phir=phi*pi/180.;
 	psir=psi*pi/180.;
-	kphi=6.*sin(phir)/(3.-sin(phir));
-	kpsi=6.*sin(psir)/(3.-sin(psir));
-	ptphi=coh/tan(phir);
-	ptpsi=coh/tan(psir);
+	// >>> Compute KFm and KGm
+	thetaFm=atan(-sin(phir)/sqrt(3.));
+	thetaGm=atan(-sin(psir)/sqrt(3.));
+    KFm=(cos(thetaFm)-sin(phir)*sin(thetaFm)/sqrt(3.));
+    KGm=(cos(thetaGm)-sin(psir)*sin(thetaGm)/sqrt(3.));
+	// >>> Compute aG
+    aG=at*tan(phir)/tan(psir);
+	// >>> Parameters for the kinematic tensor
 	bK=16./9.*(1.-nu*nu)/(1.-2.*nu);
 	bMu=32./45.*(1.-nu)*(5.-nu)/(2.-nu);
+	// >>> Numerical parameters for damage evolution
 	alpc=.995;
 	rD=1.e-4;
+	// >>> Compute the elastic moduli, the Hooke tensor, and the kinematic tensor
 	lambda=computeLambda(young,nu);
 	mu=computeMu(young,nu);
 	ks=lambda+2.*mu/3.;
 	Ce=3.*ks*Stensor4::J()+2.*mu*Stensor4::K();
 	Ckin=(3.*ks*Stensor4::J()/bK+2.*mu*Stensor4::K()/bMu)/qD;
+	// >>> Initialise elastic strain (for cases with initial stresses without displacements, e.g. tunnels) /!\
+	if (inst==real(0) && lam==real(0)) {
+        const Stensor4 Se=invert(Ce);
+        eel=(Se*sig);
+    }
 }
 
 // >>>>>>>>>>>>>>>>>>>>>
@@ -158,9 +176,13 @@ YASV.setEntryName("DamageStress");
 
 	// >>> 6.3 Compute the thermo. force associated with the plastic strain
 	const StressStensor Xel=sigel-(Hkin*epl);
+	const StressStensor Xdel=deviator(Xel);
+	const stress J2Xel=.5*(Xdel|Xdel);
+	const stress I1Xel=trace(Xel);
 	
 	// >>> 6.4 Plastic MC criterion - condition for plasticity
-	b[0]=sqrt(sigmaeq(Xel)*sigmaeq(Xel)+(kphi*at*ptphi)*(kphi*at*ptphi))+kphi*(trace(Xel)/3.-ptphi)>real(0);
+	RFel=sqrt(J2Xel*KFm*KFm+at*at*sin(phir)*sin(phir));
+	b[0]=RFel+I1Xel*sin(phir)/3.-coh*cos(phir)>real(0);
 
 }
 
@@ -187,52 +209,62 @@ YASV.setEntryName("DamageStress");
 
 		// >>>>>> 8.1.2 Compute the thermo. force associated with the plastic strain
 		const StressStensor X=sig-(Hkin*(epl+depl));
+		const StressStensor Xd=deviator(X);
+		const stress J2X=.5*(Xd|Xd);
+		const stress I1X=trace(X);
 		
-		// >>>>>> 8.1.3 Compute the plastic criterion and the plastic flow direction
-		const stress Rp=sqrt(sigmaeq(X)*sigmaeq(X)+(kphi*at*ptphi)*(kphi*at*ptphi));  // For the plastic criterion
-		const stress RpF=sqrt(sigmaeq(X)*sigmaeq(X)+(kpsi*at*ptpsi)*(kpsi*at*ptpsi)); // For the plastic flow function
-		const stress Fp=Rp+kphi*(trace(X)/3.-ptphi);                                  // The plastic criterion
-		const Stensor Np=1.5*deviator(X)/max(RpF,stol)+kpsi*Stensor::Id()/3.;         // The non-associated plastic flow direction
+		// >>>>>> 8.1.3 Compute the plastic criterion
+		const stress RF=sqrt(J2X*KFm*KFm+at*at*sin(phir)*sin(phir)); // For the plastic criterion
+		const stress RG=sqrt(J2X*KGm*KGm+at*aG*sin(psir)*sin(psir)); // For the plastic flow function
+		const stress F=RF+I1X*sin(phir)/3.-coh*cos(phir);            // The plastic criterion
 
-		// >>>>>> 8.1.4 Equations to be solved
-		feel=deel-deto+dlam*Np;
-		fepl=depl-dlam*Np;
-		flam=Fp/young;
+		// >>>>>> 8.1.4 Compute the plastic flow direction
+		const real dG_dI1X=sin(psir)/3.;
+		const real dG_dJ2X=.5*KGm*KGm/max(RG,local_zero_tolerance);
+		const Stensor nG=dG_dI1X*Stensor::Id()+dG_dJ2X*Xd;
+
+		// >>>>>> 8.1.5 Equations to be solved
+		feel=deel-deto+dlam*nG;
+		fepl=depl-dlam*nG;
+		flam=F/young;
 		falp=dalp;
 		
 		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Comment this block if "@Algorithm NewtonRaphson_NumericalJacobian" >>>>>>>>>>>>>>>>
 		
-		// >>>>>> 8.1.5 Jacobian
+		// >>>>>> 8.1.6 Jacobian
 		
-		// >>>>>>>>> 8.1.5.1 Some tools
-		// >>>>>>>>>>>> Compute dNp_dsig
+		// >>>>>>>>> 8.1.6.1 Some tools
+		// >>>>>>>>>>>> Compute dnG_dsig
 		const Stensor4 dX_dsig=Stensor4::Id();
-		const Stensor4 dNp_dX=(Stensor4::M()-(deviator(Np)^deviator(Np)))/max(RpF,stol);
-		const Stensor4 dNp_dsig=(dNp_dX*dX_dsig);
-		// >>>>>>>>>>>> Compute dNp_ddepl
+		const real dG_ddJ2X=-.5*KGm*KGm*dG_dJ2X/max(RG,local_zero_tolerance)/max(RG,local_zero_tolerance);
+		const Stensor4 dnG_dX=dG_ddJ2X*(Xd^Xd)+dG_dJ2X*Stensor4::K();
+		const Stensor4 dnG_dsig=(dnG_dX|dX_dsig);
+		// >>>>>>>>>>>> Compute dnG_ddepl
 		const Stensor4 dX_ddepl=-Hkin;
-		const Stensor4 dNp_ddepl=(dNp_dX*dX_ddepl);
-		// >>>>>>>>>>>> Compute dFp_dsig
-		const Stensor dFp_dX=1.5*deviator(X)/max(Rp,stol)+kphi*Stensor::Id()/3.;
-		const Stensor dFp_dsig=(dFp_dX|dX_dsig);
-		// >>>>>>>>>>>> Compute dFp_ddepl
-		const Stensor dFp_ddepl=(dFp_dX|dX_ddepl);
+		const Stensor4 dnG_ddepl=(dnG_dX*dX_ddepl);
+		// >>>>>>>>>>>> Compute dF_dsig
+		const real dF_dI1X=sin(phir)/3.;
+		const real dF_dJ2X=.5*KFm*KFm/max(RF,local_zero_tolerance);
+		const Stensor dF_dX=dF_dI1X*Stensor::Id()+dF_dJ2X*Xd;
+		const Stensor dF_dsig=(dF_dX|dX_dsig);
+		// >>>>>>>>>>>> Compute dF_ddepl
+		const Stensor dF_ddepl=(dF_dX|dX_ddepl);
 		
-		// >>>>>>>>> 8.1.5.2 First line
-		dfeel_ddeel=Stensor4::Id()+dlam*(dNp_dsig*Ce);
-		dfeel_ddepl=dlam*dNp_ddepl;
-		dfeel_ddlam=Np;
+		// >>>>>>>>> 8.1.6.2 First line
+		dfeel_ddeel=Stensor4::Id()+dlam*(dnG_dsig*Ce);
+		dfeel_ddepl=dlam*dnG_ddepl;
+		dfeel_ddlam=nG;
 		dfeel_ddalp=Stensor(real(0));
 
-		// >>>>>>>>> 8.1.5.3 Second line
-		dfepl_ddeel=-dlam*(dNp_dsig*Ce);
-		dfepl_ddepl=Stensor4::Id()-dlam*dNp_ddepl;
-		dfepl_ddlam=-Np;
+		// >>>>>>>>> 8.1.6.3 Second line
+		dfepl_ddeel=-dlam*(dnG_dsig*Ce);
+		dfepl_ddepl=Stensor4::Id()-dlam*dnG_ddepl;
+		dfepl_ddlam=-nG;
 		dfepl_ddalp=Stensor(real(0));
 
-		// >>>>>>>>> 8.1.5.4 Third line
-		dflam_ddeel=(dFp_dsig|Ce)/young;
-		dflam_ddepl=dFp_ddepl/young;
+		// >>>>>>>>> 8.1.6.4 Third line
+		dflam_ddeel=(dF_dsig|Ce)/young;
+		dflam_ddepl=dF_ddepl/young;
 		dflam_ddlam=real(0);
 		dflam_ddalp=real(0);
 		
@@ -243,7 +275,6 @@ YASV.setEntryName("DamageStress");
 		dfalp_ddalp=real(1);
 		
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-		
 		
 	}
 
@@ -259,59 +290,69 @@ YASV.setEntryName("DamageStress");
 		// >>>>>> 8.2.2 Compute the thermo. forces associated with the plastic strain and the damage variable
 		const StressStensor X=sig-(Hkin*(epl+depl));
 		const stress Y=-.5*((epl+depl)|dHkin_dalp)|(epl+depl);
+		const StressStensor Xd=deviator(X);
+		const stress J2X=.5*(Xd|Xd);
+		const stress I1X=trace(X);
 		
-		// >>>>>> 8.2.3 Compute the plastic criterion and the plastic flow direction
-		const stress Rp=sqrt(sigmaeq(X)*sigmaeq(X)+(kphi*at*ptphi)*(kphi*at*ptphi));  // For the plastic criterion
-		const stress RpF=sqrt(sigmaeq(X)*sigmaeq(X)+(kpsi*at*ptpsi)*(kpsi*at*ptpsi)); // For the plastic flow function
-		const stress Fp=Rp+kphi*(trace(X)/3.-ptphi);                                  // The plastic criterion
-		const Stensor Np=1.5*deviator(X)/max(RpF,stol)+kpsi*Stensor::Id()/3.;         // The non-associated plastic flow direction
+		// >>>>>> 8.2.3 Compute the plastic criterion
+		const stress RF=sqrt(J2X*KFm*KFm+at*at*sin(phir)*sin(phir)); // For the plastic criterion
+		const stress RG=sqrt(J2X*KGm*KGm+at*aG*sin(psir)*sin(psir)); // For the plastic flow function
+		const stress F=RF+I1X*sin(phir)/3.-coh*cos(phir);            // The plastic criterion
 
-		// >>>>>> 8.2.4 Compute the damage criterion
+		// >>>>>> 8.2.4 Compute the plastic flow direction
+		const real dG_dI1X=sin(psir)/3.;
+		const real dG_dJ2X=.5*KGm*KGm/max(RG,local_zero_tolerance);
+		const Stensor nG=dG_dI1X*Stensor::Id()+dG_dJ2X*Xd;
+
+		// >>>>>> 8.2.5 Compute the damage criterion
 		b[1]=Y-Yc>real(0);
 
-		// >>>>>> 8.2.5 Equations to be solved
-		feel=deel-deto+dlam*Np;
-		fepl=depl-dlam*Np;
-		flam=Fp/young;
+		// >>>>>> 8.2.6 Equations to be solved
+		feel=deel-deto+dlam*nG;
+		fepl=depl-dlam*nG;
+		flam=F/young;
 		falp=dalp;
 		
 		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Comment this block if "@Algorithm NewtonRaphson_NumericalJacobian" >>>>>>>>>>>>>>>>
 		
-		// >>>>>> 8.2.6 Jacobian
+		// >>>>>> 8.2.7 Jacobian
 
-		// >>>>>>>>> 8.2.6.1 Some tools
-		// >>>>>>>>>>>> Compute dNp_dsig
+		// >>>>>>>>> 8.2.7.1 Some tools
+		// >>>>>>>>>>>> Compute dnG_dsig
 		const Stensor4 dX_dsig=Stensor4::Id();
-		const Stensor4 dNp_dX=(Stensor4::M()-(deviator(Np)^deviator(Np)))/max(RpF,stol);
-		const Stensor4 dNp_dsig=(dNp_dX*dX_dsig);
-		// >>>>>>>>>>>> Compute dNp_ddepl
+		const real dG_ddJ2X=-.5*KGm*KGm*dG_dJ2X/max(RG,local_zero_tolerance)/max(RG,local_zero_tolerance);
+		const Stensor4 dnG_dX=dG_ddJ2X*(Xd^Xd)+dG_dJ2X*Stensor4::K();
+		const Stensor4 dnG_dsig=(dnG_dX|dX_dsig);
+		// >>>>>>>>>>>> Compute dnG_ddepl
 		const Stensor4 dX_ddepl=-Hkin;
-		const Stensor4 dNp_ddepl=(dNp_dX*dX_ddepl);
-		// >>>>>>>>>>>> Compute dFp_dsig
-		const Stensor dFp_dX=1.5*deviator(X)/max(Rp,stol)+kphi*Stensor::Id()/3.;
-		const Stensor dFp_dsig=(dFp_dX|dX_dsig);
-		// >>>>>>>>>>>> Compute dFp_ddepl
-		const Stensor dFp_ddepl=(dFp_dX|dX_ddepl);
-		
-		// >>>>>>>>> 8.2.6.2 First line
-		dfeel_ddeel=Stensor4::Id()+dlam*(dNp_dsig*Ce);
-		dfeel_ddepl=dlam*dNp_ddepl;
-		dfeel_ddlam=Np;
+		const Stensor4 dnG_ddepl=(dnG_dX*dX_ddepl);
+		// >>>>>>>>>>>> Compute dF_dsig
+		const real dF_dI1X=sin(phir)/3.;
+		const real dF_dJ2X=.5*KFm*KFm/max(RF,local_zero_tolerance);
+		const Stensor dF_dX=dF_dI1X*Stensor::Id()+dF_dJ2X*Xd;
+		const Stensor dF_dsig=(dF_dX|dX_dsig);
+		// >>>>>>>>>>>> Compute dF_ddepl
+		const Stensor dF_ddepl=(dF_dX|dX_ddepl);
+
+		// >>>>>>>>> 8.2.7.2 First line
+		dfeel_ddeel=Stensor4::Id()+dlam*(dnG_dsig*Ce);
+		dfeel_ddepl=dlam*dnG_ddepl;
+		dfeel_ddlam=nG;
 		dfeel_ddalp=Stensor(real(0));
 
-		// >>>>>>>>> 8.2.6.3 Second line
-		dfepl_ddeel=-dlam*(dNp_dsig*Ce);
-		dfepl_ddepl=Stensor4::Id()-dlam*dNp_ddepl;
-		dfepl_ddlam=-Np;
+		// >>>>>>>>> 8.2.7.3 Second line
+		dfepl_ddeel=-dlam*(dnG_dsig*Ce);
+		dfepl_ddepl=Stensor4::Id()-dlam*dnG_ddepl;
+		dfepl_ddlam=-nG;
 		dfepl_ddalp=Stensor(real(0));
 
-		// >>>>>>>>> 8.2.6.4 Third line
-		dflam_ddeel=(dFp_dsig|Ce)/young;
-		dflam_ddepl=dFp_ddepl/young;
+		// >>>>>>>>> 8.2.7.4 Third line
+		dflam_ddeel=(dF_dsig|Ce)/young;
+		dflam_ddepl=dF_ddepl/young;
 		dflam_ddlam=real(0);
 		dflam_ddalp=real(0);
 		
-		// >>>>>>>>> 8.2.6.5 Last line
+		// >>>>>>>>> 8.2.7.5 Last line
 		dfalp_ddeel=Stensor(real(0));
 		dfalp_ddepl=Stensor(real(0));
 		dfalp_ddlam=real(0);
@@ -333,45 +374,55 @@ YASV.setEntryName("DamageStress");
 		// >>>>>> 8.3.2 Compute the thermo. forces associated with the plastic strain and the damage variable
 		const StressStensor X=sig-(Hkin*(epl+depl));
 		const stress Y=-.5*((epl+depl)|dHkin_dalp)|(epl+depl);
+		const StressStensor Xd=deviator(X);
+		const stress J2X=.5*(Xd|Xd);
+		const stress I1X=trace(X);
 		
-		// >>>>>> 8.3.3 Compute the plastic criterion, Fp, and the plastic flow direction, Np
-		const stress Rp=sqrt(sigmaeq(X)*sigmaeq(X)+(kphi*at*ptphi)*(kphi*at*ptphi));
-		const stress Fp=Rp+kphi*(trace(X)/3.-ptphi);
-		const stress RpF=sqrt(sigmaeq(X)*sigmaeq(X)+(kpsi*at*ptpsi)*(kpsi*at*ptpsi));
-		const Stensor Np=1.5*deviator(X)/max(RpF,stol)+kpsi*Stensor::Id()/3.; // Non-associated plastic flow
+		// >>>>>> 8.3.3 Compute the plastic criterion
+		const stress RF=sqrt(J2X*KFm*KFm+at*at*sin(phir)*sin(phir)); // For the plastic criterion
+		const stress RG=sqrt(J2X*KGm*KGm+at*aG*sin(psir)*sin(psir)); // For the plastic flow function
+		const stress F=RF+I1X*sin(phir)/3.-coh*cos(phir);            // The plastic criterion
 
-		// >>>>>> 8.3.4 Compute the damage criterion
+		// >>>>>> 8.3.4 Compute the plastic flow direction
+		const real dG_dI1X=sin(psir)/3.;
+		const real dG_dJ2X=.5*KGm*KGm/max(RG,local_zero_tolerance);
+		const Stensor nG=dG_dI1X*Stensor::Id()+dG_dJ2X*Xd;
+
+		// >>>>>> 8.3.5 Compute the damage criterion
 		const stress Fd=Y-Yc;
 		
-		// >>>>>> 8.3.5 Equations to be solved
-		feel=deel-deto+dlam*Np;
-		fepl=depl-dlam*Np;
-		flam=Fp/young;
+		// >>>>>> 8.3.6 Equations to be solved
+		feel=deel-deto+dlam*nG;
+		fepl=depl-dlam*nG;
+		flam=F/young;
 		falp=Fd/young;
 
 		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Comment this block if "@Algorithm NewtonRaphson_NumericalJacobian" >>>>>>>>>>>>>>>>
 		
-		// >>>>>> 8.3.6 Jacobian
+		// >>>>>> 8.3.7 Jacobian
 
-		// >>>>>>>>> 8.3.6.1 Some tools
-		// >>>>>>>>>>>> Compute dNp_dsig
+		// >>>>>>>>> 8.3.7.1 Some tools
+		// >>>>>>>>>>>> Compute dnG_dsig
 		const Stensor4 dX_dsig=Stensor4::Id();
-		const Stensor4 dNp_dX=(Stensor4::M()-(deviator(Np)^deviator(Np)))/max(RpF,stol);
-		const Stensor4 dNp_dsig=(dNp_dX*dX_dsig);
-		// >>>>>>>>>>>> Compute dNp_ddepl
+		const real dG_ddJ2X=-.5*KGm*KGm*dG_dJ2X/max(RG,local_zero_tolerance)/max(RG,local_zero_tolerance);
+		const Stensor4 dnG_dX=dG_ddJ2X*(Xd^Xd)+dG_dJ2X*Stensor4::K();
+		const Stensor4 dnG_dsig=(dnG_dX|dX_dsig);
+		// >>>>>>>>>>>> Compute dnG_ddepl
 		const Stensor4 dX_ddepl=-Hkin;
-		const Stensor4 dNp_ddepl=(dNp_dX*dX_ddepl);
-		// >>>>>>>>>>>> Compute dNp_ddalp
+		const Stensor4 dnG_ddepl=(dnG_dX*dX_ddepl);
+		// >>>>>>>>>>>> Compute dnG_ddalp
 		const Stensor4 dHkin_ddalp=dHkin_dalp;
 		const StressStensor dX_ddalp=-(dHkin_ddalp*(epl+depl));
-		const Stensor dNp_ddalp=(dNp_dX*dX_ddalp);
-		// >>>>>>>>>>>> Compute dFp_dsig
-		const Stensor dFp_dX=1.5*deviator(X)/max(Rp,stol)+kphi*Stensor::Id()/3.;
-		const Stensor dFp_dsig=(dFp_dX|dX_dsig);
-		// >>>>>>>>>>>> Compute dFp_ddepl
-		const Stensor dFp_ddepl=(dFp_dX|dX_ddepl);
-		// >>>>>>>>>>>> Compute dFp_ddalp
-		const real dFp_ddalp=(dFp_dX|dX_ddalp);
+		const Stensor dnG_ddalp=(dnG_dX*dX_ddalp);
+		// >>>>>>>>>>>> Compute dF_dsig
+		const real dF_dI1X=sin(phir)/3.;
+		const real dF_dJ2X=.5*KFm*KFm/max(RF,local_zero_tolerance);
+		const Stensor dF_dX=dF_dI1X*Stensor::Id()+dF_dJ2X*Xd;
+		const Stensor dF_dsig=(dF_dX|dX_dsig);
+		// >>>>>>>>>>>> Compute dF_ddepl
+		const Stensor dF_ddepl=(dF_dX|dX_ddepl);
+		// >>>>>>>>>>>> Compute dF_ddalp
+		const real dF_ddalp=(dF_dX|dX_ddalp);
 		// >>>>>>>>>>>> Compute dFd_dY
 		const real dFd_dY=real(1);
 		// >>>>>>>>>>>> Compute dY_ddepl
@@ -381,23 +432,23 @@ YASV.setEntryName("DamageStress");
 		const Stensor4 d2Hkin_ddalp_dalp=d2fh_ddalp_dalp*Ckin;
 		const stress dY_ddalp=-.5*((epl+depl)|d2Hkin_ddalp_dalp)|(epl+depl);
 		
-		// >>>>>>>>> 8.3.6.2 First line
-		dfeel_ddeel=Stensor4::Id()+dlam*(dNp_dsig*Ce);
-		dfeel_ddepl=dlam*dNp_ddepl;
-		dfeel_ddlam=Np;
-		dfeel_ddalp=dlam*dNp_ddalp;
+		// >>>>>>>>> 8.3.7.2 First line
+		dfeel_ddeel=Stensor4::Id()+dlam*(dnG_dsig*Ce);
+		dfeel_ddepl=dlam*dnG_ddepl;
+		dfeel_ddlam=nG;
+		dfeel_ddalp=dlam*dnG_ddalp;
 
-		// >>>>>>>>> 8.3.6.3 Second line
-		dfepl_ddeel=-dlam*(dNp_dsig*Ce);
-		dfepl_ddepl=Stensor4::Id()-dlam*dNp_ddepl;
-		dfepl_ddlam=-Np;
-		dfepl_ddalp=-dlam*dNp_ddalp;
+		// >>>>>>>>> 8.3.7.3 Second line
+		dfepl_ddeel=-dlam*(dnG_dsig*Ce);
+		dfepl_ddepl=Stensor4::Id()-dlam*dnG_ddepl;
+		dfepl_ddlam=-nG;
+		dfepl_ddalp=-dlam*dnG_ddalp;
 
-		// >>>>>>>>> 8.3.6.4 Third line
-		dflam_ddeel=(dFp_dsig|Ce)/young;
-		dflam_ddepl=dFp_ddepl/young;
+		// >>>>>>>>> 8.3.7.4 Third line
+		dflam_ddeel=(dF_dsig|Ce)/young;
+		dflam_ddepl=dF_ddepl/young;
 		dflam_ddlam=real(0);
-		dflam_ddalp=dFp_ddalp/young;
+		dflam_ddalp=dF_ddalp/young;
 		
 		// >>>>>>>>> 8.3.6.5 Last line
 		dfalp_ddeel=Stensor(real(0));
@@ -434,8 +485,11 @@ YASV.setEntryName("DamageStress");
 	XmASV=trace(XASV)/3.;
 	YASV=-.5*((epl|dHkin_dalp)|epl);
 	niter=iter;
+	inst+=dt;
 	if (dlam>0) {
 		ip=1;
+		evp+=dlam*sin(psir);
+		gap+=dlam*sqrt(2.*deviator(nGtmp)|deviator(nGtmp)/3.);
 	} else {
 		ip=0;
 	}
@@ -448,7 +502,6 @@ YASV.setEntryName("DamageStress");
 	} else {
 		domain=0;
 	}
-
 }
 
 // >>>>>>>>>>>>>>>>>>>>
