@@ -13,7 +13,7 @@ INCLUDES := -I../include \
 
 CXXFLAGS := -Wall -Wfatal-errors -ansi $(shell tfel-config-3.4.0 --oflags) -fPIC $(INCLUDES) 
 
-SRCCXX = MCBigoniFull.cxx MCBigoniMini.cxx MCBigoniMiniIH.cxx asterMCBigoniFull.cxx asterMCBigoniMini.cxx asterMCBigoniMiniIH.cxx
+SRCCXX = MCBigoniFull.cxx MCBigoniMini.cxx MCBigoniMiniIH.cxx MCBigoniMiniKHD.cxx asterMCBigoniFull.cxx asterMCBigoniMini.cxx asterMCBigoniMiniIH.cxx asterMCBigoniMiniKHD.cxx
 
 makefiles1 = $(SRCCXX:.cxx=.d)
 makefiles2 = $(makefiles1:.cpp=.d)
@@ -23,7 +23,7 @@ makefiles  = $(makefiles2)
 
 all : libAsterBehaviour.so 
 
-libAsterBehaviour.so : asterMCBigoniMini.o MCBigoniMini.o asterMCBigoniMiniIH.o MCBigoniMiniIH.o asterMCBigoniFull.o MCBigoniFull.o 
+libAsterBehaviour.so : asterMCBigoniMini.o MCBigoniMini.o asterMCBigoniMiniIH.o MCBigoniMiniIH.o asterMCBigoniFull.o MCBigoniFull.o asterMCBigoniMiniKHD.o MCBigoniMiniKHD.o 
 	@$(CXX) -shared $^  -o $@ -L"$(strip $(shell tfel-config-3.4.0 --library-path))" -lAsterInterface-3.4.0 $(patsubst %,-l%,$(shell tfel-config-3.4.0 --library-dependency --material --mfront-profiling --physical-constants)) 
 
 install : 

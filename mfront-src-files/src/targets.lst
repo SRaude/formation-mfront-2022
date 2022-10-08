@@ -11,7 +11,9 @@ sources : {
 "asterMCBigoniMiniIH.cxx",
 "MCBigoniMiniIH.cxx",
 "asterMCBigoniFull.cxx",
-"MCBigoniFull.cxx"
+"MCBigoniFull.cxx",
+"asterMCBigoniMiniKHD.cxx",
+"MCBigoniMiniKHD.cxx"
 };
 cppflags : {
 "$(shell tfel-config-3.4.0 --cppflags --compiler-flags)",
@@ -30,7 +32,8 @@ link_libraries : {
 epts : {
 "astermcbigonimini",
 "astermcbigoniminiih",
-"astermcbigonifull"
+"astermcbigonifull",
+"astermcbigoniminikhd"
 };
 };
 headers : {
@@ -45,6 +48,10 @@ headers : {
 "MFront/Aster/asterMCBigoniFull.hxx",
 "TFEL/Material/MCBigoniFull.hxx",
 "TFEL/Material/MCBigoniFullBehaviourData.hxx",
-"TFEL/Material/MCBigoniFullIntegrationData.hxx"
+"TFEL/Material/MCBigoniFullIntegrationData.hxx",
+"MFront/Aster/asterMCBigoniMiniKHD.hxx",
+"TFEL/Material/MCBigoniMiniKHD.hxx",
+"TFEL/Material/MCBigoniMiniKHDBehaviourData.hxx",
+"TFEL/Material/MCBigoniMiniKHDIntegrationData.hxx"
 };
 };

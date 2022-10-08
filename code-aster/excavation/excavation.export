@@ -36,12 +36,12 @@ P cpresok RESNOOK
 P only_nook 
 P facmtps 1
 P corefilesize unlimited
-F comm /home/simon/dev/formation-mfront-2022/code-aster/excavation/command-files/excavation.comm D 1
+F comm /home/simon/dev/formation-mfront-2022/code-aster/excavation/command-files/excavation_dil.comm D 1
 F mmed /home/simon/dev/formation-mfront-2022/code-aster/excavation/mesh-files/mesh_gal.med D 20
-F libr /home/simon/dev/formation-mfront-2022/mfront-src-files/MCBigoniFull.mfront D 38
-F rmed /home/simon/dev/formation-mfront-2022/code-aster/excavation/resu-files/mc-bigoni-full/study-on-pi-shape-coef/gamma_0.000.med R 81
-F resu /home/simon/dev/formation-mfront-2022/code-aster/excavation/resu-files/mc-bigoni-full/study-on-pi-shape-coef/gamma_0.000_dx.resu R 8
-F resu /home/simon/dev/formation-mfront-2022/code-aster/excavation/resu-files/mc-bigoni-full/study-on-pi-shape-coef/gamma_0.000_dy.resu R 9
+F libr /home/simon/dev/formation-mfront-2022/mfront-src-files/MCBigoniMiniKHD.mfront D 38
+F rmed /home/simon/dev/formation-mfront-2022/code-aster/excavation/resu-files/mc-bigoni-mini-khd/resu1.med R 81
+F resu /home/simon/dev/formation-mfront-2022/code-aster/excavation/resu-files/mc-bigoni-mini-khd/resu1_dx.resu R 8
+F resu /home/simon/dev/formation-mfront-2022/code-aster/excavation/resu-files/mc-bigoni-mini-khd/resu1_dy.resu R 9
 P consbtc oui
 P soumbtc oui
 P actions make_etude

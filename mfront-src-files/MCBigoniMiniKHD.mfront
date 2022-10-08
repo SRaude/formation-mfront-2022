@@ -154,7 +154,7 @@ YASV.setEntryName("DamageStress");
 	ks=lambda+2.*mu/3.;
 	Ce=3.*ks*Stensor4::J()+2.*mu*Stensor4::K();
 	Ckin=(3.*ks*Stensor4::J()/bK+2.*mu*Stensor4::K()/bMu)/qD;
-	// >>> Initialise elastic strain (for cases with initial stresses without displacements, e.g. tunnels) /!\
+	// >>> Initialise elastic strain (for cases with initial stresses without displacements, e.g. tunnels)
 	if (inst==real(0) && lam==real(0)) {
         const Stensor4 Se=invert(Ce);
         eel=(Se*sig);
@@ -181,7 +181,7 @@ YASV.setEntryName("DamageStress");
 	const stress I1Xel=trace(Xel);
 	
 	// >>> 6.4 Plastic MC criterion - condition for plasticity
-	RFel=sqrt(J2Xel*KFm*KFm+at*at*sin(phir)*sin(phir));
+	const stress RFel=sqrt(J2Xel*KFm*KFm+at*at*sin(phir)*sin(phir));
 	b[0]=RFel+I1Xel*sin(phir)/3.-coh*cos(phir)>real(0);
 
 }
@@ -222,6 +222,7 @@ YASV.setEntryName("DamageStress");
 		const real dG_dI1X=sin(psir)/3.;
 		const real dG_dJ2X=.5*KGm*KGm/max(RG,local_zero_tolerance);
 		const Stensor nG=dG_dI1X*Stensor::Id()+dG_dJ2X*Xd;
+		nGtmp=nG;
 
 		// >>>>>> 8.1.5 Equations to be solved
 		feel=deel-deto+dlam*nG;
@@ -238,7 +239,7 @@ YASV.setEntryName("DamageStress");
 		const Stensor4 dX_dsig=Stensor4::Id();
 		const real dG_ddJ2X=-.5*KGm*KGm*dG_dJ2X/max(RG,local_zero_tolerance)/max(RG,local_zero_tolerance);
 		const Stensor4 dnG_dX=dG_ddJ2X*(Xd^Xd)+dG_dJ2X*Stensor4::K();
-		const Stensor4 dnG_dsig=(dnG_dX|dX_dsig);
+		const Stensor4 dnG_dsig=(dnG_dX*dX_dsig);
 		// >>>>>>>>>>>> Compute dnG_ddepl
 		const Stensor4 dX_ddepl=-Hkin;
 		const Stensor4 dnG_ddepl=(dnG_dX*dX_ddepl);
@@ -303,6 +304,7 @@ YASV.setEntryName("DamageStress");
 		const real dG_dI1X=sin(psir)/3.;
 		const real dG_dJ2X=.5*KGm*KGm/max(RG,local_zero_tolerance);
 		const Stensor nG=dG_dI1X*Stensor::Id()+dG_dJ2X*Xd;
+		nGtmp=nG;
 
 		// >>>>>> 8.2.5 Compute the damage criterion
 		b[1]=Y-Yc>real(0);
@@ -322,7 +324,7 @@ YASV.setEntryName("DamageStress");
 		const Stensor4 dX_dsig=Stensor4::Id();
 		const real dG_ddJ2X=-.5*KGm*KGm*dG_dJ2X/max(RG,local_zero_tolerance)/max(RG,local_zero_tolerance);
 		const Stensor4 dnG_dX=dG_ddJ2X*(Xd^Xd)+dG_dJ2X*Stensor4::K();
-		const Stensor4 dnG_dsig=(dnG_dX|dX_dsig);
+		const Stensor4 dnG_dsig=(dnG_dX*dX_dsig);
 		// >>>>>>>>>>>> Compute dnG_ddepl
 		const Stensor4 dX_ddepl=-Hkin;
 		const Stensor4 dnG_ddepl=(dnG_dX*dX_ddepl);
@@ -387,6 +389,7 @@ YASV.setEntryName("DamageStress");
 		const real dG_dI1X=sin(psir)/3.;
 		const real dG_dJ2X=.5*KGm*KGm/max(RG,local_zero_tolerance);
 		const Stensor nG=dG_dI1X*Stensor::Id()+dG_dJ2X*Xd;
+		nGtmp=nG;
 
 		// >>>>>> 8.3.5 Compute the damage criterion
 		const stress Fd=Y-Yc;
@@ -406,7 +409,7 @@ YASV.setEntryName("DamageStress");
 		const Stensor4 dX_dsig=Stensor4::Id();
 		const real dG_ddJ2X=-.5*KGm*KGm*dG_dJ2X/max(RG,local_zero_tolerance)/max(RG,local_zero_tolerance);
 		const Stensor4 dnG_dX=dG_ddJ2X*(Xd^Xd)+dG_dJ2X*Stensor4::K();
-		const Stensor4 dnG_dsig=(dnG_dX|dX_dsig);
+		const Stensor4 dnG_dsig=(dnG_dX*dX_dsig);
 		// >>>>>>>>>>>> Compute dnG_ddepl
 		const Stensor4 dX_ddepl=-Hkin;
 		const Stensor4 dnG_ddepl=(dnG_dX*dX_ddepl);
