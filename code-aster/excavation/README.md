@@ -25,7 +25,7 @@ La réponse mécanique du domaine étudié est modélisée par l'une des lois de
 | $\varphi$ | `FrictionAngle` | $32.07$                     | °     |
 | $\psi$    | `DilationAngle` | $32.07$                     | °     |
 | $C$       | `Cohesion`      | $4.21\times 10^6$           | Pa    |
-| $a$       | `TensionCutOff` | $\frac{C}{20\tan{\varphi}}$ | Pa    |
+| $a$       | `TensionCutOff` | $\frac{C}{10\tan{\varphi}}$ | Pa    |
 | $h_c$     | `HardeningCoef` | $0$                         | -     |
 | $\gamma$  | `PiShapeCoef`   | $0.99$                      | -     |
  
