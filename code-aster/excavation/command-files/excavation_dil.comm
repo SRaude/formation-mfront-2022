@@ -80,21 +80,13 @@ ldc="MCBigoniMiniKHD"
 DefaultDicPara=OrderedDict()
 DefaultDicPara["YoungModulus"]=9.e9
 DefaultDicPara["PoissonRatio"]=.25
-DefaultDicPara["FrictionAngle"]=12.07
-DefaultDicPara["DilationAngle"]=12.07
+DefaultDicPara["FrictionAngle"]=32.07
+DefaultDicPara["DilationAngle"]=32.07
 DefaultDicPara["Cohesion"]=1.21e6
-DefaultDicPara["TensionCutOff"]=.1*DefaultDicPara["Cohesion"]/tan(DefaultDicPara["FrictionAngle"]*pi/180.)
-
-if ldc=="MCBigoniFull":
-   DefaultDicPara["PiShapeCoef"]=0.
-
-if ldc=="MCBigoniMiniIH":
-   DefaultDicPara["HardeningCoef"]=10.
-
-if ldc=="MCBigoniMiniKHD":
-   DefaultDicPara["DamageStrength"]=1.e-6*DefaultDicPara["YoungModulus"]
-   DefaultDicPara["DExpoDamageFunc"]=.5
-   DefaultDicPara["QDamageFactor"]=5.
+DefaultDicPara["TensionCutOff"]=0.
+DefaultDicPara["DamageStrength"]=2.e-6*DefaultDicPara["YoungModulus"]
+DefaultDicPara["DExpoDamageFunc"]=.5
+DefaultDicPara["QDamageFactor"]=5.
 
 gravi=9.81
 vol_weight=20000.
@@ -105,7 +97,7 @@ COX=DEFI_MATERIAU(ELAS=_F(E=DefaultDicPara["YoungModulus"],
                           RHO=rho),
                   MFRONT=_F(LISTE_COEF=tuple(DefaultDicPara.values())),)
 
-COX_REG=DEFI_MATERIAU(ELAS_2NDG=_F(A1=1.5e7,
+COX_REG=DEFI_MATERIAU(ELAS_2NDG=_F(A1=1.5e6,
                                    A2=0.,
                                    A3=0.,
                                    A5=0.,),
@@ -233,9 +225,9 @@ INST_EQU=DEFI_LIST_REEL(DEBUT=0.,
 
 INST_EX=DEFI_LIST_REEL(DEBUT=1.,
                        INTERVALLE=(_F(JUSQU_A=1.75,
-                                      NOMBRE=50,),
+                                      NOMBRE=25,),
                                    _F(JUSQU_A=2.,
-                                      NOMBRE=50,),),)
+                                      NOMBRE=200,),),)
 
 SUBD_EX=DEFI_LIST_INST(DEFI_LIST=_F(LIST_INST=INST_EX),
                        ECHEC=_F(EVENEMENT='ERREUR',
@@ -330,12 +322,14 @@ RESU1=STAT_NON_LINE(MODELE=MODL,
                     CHAM_MATER=AFARG,
                     ETAT_INIT=_F(SIGM=SIEF0,
                                  VARI=VARI0,),
-                    INCREMENT=_F(LIST_INST=SUBD_EX),
+                    INCREMENT=_F(LIST_INST=SUBD_EX,
+                                 # INST_FIN=1.825000000000e+00,
+                                 ),
                     NEWTON=_F(MATRICE="TANGENTE",
-                              PREDICTION='EXTRAPOLE',
+                              # PREDICTION='EXTRAPOLE',
                               ),
                     CONVERGENCE=_F(ITER_GLOB_MAXI=20.,
-                  																	RESI_GLOB_RELA=1.e-10,),
+                  																	RESI_GLOB_RELA=1.e-8,),
                     EXCIT=(_F(CHARGE=DIMP_EX),
                            _F(CHARGE=PESA),
                            _F(CHARGE=CHREA,

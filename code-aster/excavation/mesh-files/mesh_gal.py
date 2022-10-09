@@ -142,7 +142,7 @@ MeshTheModel=smesh.Mesh(TheModel)
 MeshTheModel.SetName("MeshTheModel")
 
 ###### Define some characteristic sizes
-SizeCellGal=20.e-2
+SizeCellGal=25.e-2
 MaxSize=h/10.
 NOSGal=int(pi*r/SizeCellGal)
 
@@ -195,4 +195,7 @@ for k,v in DicGroupOfEdges.items():
 	MeshTheModel.GroupOnGeom(v)
 
 ###### Export mesh to med file
-MeshTheModel.ExportMED("mesh_gal.med")
+###### Export mesh to med file
+import os
+path=os.getcwd()
+MeshTheModel.ExportMED(path+"/mesh_%i_nodes.med"%(MeshTheModel.NbNodes()))

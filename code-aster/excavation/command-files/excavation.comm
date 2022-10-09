@@ -54,14 +54,14 @@ MODL=AFFE_MODELE(MAILLAGE=MAILLAGE,
 ### >>> Material <<<
 ### <<<<<<<<<<<<<<<<
 
-ldc="MCBigoniMiniKHD"
+ldc="MCBigoniMini"
 
 DefaultDicPara=OrderedDict()
 DefaultDicPara["YoungModulus"]=9.e9
 DefaultDicPara["PoissonRatio"]=.25
-DefaultDicPara["FrictionAngle"]=12.07
-DefaultDicPara["DilationAngle"]=12.07
-DefaultDicPara["Cohesion"]=1.21e6
+DefaultDicPara["FrictionAngle"]=32.07
+DefaultDicPara["DilationAngle"]=32.07
+DefaultDicPara["Cohesion"]=4.21e6
 DefaultDicPara["TensionCutOff"]=.1*DefaultDicPara["Cohesion"]/tan(DefaultDicPara["FrictionAngle"]*pi/180.)
 
 if ldc=="MCBigoniFull":
@@ -69,11 +69,6 @@ if ldc=="MCBigoniFull":
 
 if ldc=="MCBigoniMiniIH":
    DefaultDicPara["HardeningCoef"]=10.
-
-if ldc=="MCBigoniMiniKHD":
-   DefaultDicPara["DamageStrength"]=1.e-5*DefaultDicPara["YoungModulus"]
-   DefaultDicPara["DExpoDamageFunc"]=.5
-   DefaultDicPara["QDamageFactor"]=5.
 
 gravi=9.81
 vol_weight=20000.
@@ -296,8 +291,7 @@ RESU1=STAT_NON_LINE(MODELE=MODL,
                                  VARI=VARI0,),
                     INCREMENT=_F(LIST_INST=SUBD_EX),
                     NEWTON=_F(MATRICE="TANGENTE",
-                              PREDICTION='EXTRAPOLE',
-                              ),
+                              PREDICTION='EXTRAPOLE',),
                     CONVERGENCE=_F(ITER_GLOB_MAXI=20.,
                   																	RESI_GLOB_RELA=1.e-10,),
                     EXCIT=(_F(CHARGE=DIMP_EX),
@@ -356,20 +350,21 @@ IMPR_RESU(UNITE=81,
                    TOUT="OUI",
                    NOM_CHAM="VARI_ELGA",
                    IMPR_NOM_VARI='NON',
-                   # INST=(1.,2.),
-                   # NOM_CMP=("V5","V6","V7","V8","V9","V10","V11"),
-                   NOM_CMP=("V10","V12","V13","V14"),),
+                   INST=(1.,2.),
+                   NOM_CMP=("V5","V6","V7","V8","V9","V10"),       # MCBigoniMini and MCBigoniMiniIH
+                   # NOM_CMP=("V5","V6","V7","V8","V9","V10","V11"), # MCBigoniMiniFull
+                   ),
                 _F(RESULTAT=RESU1,
                    TOUT="OUI",
                    NOM_CHAM="DEPL",
                    IMPR_NOM_VARI='NON',
-                   # INST=(1.,2.),
+                   INST=(1.,2.),
                    NOM_CMP=("DX","DY"),),
                 _F(RESULTAT=RESU1,
                    TOUT="OUI",
                    NOM_CHAM="SIEF_ELGA",
                    IMPR_NOM_VARI='NON',
-                   # INST=(1.,2.),
+                   INST=(1.,2.),
                    NOM_CMP=("SIXX","SIYY","SIZZ","SIXY"),),),)
 
 FIN()

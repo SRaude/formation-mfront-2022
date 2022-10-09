@@ -36,9 +36,9 @@ DefaultDicPara["YoungModulus"]=9.e9
 DefaultDicPara["PoissonRatio"]=.25
 DefaultDicPara["FrictionAngle"]=32.07
 DefaultDicPara["DilationAngle"]=32.07
-DefaultDicPara["Cohesion"]=4.21e6
+DefaultDicPara["Cohesion"]=1.21e6
 DefaultDicPara["TensionCutOff"]=0.
-DefaultDicPara["DamageStrength"]=1.e-5*DefaultDicPara["YoungModulus"]
+DefaultDicPara["DamageStrength"]=2.e-6*DefaultDicPara["YoungModulus"]
 DefaultDicPara["DExpoDamageFunc"]=.5
 DefaultDicPara["QDamageFactor"]=5.
 
@@ -91,15 +91,15 @@ ggm.LoadingConditions["PrescribedStrainRate"]=DPStrainRate
 
 SensiDicPara=OrderedDict()
 SensiDicPara["PrescribedConfiningPressure"]={"list":np.linspace(-20.e6,-1.e6,8),"label":r"$\sigma_3$ (MPa)","scale":1.e6}
-SensiDicPara["YoungModulus"]={"list":np.logspace(9,10,8),"label":r"$E$ (GPa)","scale":1.e9}
-SensiDicPara["PoissonRatio"]={"list":np.linspace(.1,.35,8),"label":r"$\nu$ (-)","scale":1.}
-SensiDicPara["FrictionAngle"]={"list":np.linspace(20.,45.,8),"label":r"$\phi$ (°)","scale":1.}
-SensiDicPara["DilationAngle"]={"list":np.linspace(1.,30.,8),"label":r"$\psi$ (°)","scale":1.}
-SensiDicPara["Cohesion"]={"list":np.linspace(.1,10.,8)*1.e6,"label":r"$C$ (MPa)","scale":1.e6}
-SensiDicPara["TensionCutOff"]={"list":np.linspace(.01,.9,8)*DefaultDicPara["Cohesion"]/tan(DefaultDicPara["FrictionAngle"]*pi/180.),"label":r"$a$ (MPa)","scale":1.e6}
-SensiDicPara["DamageStrength"]={"list":np.logspace(-6,-3,8)*DefaultDicPara["YoungModulus"],"label":r"$Y_c$ (MPa)","scale":1.e6}
-SensiDicPara["QDamageFactor"]={"list":np.logspace(.5,3.,8),"label":r"$Q$ (-)","scale":1.}
-SensiDicPara["DExpoDamageFunc"]={"list":np.linspace(.1,.9,8),"label":r"$n_D$ (-)","scale":1.}
+# SensiDicPara["YoungModulus"]={"list":np.logspace(9,10,8),"label":r"$E$ (GPa)","scale":1.e9}
+# SensiDicPara["PoissonRatio"]={"list":np.linspace(.1,.35,8),"label":r"$\nu$ (-)","scale":1.}
+# SensiDicPara["FrictionAngle"]={"list":np.linspace(20.,45.,8),"label":r"$\phi$ (°)","scale":1.}
+# SensiDicPara["DilationAngle"]={"list":np.linspace(1.,30.,8),"label":r"$\psi$ (°)","scale":1.}
+# SensiDicPara["Cohesion"]={"list":np.linspace(.1,10.,8)*1.e6,"label":r"$C$ (MPa)","scale":1.e6}
+# SensiDicPara["TensionCutOff"]={"list":np.linspace(.01,.9,8)*DefaultDicPara["Cohesion"]/tan(DefaultDicPara["FrictionAngle"]*pi/180.),"label":r"$a$ (MPa)","scale":1.e6}
+# SensiDicPara["DamageStrength"]={"list":np.logspace(-6,-3,8)*DefaultDicPara["YoungModulus"],"label":r"$Y_c$ (MPa)","scale":1.e6}
+# SensiDicPara["QDamageFactor"]={"list":np.logspace(.5,3.,8),"label":r"$Q$ (-)","scale":1.}
+# SensiDicPara["DExpoDamageFunc"]={"list":np.linspace(.1,.9,8),"label":r"$n_D$ (-)","scale":1.}
 
 ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ### Define a dictionary for the curves to be plotted
