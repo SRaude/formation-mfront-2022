@@ -36,4 +36,9 @@
     > *Répertoire contenant un certain nombre de scripts Python permettant de réaliser des études de sensibilité aux paramètres matériau avec MTest*  
     > *`mc-bigoni-mini` : cas-tests réalisés avec la ldc MCBigoniMini*  
     > *`mc-bigoni-mini-ih` : cas-tests réalisés avec la ldc MCBigoniMiniIH*  
-    > *`mc-bigoni-full` : cas-tests réalisés avec la ldc MCBigoniFull*
+    > *`mc-bigoni-full` : cas-tests réalisés avec la ldc MCBigoniFull*  
+    > *`mc-bigoni-mini-khd` : cas-tests réalisés avec la ldc MCBigoniMiniKHD*
+
+- `basic-mtests`
+
+    > *Répertoire contenant des fichiers MTest permettant de réaliser des tests simples à l'échelle du point matériel*
