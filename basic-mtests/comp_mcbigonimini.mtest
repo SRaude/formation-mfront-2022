@@ -1,0 +1,61 @@
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// SIMPLE TRIAXIAL COMPRESSION TEST
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// Path to source files - definition of the model
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+@Behaviour<aster> '/home/simon/dev/formation-mfront-2022/mfront-src-files/src/libAsterBehaviour.so'  'astermcbigonimini';
+
+// >>>>>>>>>>>>>>>>>>>
+// Material parameters
+// <<<<<<<<<<<<<<<<<<<
+
+@Real 'MyYoungModulus' 9.e9;
+@Real 'MyPoissonRatio' .25;
+@Real 'MyFrictionAngle' 32.07;
+@Real 'MyDilationAngle' 32.07;
+@Real 'MyCohesion' 4.21e6;
+@Real 'MyTensionCutOff' 0.;
+
+@MaterialProperty<constant> 'YoungModulus' 'MyYoungModulus';
+@MaterialProperty<constant> 'PoissonRatio' 'MyPoissonRatio';
+@MaterialProperty<constant> 'FrictionAngle' 'MyFrictionAngle';
+@MaterialProperty<constant> 'DilationAngle' 'MyDilationAngle';
+@MaterialProperty<constant> 'Cohesion' 'MyCohesion';
+@MaterialProperty<constant> 'TensionCutOff' 'MyTensionCutOff';
+
+// >>>>>>>>>>>>>>>>>>
+// Loading conditions
+// <<<<<<<<<<<<<<<<<<
+
+@Real 'ConfPres' 4.e6;
+@Real 'BulkModu' 'MyYoungModulus/3./(1.-2.*MyPoissonRatio)';
+@Real 'EZZini' '-ConfPres/3./BulkModu';
+@Real 'EZZend' '-3./100.';
+
+@ImposedStress 'SXX' {0.:'-ConfPres',1.:'-ConfPres'};
+@ImposedStress 'SYY' {0.:'-ConfPres',1.:'-ConfPres'};
+@ImposedStrain 'EZZ' {0.:'EZZini',1.:'EZZend'};
+
+// >>>>>>>>>>
+// Time steps
+// <<<<<<<<<<
+
+@Times {0.,1. in 250};
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// Definition of some numerical quantities
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+@ExternalStateVariable 'Temperature' 293.15; // Not used in the test, but required by MTest
+@MaximumNumberOfSubSteps 20;                 // Sub-steps in case of no-convergence
+@StrainEpsilon 1.000000e-14;                 // Residual error (RESI_INTE_RELA)
+@OutputFilePrecision 15;                     // Numerical precision in the output table
+
+// >>>>>>>>>>>>>>
+// Residual error
+// <<<<<<<<<<<<<<
+
+@OutputFile '/home/simon/dev/formation-mfront-2022/basic-mtests/comp_mcbigonimini.resu';
