@@ -171,3 +171,70 @@ f_\lambda \equiv \Delta\lambda = 0
 $$
 
 Dans ce cas, le jacobien du système est la matrice identité.
+
+### Paramètres matériau
+
+Les paramètres matériau du modèle sont,
+
+<div align="center">
+  
+|                             | Symbole   | Nom             | Unité |
+| :-------------------------- | :-------: | :-------------: | :---: |
+| Module de Young             | $E$       | `YoungModulus`  | Pa    |
+| Coefficient de Poisson      | $\nu$     | `PoissonRatio`  | -     |
+| Angle de frottement interne | $\varphi$ | `FrictionAngle` | °     |
+| Angle de dilatance          | $\psi$    | `DilationAngle` | °     |
+| Cohésion                    | $C$       | `Cohesion`      | Pa    |
+| *Limite à la traction*      | $a$       | `TensionCutOff` | Pa    |
+ 
+</div>
+
+## MCBigoniMiniIH
+
+Un écrouissage positif est ajouté sur le paramètre de cohésion du modèle `MCBigoniMini` tel que,
+
+$$
+F \coloneqq \frac{I_1}{3}\sin{\varphi} + \sqrt{J_2K_{F,m}^2+a^2\sin^2{\varphi}}-C\left( 1 + h_c\gamma^p \right)\cos{\varphi} \le 0
+$$
+
+Avec,
+
+$$
+\gamma^p=\int_t{\left(\sqrt{\frac{2}{3}\boldsymbol{\dot{e}^p}:\boldsymbol{\dot{e}^p}}\right)}\mathrm{d}t,\qquad \boldsymbol{\dot{e}^p}=\mathbb{K}:\boldsymbol{\epsilon^p}
+$$
+
+$\gamma^p$ est définie comme un variable d'état supplémentaire. En charge plastique, le système d'équations à résoudre s'écrit,
+
+$$
+\begin{cases}
+\boldsymbol{f_{\boldsymbol{\epsilon^e}}} \equiv \boldsymbol{\Delta\epsilon^{e}} - \boldsymbol{\Delta\epsilon} + \Delta\lambda\boldsymbol{n_G}^{t+\theta\Delta t} = 0\\
+f_\lambda \equiv \frac{F}{E} = 0\\
+f_{\gamma^p} \equiv \Delta{\gamma^p} - \Delta\lambda\sqrt{\frac{2}{3}\left(\mathbb{K}:\boldsymbol{n_G}\right):\left(\mathbb{K}:\boldsymbol{n_G}\right)}
+\end{cases}
+$$
+
+$h_c$ est un paramètre matériau supplémentaire. Le jacobien du système implicite à résoudre se décompose par blocs,
+
+$$
+J = \begin{pmatrix}
+\frac{\partial \boldsymbol{f_{\boldsymbol{\epsilon^e}}}}{\partial\boldsymbol{\Delta\epsilon^e}} & \frac{\partial \boldsymbol{f_{\boldsymbol{\epsilon^e}}}}{\partial\Delta\lambda} & \frac{\partial \boldsymbol{f_{\boldsymbol{\epsilon^e}}}}{\partial\Delta\gamma^p}\\
+\frac{\partial f_{\lambda}}{\partial\boldsymbol{\Delta\epsilon^e}} & \frac{\partial f_{\lambda}}{\partial\Delta\lambda} & \frac{\partial f_{\lambda}}{\partial\Delta\gamma^p}\\
+\frac{\partial f_{\gamma^p}}{\partial\boldsymbol{\Delta\epsilon^e}} & \frac{\partial f_{\gamma^p}}{\partial\Delta\lambda} & \frac{\partial f_{\gamma^p}}{\partial\Delta\gamma^p}
+\end{pmatrix}
+$$
+
+Le bloc supérieur gauche est identique à celui du modèle `MCBigoniMiniIH`. Les deux composantes supplémentaires des deux premières lignes s'écrivent,
+
+$$
+\frac{\partial \boldsymbol{f_{\boldsymbol{\epsilon^e}}}}{\partial\Delta\gamma^p}=\boldsymbol{0},\qquad \frac{\partial f_{\lambda}}{\partial\Delta\gamma^p} = \frac{1}{E}\frac{\partial F}{\partial\Delta\gamma^p} = -\frac{1}{E}C h_c \cos{\varphi}
+$$
+
+La dernière ligne s'écrit,
+
+$$
+\begin{cases}
+\frac{\partial f_{\gamma^p}}{\partial\boldsymbol{\Delta\epsilon^e}} = -\Delta\lambda\sqrt{\frac{2}{3}}\left(\left(\mathbb{K}:\boldsymbol{n_G}\right) : \frac{\partial\boldsymbol{n_G}}{\partial\boldsymbol{\sigma}}\right) : \mathbb{C}\\
+\frac{\partial f_{\gamma^p}}{\partial\Delta\lambda} = -\sqrt{\frac{2}{3}\left(\mathbb{K}:\boldsymbol{n_G}\right):\left(\mathbb{K}:\boldsymbol{n_G}\right)}\\
+\frac{\partial f_{\gamma^p}}{\partial\Delta\gamma^p} = 1
+\end{cases}
+$$
