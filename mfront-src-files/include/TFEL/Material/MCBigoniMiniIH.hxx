@@ -390,21 +390,21 @@ this->gap += this->dgap;
 void updateAuxiliaryStateVariables(){
 using namespace std;
 using namespace tfel::math;
-#line 234 "MCBigoniMiniIH.mfront"
-this->inst+=this->dt;
 #line 235 "MCBigoniMiniIH.mfront"
-this->niter=iter;
+this->inst+=this->dt;
 #line 236 "MCBigoniMiniIH.mfront"
-if (this->dlam>0) {
+this->niter=iter;
 #line 237 "MCBigoniMiniIH.mfront"
-this->ip=1;
+if (this->dlam>0) {
 #line 238 "MCBigoniMiniIH.mfront"
-this->evp+=this->dlam*sin(this->psir);
+this->ip=1;
 #line 239 "MCBigoniMiniIH.mfront"
-} else {
+this->evp+=this->dlam*sin(this->psir);
 #line 240 "MCBigoniMiniIH.mfront"
-this->ip=0;
+} else {
 #line 241 "MCBigoniMiniIH.mfront"
+this->ip=0;
+#line 242 "MCBigoniMiniIH.mfront"
 }
 }
 
@@ -750,7 +750,9 @@ else {
 feel=(this->deel)-(this->deto);
 #line 224 "MCBigoniMiniIH.mfront"
 flam=(this->dlam);
-#line 226 "MCBigoniMiniIH.mfront"
+#line 225 "MCBigoniMiniIH.mfront"
+fgap=(this->dgap);
+#line 227 "MCBigoniMiniIH.mfront"
 }
 static_cast<void>(dfeel_ddeel); /* suppress potential warnings */
 static_cast<void>(dfeel_ddlam); /* suppress potential warnings */
@@ -824,27 +826,27 @@ MCBigoniMiniIH& behaviour;
 const tfel::math::TinyPermutation<2+StensorSize>& permutation;
 }; // end of struct GetPartialJacobianInvert
 GetPartialJacobianInvert getPartialJacobianInvert(*this, jacobian_permutation);
-#line 250 "MCBigoniMiniIH.mfront"
-if((smt==ELASTIC)||(smt==SECANTOPERATOR)) {
 #line 251 "MCBigoniMiniIH.mfront"
-computeElasticStiffness<N,Type>::exe((this->Dt),(this->lambda),(this->mu));
+if((smt==ELASTIC)||(smt==SECANTOPERATOR)) {
 #line 252 "MCBigoniMiniIH.mfront"
-}
+computeElasticStiffness<N,Type>::exe((this->Dt),(this->lambda),(this->mu));
 #line 253 "MCBigoniMiniIH.mfront"
-else if (smt==CONSISTENTTANGENTOPERATOR) {
-#line 254 "MCBigoniMiniIH.mfront"
-Stensor4 Je;
-#line 255 "MCBigoniMiniIH.mfront"
-getPartialJacobianInvert(Je);
-#line 256 "MCBigoniMiniIH.mfront"
-(this->Dt)=(this->Ce)*Je;
-#line 257 "MCBigoniMiniIH.mfront"
 }
+#line 254 "MCBigoniMiniIH.mfront"
+else if (smt==CONSISTENTTANGENTOPERATOR) {
+#line 255 "MCBigoniMiniIH.mfront"
+Stensor4 Je;
+#line 256 "MCBigoniMiniIH.mfront"
+getPartialJacobianInvert(Je);
+#line 257 "MCBigoniMiniIH.mfront"
+(this->Dt)=(this->Ce)*Je;
 #line 258 "MCBigoniMiniIH.mfront"
-else {
+}
 #line 259 "MCBigoniMiniIH.mfront"
-return false;
+else {
 #line 260 "MCBigoniMiniIH.mfront"
+return false;
+#line 261 "MCBigoniMiniIH.mfront"
 }
 return true;
 }

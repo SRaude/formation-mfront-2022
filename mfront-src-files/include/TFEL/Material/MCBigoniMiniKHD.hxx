@@ -431,57 +431,57 @@ this->alp += this->dalp;
 void updateAuxiliaryStateVariables(){
 using namespace std;
 using namespace tfel::math;
-#line 479 "MCBigoniMiniKHD.mfront"
-const real fh=(1.-this->alp)*(1.-this->alp)/pow(this->alp+this->rD,this->nD);
-#line 480 "MCBigoniMiniKHD.mfront"
-const real dfh_dalp=(1.-this->alp)*(this->alp*this->nD-2.*this->alp-2.*this->rD-this->nD)/pow(this->alp+this->rD,this->nD+1.);
-#line 481 "MCBigoniMiniKHD.mfront"
-const Stensor4 Hkin=fh*this->Ckin;
 #line 482 "MCBigoniMiniKHD.mfront"
-const Stensor4 dHkin_dalp=dfh_dalp*this->Ckin;
+const real fh=(1.-this->alp)*(1.-this->alp)/pow(this->alp+this->rD,this->nD);
 #line 483 "MCBigoniMiniKHD.mfront"
-const StressStensor XASV=this->sig-(Hkin*(this->epl));
+const real dfh_dalp=(1.-this->alp)*(this->alp*this->nD-2.*this->alp-2.*this->rD-this->nD)/pow(this->alp+this->rD,this->nD+1.);
 #line 484 "MCBigoniMiniKHD.mfront"
-this->XeqASV=sigmaeq(XASV);
+const Stensor4 Hkin=fh*this->Ckin;
 #line 485 "MCBigoniMiniKHD.mfront"
-this->XmASV=trace(XASV)/3.;
+const Stensor4 dHkin_dalp=dfh_dalp*this->Ckin;
 #line 486 "MCBigoniMiniKHD.mfront"
-this->YASV=-.5*((this->epl|dHkin_dalp)|this->epl);
+const StressStensor XASV=this->sig-(Hkin*(this->epl));
 #line 487 "MCBigoniMiniKHD.mfront"
-this->niter=iter;
+this->XeqASV=sigmaeq(XASV);
 #line 488 "MCBigoniMiniKHD.mfront"
-this->inst+=this->dt;
+this->XmASV=trace(XASV)/3.;
 #line 489 "MCBigoniMiniKHD.mfront"
-if (this->dlam>0) {
+this->YASV=-.5*((this->epl|dHkin_dalp)|this->epl);
 #line 490 "MCBigoniMiniKHD.mfront"
-this->ip=1;
+this->niter=iter;
 #line 491 "MCBigoniMiniKHD.mfront"
-this->evp+=this->dlam*sin(this->psir);
+this->inst+=this->dt;
 #line 492 "MCBigoniMiniKHD.mfront"
-this->gap+=this->dlam*sqrt(2.*deviator(this->nGtmp)|deviator(this->nGtmp)/3.);
+if (this->dlam>0) {
 #line 493 "MCBigoniMiniKHD.mfront"
-} else {
+this->ip=1;
 #line 494 "MCBigoniMiniKHD.mfront"
-this->ip=0;
+this->evp+=this->dlam*sin(this->psir);
 #line 495 "MCBigoniMiniKHD.mfront"
-}
+this->gap+=this->dlam*sqrt(2.*deviator(this->nGtmp)|deviator(this->nGtmp)/3.);
 #line 496 "MCBigoniMiniKHD.mfront"
-if (this->b[0] && this->alp>=this->alpc) {
-#line 497 "MCBigoniMiniKHD.mfront"
-this->domain=3;
-#line 498 "MCBigoniMiniKHD.mfront"
-} else if (this->b[0] && this->alp<this->alpc) {
-#line 499 "MCBigoniMiniKHD.mfront"
-this->domain=1;
-#line 500 "MCBigoniMiniKHD.mfront"
-} else if (this->b[0] && this->b[1] && this->alp<this->alpc) {
-#line 501 "MCBigoniMiniKHD.mfront"
-this->domain=2;
-#line 502 "MCBigoniMiniKHD.mfront"
 } else {
+#line 497 "MCBigoniMiniKHD.mfront"
+this->ip=0;
+#line 498 "MCBigoniMiniKHD.mfront"
+}
+#line 499 "MCBigoniMiniKHD.mfront"
+if (this->b[0] && this->alp>=this->alpc) {
+#line 500 "MCBigoniMiniKHD.mfront"
+this->domain=3;
+#line 501 "MCBigoniMiniKHD.mfront"
+} else if (this->b[0] && this->alp<this->alpc) {
+#line 502 "MCBigoniMiniKHD.mfront"
+this->domain=1;
 #line 503 "MCBigoniMiniKHD.mfront"
-this->domain=0;
+} else if (this->b[0] && this->b[1] && this->alp<this->alpc) {
 #line 504 "MCBigoniMiniKHD.mfront"
+this->domain=2;
+#line 505 "MCBigoniMiniKHD.mfront"
+} else {
+#line 506 "MCBigoniMiniKHD.mfront"
+this->domain=0;
+#line 507 "MCBigoniMiniKHD.mfront"
 }
 }
 
@@ -831,295 +831,301 @@ const real dG_dI1X=sin((this->psir))/3.;
 const real dG_dJ2X=.5*(this->KGm)*(this->KGm)/max(RG,(this->local_zero_tolerance));
 #line 224 "MCBigoniMiniKHD.mfront"
 const Stensor nG=dG_dI1X*Stensor::Id()+dG_dJ2X*Xd;
-#line 227 "MCBigoniMiniKHD.mfront"
-feel=(this->deel)-(this->deto)+(this->dlam)*nG;
+#line 225 "MCBigoniMiniKHD.mfront"
+(this->nGtmp)=nG;
 #line 228 "MCBigoniMiniKHD.mfront"
-fepl=(this->depl)-(this->dlam)*nG;
-#line 229 "MCBigoniMiniKHD.mfront"
-flam=F/(this->young);
-#line 230 "MCBigoniMiniKHD.mfront"
-falp=(this->dalp);
-#line 238 "MCBigoniMiniKHD.mfront"
-const Stensor4 dX_dsig=Stensor4::Id();
-#line 239 "MCBigoniMiniKHD.mfront"
-const real dG_ddJ2X=-.5*(this->KGm)*(this->KGm)*dG_dJ2X/max(RG,(this->local_zero_tolerance))/max(RG,(this->local_zero_tolerance));
-#line 240 "MCBigoniMiniKHD.mfront"
-const Stensor4 dnG_dX=dG_ddJ2X*(Xd^Xd)+dG_dJ2X*Stensor4::K();
-#line 241 "MCBigoniMiniKHD.mfront"
-const Stensor4 dnG_dsig=(dnG_dX*dX_dsig);
-#line 243 "MCBigoniMiniKHD.mfront"
-const Stensor4 dX_ddepl=-Hkin;
-#line 244 "MCBigoniMiniKHD.mfront"
-const Stensor4 dnG_ddepl=(dnG_dX*dX_ddepl);
-#line 246 "MCBigoniMiniKHD.mfront"
-const real dF_dI1X=sin((this->phir))/3.;
-#line 247 "MCBigoniMiniKHD.mfront"
-const real dF_dJ2X=.5*(this->KFm)*(this->KFm)/max(RF,(this->local_zero_tolerance));
-#line 248 "MCBigoniMiniKHD.mfront"
-const Stensor dF_dX=dF_dI1X*Stensor::Id()+dF_dJ2X*Xd;
-#line 249 "MCBigoniMiniKHD.mfront"
-const Stensor dF_dsig=(dF_dX|dX_dsig);
-#line 251 "MCBigoniMiniKHD.mfront"
-const Stensor dF_ddepl=(dF_dX|dX_ddepl);
-#line 254 "MCBigoniMiniKHD.mfront"
-dfeel_ddeel=Stensor4::Id()+(this->dlam)*(dnG_dsig*(this->Ce));
-#line 255 "MCBigoniMiniKHD.mfront"
-dfeel_ddepl=(this->dlam)*dnG_ddepl;
-#line 256 "MCBigoniMiniKHD.mfront"
-dfeel_ddlam=nG;
-#line 257 "MCBigoniMiniKHD.mfront"
-dfeel_ddalp=Stensor(real(0));
-#line 260 "MCBigoniMiniKHD.mfront"
-dfepl_ddeel=-(this->dlam)*(dnG_dsig*(this->Ce));
-#line 261 "MCBigoniMiniKHD.mfront"
-dfepl_ddepl=Stensor4::Id()-(this->dlam)*dnG_ddepl;
-#line 262 "MCBigoniMiniKHD.mfront"
-dfepl_ddlam=-nG;
-#line 263 "MCBigoniMiniKHD.mfront"
-dfepl_ddalp=Stensor(real(0));
-#line 266 "MCBigoniMiniKHD.mfront"
-dflam_ddeel=(dF_dsig|(this->Ce))/(this->young);
-#line 267 "MCBigoniMiniKHD.mfront"
-dflam_ddepl=dF_ddepl/(this->young);
-#line 268 "MCBigoniMiniKHD.mfront"
-dflam_ddlam=real(0);
-#line 269 "MCBigoniMiniKHD.mfront"
-dflam_ddalp=real(0);
-#line 272 "MCBigoniMiniKHD.mfront"
-dfalp_ddeel=Stensor(real(0));
-#line 273 "MCBigoniMiniKHD.mfront"
-dfalp_ddepl=Stensor(real(0));
-#line 274 "MCBigoniMiniKHD.mfront"
-dfalp_ddlam=real(0);
-#line 275 "MCBigoniMiniKHD.mfront"
-dfalp_ddalp=real(1);
-#line 279 "MCBigoniMiniKHD.mfront"
-}
-#line 282 "MCBigoniMiniKHD.mfront"
-if ((this->b)[0] && (this->alp)<(this->alpc)){
-#line 285 "MCBigoniMiniKHD.mfront"
-const real fh=(1.-(this->alp))*(1.-(this->alp))/pow((this->alp)+(this->rD),(this->nD));
-#line 286 "MCBigoniMiniKHD.mfront"
-const real dfh_dalp=(1.-(this->alp))*((this->alp)*(this->nD)-2.*(this->alp)-2.*(this->rD)-(this->nD))/pow((this->alp)+(this->rD),(this->nD)+1.);
-#line 287 "MCBigoniMiniKHD.mfront"
-const Stensor4 Hkin=fh*(this->Ckin);
-#line 288 "MCBigoniMiniKHD.mfront"
-const Stensor4 dHkin_dalp=dfh_dalp*(this->Ckin);
-#line 291 "MCBigoniMiniKHD.mfront"
-const StressStensor X=(this->sig)-(Hkin*((this->epl)+(this->depl)));
-#line 292 "MCBigoniMiniKHD.mfront"
-const stress Y=-.5*(((this->epl)+(this->depl))|dHkin_dalp)|((this->epl)+(this->depl));
-#line 293 "MCBigoniMiniKHD.mfront"
-const StressStensor Xd=deviator(X);
-#line 294 "MCBigoniMiniKHD.mfront"
-const stress J2X=.5*(Xd|Xd);
-#line 295 "MCBigoniMiniKHD.mfront"
-const stress I1X=trace(X);
-#line 298 "MCBigoniMiniKHD.mfront"
-const stress RF=sqrt(J2X*(this->KFm)*(this->KFm)+(this->at)*(this->at)*sin((this->phir))*sin((this->phir)));
-#line 299 "MCBigoniMiniKHD.mfront"
-const stress RG=sqrt(J2X*(this->KGm)*(this->KGm)+(this->at)*(this->aG)*sin((this->psir))*sin((this->psir)));
-#line 300 "MCBigoniMiniKHD.mfront"
-const stress F=RF+I1X*sin((this->phir))/3.-(this->coh)*cos((this->phir));
-#line 303 "MCBigoniMiniKHD.mfront"
-const real dG_dI1X=sin((this->psir))/3.;
-#line 304 "MCBigoniMiniKHD.mfront"
-const real dG_dJ2X=.5*(this->KGm)*(this->KGm)/max(RG,(this->local_zero_tolerance));
-#line 305 "MCBigoniMiniKHD.mfront"
-const Stensor nG=dG_dI1X*Stensor::Id()+dG_dJ2X*Xd;
-#line 308 "MCBigoniMiniKHD.mfront"
-(this->b)[1]=Y-(this->Yc)>real(0);
-#line 311 "MCBigoniMiniKHD.mfront"
 feel=(this->deel)-(this->deto)+(this->dlam)*nG;
-#line 312 "MCBigoniMiniKHD.mfront"
+#line 229 "MCBigoniMiniKHD.mfront"
 fepl=(this->depl)-(this->dlam)*nG;
-#line 313 "MCBigoniMiniKHD.mfront"
+#line 230 "MCBigoniMiniKHD.mfront"
 flam=F/(this->young);
-#line 314 "MCBigoniMiniKHD.mfront"
+#line 231 "MCBigoniMiniKHD.mfront"
 falp=(this->dalp);
-#line 322 "MCBigoniMiniKHD.mfront"
+#line 239 "MCBigoniMiniKHD.mfront"
 const Stensor4 dX_dsig=Stensor4::Id();
-#line 323 "MCBigoniMiniKHD.mfront"
+#line 240 "MCBigoniMiniKHD.mfront"
 const real dG_ddJ2X=-.5*(this->KGm)*(this->KGm)*dG_dJ2X/max(RG,(this->local_zero_tolerance))/max(RG,(this->local_zero_tolerance));
-#line 324 "MCBigoniMiniKHD.mfront"
+#line 241 "MCBigoniMiniKHD.mfront"
 const Stensor4 dnG_dX=dG_ddJ2X*(Xd^Xd)+dG_dJ2X*Stensor4::K();
-#line 325 "MCBigoniMiniKHD.mfront"
+#line 242 "MCBigoniMiniKHD.mfront"
 const Stensor4 dnG_dsig=(dnG_dX*dX_dsig);
-#line 327 "MCBigoniMiniKHD.mfront"
+#line 244 "MCBigoniMiniKHD.mfront"
 const Stensor4 dX_ddepl=-Hkin;
-#line 328 "MCBigoniMiniKHD.mfront"
+#line 245 "MCBigoniMiniKHD.mfront"
 const Stensor4 dnG_ddepl=(dnG_dX*dX_ddepl);
-#line 330 "MCBigoniMiniKHD.mfront"
+#line 247 "MCBigoniMiniKHD.mfront"
 const real dF_dI1X=sin((this->phir))/3.;
-#line 331 "MCBigoniMiniKHD.mfront"
+#line 248 "MCBigoniMiniKHD.mfront"
 const real dF_dJ2X=.5*(this->KFm)*(this->KFm)/max(RF,(this->local_zero_tolerance));
-#line 332 "MCBigoniMiniKHD.mfront"
+#line 249 "MCBigoniMiniKHD.mfront"
 const Stensor dF_dX=dF_dI1X*Stensor::Id()+dF_dJ2X*Xd;
-#line 333 "MCBigoniMiniKHD.mfront"
+#line 250 "MCBigoniMiniKHD.mfront"
 const Stensor dF_dsig=(dF_dX|dX_dsig);
-#line 335 "MCBigoniMiniKHD.mfront"
+#line 252 "MCBigoniMiniKHD.mfront"
 const Stensor dF_ddepl=(dF_dX|dX_ddepl);
-#line 338 "MCBigoniMiniKHD.mfront"
+#line 255 "MCBigoniMiniKHD.mfront"
 dfeel_ddeel=Stensor4::Id()+(this->dlam)*(dnG_dsig*(this->Ce));
-#line 339 "MCBigoniMiniKHD.mfront"
+#line 256 "MCBigoniMiniKHD.mfront"
 dfeel_ddepl=(this->dlam)*dnG_ddepl;
-#line 340 "MCBigoniMiniKHD.mfront"
+#line 257 "MCBigoniMiniKHD.mfront"
 dfeel_ddlam=nG;
-#line 341 "MCBigoniMiniKHD.mfront"
+#line 258 "MCBigoniMiniKHD.mfront"
 dfeel_ddalp=Stensor(real(0));
-#line 344 "MCBigoniMiniKHD.mfront"
+#line 261 "MCBigoniMiniKHD.mfront"
 dfepl_ddeel=-(this->dlam)*(dnG_dsig*(this->Ce));
-#line 345 "MCBigoniMiniKHD.mfront"
+#line 262 "MCBigoniMiniKHD.mfront"
 dfepl_ddepl=Stensor4::Id()-(this->dlam)*dnG_ddepl;
-#line 346 "MCBigoniMiniKHD.mfront"
+#line 263 "MCBigoniMiniKHD.mfront"
 dfepl_ddlam=-nG;
-#line 347 "MCBigoniMiniKHD.mfront"
+#line 264 "MCBigoniMiniKHD.mfront"
 dfepl_ddalp=Stensor(real(0));
-#line 350 "MCBigoniMiniKHD.mfront"
+#line 267 "MCBigoniMiniKHD.mfront"
 dflam_ddeel=(dF_dsig|(this->Ce))/(this->young);
-#line 351 "MCBigoniMiniKHD.mfront"
+#line 268 "MCBigoniMiniKHD.mfront"
 dflam_ddepl=dF_ddepl/(this->young);
-#line 352 "MCBigoniMiniKHD.mfront"
+#line 269 "MCBigoniMiniKHD.mfront"
 dflam_ddlam=real(0);
-#line 353 "MCBigoniMiniKHD.mfront"
+#line 270 "MCBigoniMiniKHD.mfront"
 dflam_ddalp=real(0);
-#line 356 "MCBigoniMiniKHD.mfront"
+#line 273 "MCBigoniMiniKHD.mfront"
 dfalp_ddeel=Stensor(real(0));
-#line 357 "MCBigoniMiniKHD.mfront"
+#line 274 "MCBigoniMiniKHD.mfront"
 dfalp_ddepl=Stensor(real(0));
-#line 358 "MCBigoniMiniKHD.mfront"
+#line 275 "MCBigoniMiniKHD.mfront"
 dfalp_ddlam=real(0);
-#line 359 "MCBigoniMiniKHD.mfront"
+#line 276 "MCBigoniMiniKHD.mfront"
 dfalp_ddalp=real(1);
-#line 363 "MCBigoniMiniKHD.mfront"
+#line 280 "MCBigoniMiniKHD.mfront"
 }
-#line 366 "MCBigoniMiniKHD.mfront"
-if ((this->b)[0] && (this->b)[1] && (this->alp)<(this->alpc)){
-#line 369 "MCBigoniMiniKHD.mfront"
-const real fh=(1.-(this->alp)-(this->dalp))*(1.-(this->alp)-(this->dalp))/pow((this->alp)+(this->dalp)+(this->rD),(this->nD));
-#line 370 "MCBigoniMiniKHD.mfront"
-const real dfh_dalp=(1.-(this->alp)-(this->dalp))*(((this->alp)+(this->dalp))*(this->nD)-2.*((this->alp)+(this->dalp))-2.*(this->rD)-(this->nD))/pow((this->alp)+(this->dalp)+(this->rD),(this->nD)+1.);
-#line 371 "MCBigoniMiniKHD.mfront"
+#line 283 "MCBigoniMiniKHD.mfront"
+if ((this->b)[0] && (this->alp)<(this->alpc)){
+#line 286 "MCBigoniMiniKHD.mfront"
+const real fh=(1.-(this->alp))*(1.-(this->alp))/pow((this->alp)+(this->rD),(this->nD));
+#line 287 "MCBigoniMiniKHD.mfront"
+const real dfh_dalp=(1.-(this->alp))*((this->alp)*(this->nD)-2.*(this->alp)-2.*(this->rD)-(this->nD))/pow((this->alp)+(this->rD),(this->nD)+1.);
+#line 288 "MCBigoniMiniKHD.mfront"
 const Stensor4 Hkin=fh*(this->Ckin);
-#line 372 "MCBigoniMiniKHD.mfront"
+#line 289 "MCBigoniMiniKHD.mfront"
 const Stensor4 dHkin_dalp=dfh_dalp*(this->Ckin);
-#line 375 "MCBigoniMiniKHD.mfront"
+#line 292 "MCBigoniMiniKHD.mfront"
 const StressStensor X=(this->sig)-(Hkin*((this->epl)+(this->depl)));
-#line 376 "MCBigoniMiniKHD.mfront"
+#line 293 "MCBigoniMiniKHD.mfront"
 const stress Y=-.5*(((this->epl)+(this->depl))|dHkin_dalp)|((this->epl)+(this->depl));
-#line 377 "MCBigoniMiniKHD.mfront"
+#line 294 "MCBigoniMiniKHD.mfront"
 const StressStensor Xd=deviator(X);
-#line 378 "MCBigoniMiniKHD.mfront"
+#line 295 "MCBigoniMiniKHD.mfront"
 const stress J2X=.5*(Xd|Xd);
-#line 379 "MCBigoniMiniKHD.mfront"
+#line 296 "MCBigoniMiniKHD.mfront"
 const stress I1X=trace(X);
-#line 382 "MCBigoniMiniKHD.mfront"
+#line 299 "MCBigoniMiniKHD.mfront"
 const stress RF=sqrt(J2X*(this->KFm)*(this->KFm)+(this->at)*(this->at)*sin((this->phir))*sin((this->phir)));
-#line 383 "MCBigoniMiniKHD.mfront"
+#line 300 "MCBigoniMiniKHD.mfront"
 const stress RG=sqrt(J2X*(this->KGm)*(this->KGm)+(this->at)*(this->aG)*sin((this->psir))*sin((this->psir)));
-#line 384 "MCBigoniMiniKHD.mfront"
+#line 301 "MCBigoniMiniKHD.mfront"
 const stress F=RF+I1X*sin((this->phir))/3.-(this->coh)*cos((this->phir));
-#line 387 "MCBigoniMiniKHD.mfront"
+#line 304 "MCBigoniMiniKHD.mfront"
 const real dG_dI1X=sin((this->psir))/3.;
-#line 388 "MCBigoniMiniKHD.mfront"
+#line 305 "MCBigoniMiniKHD.mfront"
 const real dG_dJ2X=.5*(this->KGm)*(this->KGm)/max(RG,(this->local_zero_tolerance));
+#line 306 "MCBigoniMiniKHD.mfront"
+const Stensor nG=dG_dI1X*Stensor::Id()+dG_dJ2X*Xd;
+#line 307 "MCBigoniMiniKHD.mfront"
+(this->nGtmp)=nG;
+#line 310 "MCBigoniMiniKHD.mfront"
+(this->b)[1]=Y-(this->Yc)>real(0);
+#line 313 "MCBigoniMiniKHD.mfront"
+feel=(this->deel)-(this->deto)+(this->dlam)*nG;
+#line 314 "MCBigoniMiniKHD.mfront"
+fepl=(this->depl)-(this->dlam)*nG;
+#line 315 "MCBigoniMiniKHD.mfront"
+flam=F/(this->young);
+#line 316 "MCBigoniMiniKHD.mfront"
+falp=(this->dalp);
+#line 324 "MCBigoniMiniKHD.mfront"
+const Stensor4 dX_dsig=Stensor4::Id();
+#line 325 "MCBigoniMiniKHD.mfront"
+const real dG_ddJ2X=-.5*(this->KGm)*(this->KGm)*dG_dJ2X/max(RG,(this->local_zero_tolerance))/max(RG,(this->local_zero_tolerance));
+#line 326 "MCBigoniMiniKHD.mfront"
+const Stensor4 dnG_dX=dG_ddJ2X*(Xd^Xd)+dG_dJ2X*Stensor4::K();
+#line 327 "MCBigoniMiniKHD.mfront"
+const Stensor4 dnG_dsig=(dnG_dX*dX_dsig);
+#line 329 "MCBigoniMiniKHD.mfront"
+const Stensor4 dX_ddepl=-Hkin;
+#line 330 "MCBigoniMiniKHD.mfront"
+const Stensor4 dnG_ddepl=(dnG_dX*dX_ddepl);
+#line 332 "MCBigoniMiniKHD.mfront"
+const real dF_dI1X=sin((this->phir))/3.;
+#line 333 "MCBigoniMiniKHD.mfront"
+const real dF_dJ2X=.5*(this->KFm)*(this->KFm)/max(RF,(this->local_zero_tolerance));
+#line 334 "MCBigoniMiniKHD.mfront"
+const Stensor dF_dX=dF_dI1X*Stensor::Id()+dF_dJ2X*Xd;
+#line 335 "MCBigoniMiniKHD.mfront"
+const Stensor dF_dsig=(dF_dX|dX_dsig);
+#line 337 "MCBigoniMiniKHD.mfront"
+const Stensor dF_ddepl=(dF_dX|dX_ddepl);
+#line 340 "MCBigoniMiniKHD.mfront"
+dfeel_ddeel=Stensor4::Id()+(this->dlam)*(dnG_dsig*(this->Ce));
+#line 341 "MCBigoniMiniKHD.mfront"
+dfeel_ddepl=(this->dlam)*dnG_ddepl;
+#line 342 "MCBigoniMiniKHD.mfront"
+dfeel_ddlam=nG;
+#line 343 "MCBigoniMiniKHD.mfront"
+dfeel_ddalp=Stensor(real(0));
+#line 346 "MCBigoniMiniKHD.mfront"
+dfepl_ddeel=-(this->dlam)*(dnG_dsig*(this->Ce));
+#line 347 "MCBigoniMiniKHD.mfront"
+dfepl_ddepl=Stensor4::Id()-(this->dlam)*dnG_ddepl;
+#line 348 "MCBigoniMiniKHD.mfront"
+dfepl_ddlam=-nG;
+#line 349 "MCBigoniMiniKHD.mfront"
+dfepl_ddalp=Stensor(real(0));
+#line 352 "MCBigoniMiniKHD.mfront"
+dflam_ddeel=(dF_dsig|(this->Ce))/(this->young);
+#line 353 "MCBigoniMiniKHD.mfront"
+dflam_ddepl=dF_ddepl/(this->young);
+#line 354 "MCBigoniMiniKHD.mfront"
+dflam_ddlam=real(0);
+#line 355 "MCBigoniMiniKHD.mfront"
+dflam_ddalp=real(0);
+#line 358 "MCBigoniMiniKHD.mfront"
+dfalp_ddeel=Stensor(real(0));
+#line 359 "MCBigoniMiniKHD.mfront"
+dfalp_ddepl=Stensor(real(0));
+#line 360 "MCBigoniMiniKHD.mfront"
+dfalp_ddlam=real(0);
+#line 361 "MCBigoniMiniKHD.mfront"
+dfalp_ddalp=real(1);
+#line 365 "MCBigoniMiniKHD.mfront"
+}
+#line 368 "MCBigoniMiniKHD.mfront"
+if ((this->b)[0] && (this->b)[1] && (this->alp)<(this->alpc)){
+#line 371 "MCBigoniMiniKHD.mfront"
+const real fh=(1.-(this->alp)-(this->dalp))*(1.-(this->alp)-(this->dalp))/pow((this->alp)+(this->dalp)+(this->rD),(this->nD));
+#line 372 "MCBigoniMiniKHD.mfront"
+const real dfh_dalp=(1.-(this->alp)-(this->dalp))*(((this->alp)+(this->dalp))*(this->nD)-2.*((this->alp)+(this->dalp))-2.*(this->rD)-(this->nD))/pow((this->alp)+(this->dalp)+(this->rD),(this->nD)+1.);
+#line 373 "MCBigoniMiniKHD.mfront"
+const Stensor4 Hkin=fh*(this->Ckin);
+#line 374 "MCBigoniMiniKHD.mfront"
+const Stensor4 dHkin_dalp=dfh_dalp*(this->Ckin);
+#line 377 "MCBigoniMiniKHD.mfront"
+const StressStensor X=(this->sig)-(Hkin*((this->epl)+(this->depl)));
+#line 378 "MCBigoniMiniKHD.mfront"
+const stress Y=-.5*(((this->epl)+(this->depl))|dHkin_dalp)|((this->epl)+(this->depl));
+#line 379 "MCBigoniMiniKHD.mfront"
+const StressStensor Xd=deviator(X);
+#line 380 "MCBigoniMiniKHD.mfront"
+const stress J2X=.5*(Xd|Xd);
+#line 381 "MCBigoniMiniKHD.mfront"
+const stress I1X=trace(X);
+#line 384 "MCBigoniMiniKHD.mfront"
+const stress RF=sqrt(J2X*(this->KFm)*(this->KFm)+(this->at)*(this->at)*sin((this->phir))*sin((this->phir)));
+#line 385 "MCBigoniMiniKHD.mfront"
+const stress RG=sqrt(J2X*(this->KGm)*(this->KGm)+(this->at)*(this->aG)*sin((this->psir))*sin((this->psir)));
+#line 386 "MCBigoniMiniKHD.mfront"
+const stress F=RF+I1X*sin((this->phir))/3.-(this->coh)*cos((this->phir));
 #line 389 "MCBigoniMiniKHD.mfront"
+const real dG_dI1X=sin((this->psir))/3.;
+#line 390 "MCBigoniMiniKHD.mfront"
+const real dG_dJ2X=.5*(this->KGm)*(this->KGm)/max(RG,(this->local_zero_tolerance));
+#line 391 "MCBigoniMiniKHD.mfront"
 const Stensor nG=dG_dI1X*Stensor::Id()+dG_dJ2X*Xd;
 #line 392 "MCBigoniMiniKHD.mfront"
-const stress Fd=Y-(this->Yc);
+(this->nGtmp)=nG;
 #line 395 "MCBigoniMiniKHD.mfront"
-feel=(this->deel)-(this->deto)+(this->dlam)*nG;
-#line 396 "MCBigoniMiniKHD.mfront"
-fepl=(this->depl)-(this->dlam)*nG;
-#line 397 "MCBigoniMiniKHD.mfront"
-flam=F/(this->young);
+const stress Fd=Y-(this->Yc);
 #line 398 "MCBigoniMiniKHD.mfront"
+feel=(this->deel)-(this->deto)+(this->dlam)*nG;
+#line 399 "MCBigoniMiniKHD.mfront"
+fepl=(this->depl)-(this->dlam)*nG;
+#line 400 "MCBigoniMiniKHD.mfront"
+flam=F/(this->young);
+#line 401 "MCBigoniMiniKHD.mfront"
 falp=Fd/(this->young);
-#line 406 "MCBigoniMiniKHD.mfront"
-const Stensor4 dX_dsig=Stensor4::Id();
-#line 407 "MCBigoniMiniKHD.mfront"
-const real dG_ddJ2X=-.5*(this->KGm)*(this->KGm)*dG_dJ2X/max(RG,(this->local_zero_tolerance))/max(RG,(this->local_zero_tolerance));
-#line 408 "MCBigoniMiniKHD.mfront"
-const Stensor4 dnG_dX=dG_ddJ2X*(Xd^Xd)+dG_dJ2X*Stensor4::K();
 #line 409 "MCBigoniMiniKHD.mfront"
-const Stensor4 dnG_dsig=(dnG_dX*dX_dsig);
+const Stensor4 dX_dsig=Stensor4::Id();
+#line 410 "MCBigoniMiniKHD.mfront"
+const real dG_ddJ2X=-.5*(this->KGm)*(this->KGm)*dG_dJ2X/max(RG,(this->local_zero_tolerance))/max(RG,(this->local_zero_tolerance));
 #line 411 "MCBigoniMiniKHD.mfront"
-const Stensor4 dX_ddepl=-Hkin;
+const Stensor4 dnG_dX=dG_ddJ2X*(Xd^Xd)+dG_dJ2X*Stensor4::K();
 #line 412 "MCBigoniMiniKHD.mfront"
-const Stensor4 dnG_ddepl=(dnG_dX*dX_ddepl);
+const Stensor4 dnG_dsig=(dnG_dX*dX_dsig);
 #line 414 "MCBigoniMiniKHD.mfront"
-const Stensor4 dHkin_ddalp=dHkin_dalp;
+const Stensor4 dX_ddepl=-Hkin;
 #line 415 "MCBigoniMiniKHD.mfront"
-const StressStensor dX_ddalp=-(dHkin_ddalp*((this->epl)+(this->depl)));
-#line 416 "MCBigoniMiniKHD.mfront"
-const Stensor dnG_ddalp=(dnG_dX*dX_ddalp);
+const Stensor4 dnG_ddepl=(dnG_dX*dX_ddepl);
+#line 417 "MCBigoniMiniKHD.mfront"
+const Stensor4 dHkin_ddalp=dHkin_dalp;
 #line 418 "MCBigoniMiniKHD.mfront"
-const real dF_dI1X=sin((this->phir))/3.;
+const StressStensor dX_ddalp=-(dHkin_ddalp*((this->epl)+(this->depl)));
 #line 419 "MCBigoniMiniKHD.mfront"
-const real dF_dJ2X=.5*(this->KFm)*(this->KFm)/max(RF,(this->local_zero_tolerance));
-#line 420 "MCBigoniMiniKHD.mfront"
-const Stensor dF_dX=dF_dI1X*Stensor::Id()+dF_dJ2X*Xd;
+const Stensor dnG_ddalp=(dnG_dX*dX_ddalp);
 #line 421 "MCBigoniMiniKHD.mfront"
-const Stensor dF_dsig=(dF_dX|dX_dsig);
+const real dF_dI1X=sin((this->phir))/3.;
+#line 422 "MCBigoniMiniKHD.mfront"
+const real dF_dJ2X=.5*(this->KFm)*(this->KFm)/max(RF,(this->local_zero_tolerance));
 #line 423 "MCBigoniMiniKHD.mfront"
+const Stensor dF_dX=dF_dI1X*Stensor::Id()+dF_dJ2X*Xd;
+#line 424 "MCBigoniMiniKHD.mfront"
+const Stensor dF_dsig=(dF_dX|dX_dsig);
+#line 426 "MCBigoniMiniKHD.mfront"
 const Stensor dF_ddepl=(dF_dX|dX_ddepl);
-#line 425 "MCBigoniMiniKHD.mfront"
+#line 428 "MCBigoniMiniKHD.mfront"
 const real dF_ddalp=(dF_dX|dX_ddalp);
-#line 427 "MCBigoniMiniKHD.mfront"
+#line 430 "MCBigoniMiniKHD.mfront"
 const real dFd_dY=real(1);
-#line 429 "MCBigoniMiniKHD.mfront"
-const Stensor dY_ddepl=-(dHkin_dalp*((this->epl)+(this->depl)));
-#line 431 "MCBigoniMiniKHD.mfront"
-const real d2fh_ddalp_dalp=(((this->alp)+(this->dalp))*((this->alp)+(this->dalp))*((this->nD)*((this->nD)-3.)+2.)+2.*((this->alp)+(this->dalp))*(-2.*(this->rD)*((this->nD)-1.)-(this->nD)*((this->nD)-1.))+2.*(this->rD)*((this->rD)+2.*(this->nD))+(this->nD)*((this->nD)+1.))/pow((this->alp)+(this->dalp)+(this->rD),(this->nD)+2.);
 #line 432 "MCBigoniMiniKHD.mfront"
+const Stensor dY_ddepl=-(dHkin_dalp*((this->epl)+(this->depl)));
+#line 434 "MCBigoniMiniKHD.mfront"
+const real d2fh_ddalp_dalp=(((this->alp)+(this->dalp))*((this->alp)+(this->dalp))*((this->nD)*((this->nD)-3.)+2.)+2.*((this->alp)+(this->dalp))*(-2.*(this->rD)*((this->nD)-1.)-(this->nD)*((this->nD)-1.))+2.*(this->rD)*((this->rD)+2.*(this->nD))+(this->nD)*((this->nD)+1.))/pow((this->alp)+(this->dalp)+(this->rD),(this->nD)+2.);
+#line 435 "MCBigoniMiniKHD.mfront"
 const Stensor4 d2Hkin_ddalp_dalp=d2fh_ddalp_dalp*(this->Ckin);
-#line 433 "MCBigoniMiniKHD.mfront"
-const stress dY_ddalp=-.5*(((this->epl)+(this->depl))|d2Hkin_ddalp_dalp)|((this->epl)+(this->depl));
 #line 436 "MCBigoniMiniKHD.mfront"
-dfeel_ddeel=Stensor4::Id()+(this->dlam)*(dnG_dsig*(this->Ce));
-#line 437 "MCBigoniMiniKHD.mfront"
-dfeel_ddepl=(this->dlam)*dnG_ddepl;
-#line 438 "MCBigoniMiniKHD.mfront"
-dfeel_ddlam=nG;
+const stress dY_ddalp=-.5*(((this->epl)+(this->depl))|d2Hkin_ddalp_dalp)|((this->epl)+(this->depl));
 #line 439 "MCBigoniMiniKHD.mfront"
-dfeel_ddalp=(this->dlam)*dnG_ddalp;
+dfeel_ddeel=Stensor4::Id()+(this->dlam)*(dnG_dsig*(this->Ce));
+#line 440 "MCBigoniMiniKHD.mfront"
+dfeel_ddepl=(this->dlam)*dnG_ddepl;
+#line 441 "MCBigoniMiniKHD.mfront"
+dfeel_ddlam=nG;
 #line 442 "MCBigoniMiniKHD.mfront"
-dfepl_ddeel=-(this->dlam)*(dnG_dsig*(this->Ce));
-#line 443 "MCBigoniMiniKHD.mfront"
-dfepl_ddepl=Stensor4::Id()-(this->dlam)*dnG_ddepl;
-#line 444 "MCBigoniMiniKHD.mfront"
-dfepl_ddlam=-nG;
+dfeel_ddalp=(this->dlam)*dnG_ddalp;
 #line 445 "MCBigoniMiniKHD.mfront"
-dfepl_ddalp=-(this->dlam)*dnG_ddalp;
+dfepl_ddeel=-(this->dlam)*(dnG_dsig*(this->Ce));
+#line 446 "MCBigoniMiniKHD.mfront"
+dfepl_ddepl=Stensor4::Id()-(this->dlam)*dnG_ddepl;
+#line 447 "MCBigoniMiniKHD.mfront"
+dfepl_ddlam=-nG;
 #line 448 "MCBigoniMiniKHD.mfront"
-dflam_ddeel=(dF_dsig|(this->Ce))/(this->young);
-#line 449 "MCBigoniMiniKHD.mfront"
-dflam_ddepl=dF_ddepl/(this->young);
-#line 450 "MCBigoniMiniKHD.mfront"
-dflam_ddlam=real(0);
+dfepl_ddalp=-(this->dlam)*dnG_ddalp;
 #line 451 "MCBigoniMiniKHD.mfront"
-dflam_ddalp=dF_ddalp/(this->young);
+dflam_ddeel=(dF_dsig|(this->Ce))/(this->young);
+#line 452 "MCBigoniMiniKHD.mfront"
+dflam_ddepl=dF_ddepl/(this->young);
+#line 453 "MCBigoniMiniKHD.mfront"
+dflam_ddlam=real(0);
 #line 454 "MCBigoniMiniKHD.mfront"
-dfalp_ddeel=Stensor(real(0));
-#line 455 "MCBigoniMiniKHD.mfront"
-dfalp_ddepl=(dFd_dY*dY_ddepl)/(this->young);
-#line 456 "MCBigoniMiniKHD.mfront"
-dfalp_ddlam=real(0);
+dflam_ddalp=dF_ddalp/(this->young);
 #line 457 "MCBigoniMiniKHD.mfront"
+dfalp_ddeel=Stensor(real(0));
+#line 458 "MCBigoniMiniKHD.mfront"
+dfalp_ddepl=(dFd_dY*dY_ddepl)/(this->young);
+#line 459 "MCBigoniMiniKHD.mfront"
+dfalp_ddlam=real(0);
+#line 460 "MCBigoniMiniKHD.mfront"
 dfalp_ddalp=(dFd_dY*dY_ddalp)/(this->young);
-#line 461 "MCBigoniMiniKHD.mfront"
-}
 #line 464 "MCBigoniMiniKHD.mfront"
-if (not (this->b)[0]){
-#line 466 "MCBigoniMiniKHD.mfront"
-feel=(this->deel)-(this->deto);
+}
 #line 467 "MCBigoniMiniKHD.mfront"
-fepl=(this->depl);
-#line 468 "MCBigoniMiniKHD.mfront"
-flam=(this->dlam);
+if (not (this->b)[0]){
 #line 469 "MCBigoniMiniKHD.mfront"
-falp=(this->dalp);
+feel=(this->deel)-(this->deto);
+#line 470 "MCBigoniMiniKHD.mfront"
+fepl=(this->depl);
 #line 471 "MCBigoniMiniKHD.mfront"
+flam=(this->dlam);
+#line 472 "MCBigoniMiniKHD.mfront"
+falp=(this->dalp);
+#line 474 "MCBigoniMiniKHD.mfront"
 }
 static_cast<void>(dfeel_ddeel); /* suppress potential warnings */
 static_cast<void>(dfeel_ddepl); /* suppress potential warnings */
@@ -1209,27 +1215,27 @@ MCBigoniMiniKHD& behaviour;
 const tfel::math::TinyPermutation<2+2*StensorSize>& permutation;
 }; // end of struct GetPartialJacobianInvert
 GetPartialJacobianInvert getPartialJacobianInvert(*this, jacobian_permutation);
-#line 512 "MCBigoniMiniKHD.mfront"
-if((smt==ELASTIC)||(smt==SECANTOPERATOR)) {
-#line 513 "MCBigoniMiniKHD.mfront"
-computeElasticStiffness<N,Type>::exe((this->Dt),(this->lambda),(this->mu));
-#line 514 "MCBigoniMiniKHD.mfront"
-}
 #line 515 "MCBigoniMiniKHD.mfront"
-else if (smt==CONSISTENTTANGENTOPERATOR) {
+if((smt==ELASTIC)||(smt==SECANTOPERATOR)) {
 #line 516 "MCBigoniMiniKHD.mfront"
-Stensor4 Je;
+computeElasticStiffness<N,Type>::exe((this->Dt),(this->lambda),(this->mu));
 #line 517 "MCBigoniMiniKHD.mfront"
-getPartialJacobianInvert(Je);
-#line 518 "MCBigoniMiniKHD.mfront"
-(this->Dt)=(this->Ce)*Je;
-#line 519 "MCBigoniMiniKHD.mfront"
 }
+#line 518 "MCBigoniMiniKHD.mfront"
+else if (smt==CONSISTENTTANGENTOPERATOR) {
+#line 519 "MCBigoniMiniKHD.mfront"
+Stensor4 Je;
 #line 520 "MCBigoniMiniKHD.mfront"
-else {
+getPartialJacobianInvert(Je);
 #line 521 "MCBigoniMiniKHD.mfront"
-return false;
+(this->Dt)=(this->Ce)*Je;
 #line 522 "MCBigoniMiniKHD.mfront"
+}
+#line 523 "MCBigoniMiniKHD.mfront"
+else {
+#line 524 "MCBigoniMiniKHD.mfront"
+return false;
+#line 525 "MCBigoniMiniKHD.mfront"
 }
 return true;
 }
