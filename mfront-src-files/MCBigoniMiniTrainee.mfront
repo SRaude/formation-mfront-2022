@@ -1,0 +1,262 @@
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// Perfectly-plastic (non-associated plastic flow) model based on:
+//    * http://tfel.sourceforge.net/MohrCoulomb.html
+//    * https://doi.org/10.1016/j.compstruc.2016.11.010
+//    * https://doi.org/10.1016/0045-7949(94)00339-5
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+@DSL Implicit;
+@Author Simon Raude;
+@Date 07/10/2022;
+@Behaviour MCBigoniMini;
+
+@Algorithm NewtonRaphson;
+// @Algorithm NewtonRaphson_NumericalJacobian;
+// @CompareToNumericalJacobian true;
+// @PerturbationValueForNumericalJacobianComputation 1.e-8;
+
+@Theta 1.; 
+@Epsilon 1.e-14;
+
+// >>>>>>>>>>>>>>>>>>>>>
+// 1. Material Constants
+// <<<<<<<<<<<<<<<<<<<<<
+
+/*
+
+>>> Here define the material parameters of the model
+>>> Use the @MaterialProperty keyword and the .setGlossaryName() of .setEntryName() methods
+
+>>> YoungModulus
+>>> PoissonRatio
+>>> FrictionAngle
+>>> DilationAngle
+>>> Cohesion
+>>> TensionCutOff
+
+// Young modulus (>0, Pa)
+@MaterialProperty stress young;
+young.setGlossaryName("YoungModulus");
+
+>>> To be continued...
+
+*/
+
+// >>>>>>>>>>>>>>>>>>
+// 2. Local Variables
+// <<<<<<<<<<<<<<<<<<
+
+@LocalVariable bool b;                    // True if plastic loading
+@LocalVariable real local_zero_tolerance; // Local zero tolerance
+@LocalVariable real pi;                   // Real pi=3.14....
+@LocalVariable real phir;                 // Friction angle in radians
+@LocalVariable real psir;                 // Dilation angle in radians
+@LocalVariable real thetaFm;              // Plastic criterion: Lode angle for which the radius of the MC criterion reach a minimum
+@LocalVariable real thetaGm;              // Plastic flow function: Lode angle for which the radius of the MC flow function reach a minimum
+@LocalVariable real KFm;                  // Value of the function KF(theta) for Theta=thetaFm
+@LocalVariable real KGm;                  // Value of the function KG(theta) for Theta=thetaGm
+@LocalVariable stress aG;                 // at*tan(phi)/tan(psi) (in the plastic flow function)
+@LocalVariable Stensor4 Ce;               // Elastic stiffness tensor
+@LocalVariable stress lambda;             // First Lame modulus
+@LocalVariable stress mu;                 // Shear modulus
+@LocalVariable stress ks;                 // Bulk modulus
+@LocalVariable Stensor nGtmp;             // Local variable which is actually the plastic flow direction used to update the auxiliary variable gap
+
+// >>>>>>>>>>>>>>>>>
+// 3. State Variable
+// <<<<<<<<<<<<<<<<<
+
+/*
+
+>>> Here define the state variable "lam"  and its EntryName "PlasticMultiplier"
+>>> Use the @StateVariable keyword and the .setEntryName() method
+
+*/
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// 4. Auxilliary state variables
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+/*
+
+>>> Here define the auxiliary state variables "niter", "ip", "evp", "gap", and "inst"
+>>> Use the @AuxiliaryStateVariable keyword and the .setEntryName() method
+
+>>> niter : "LocalNewtonIter"
+>>> ip    : "PlasticIndex"
+>>> evp   : "PVolumStrain"
+>>> gap   : "EquiPlastStrain"
+>>> inst  : "Time"
+
+@AuxiliaryStateVariable real niter;
+niter.setEntryName("LocalNewtonIter");
+
+>>> To be continued...
+
+*/
+
+// >>>>>>>>>>>>>>>>>>>>>>>>
+// 5. Init. local variables
+// <<<<<<<<<<<<<<<<<<<<<<<<
+
+@Includes{
+	#include"TFEL/Material/Lame.hxx"
+}
+
+@InitLocalVariables{
+	
+    using namespace tfel::material::lame;
+	local_zero_tolerance=real(1e-12);
+	
+    // >>> Convert the FrictionAngle and the DilationAngle to radians
+	// pi=4.*atan(1.);
+	// phir=...;
+	// psir=...;
+
+	// >>> Compute KFm and KGm
+	// thetaFm=...;
+	// thetaGm=...;
+    // KFm=...;
+    // KGm=...;
+
+	// >>> Compute aG
+    // aG=...;
+    
+	// >>> Compute the elastic moduli and the Hooke tensor
+	// lambda=...;
+	// mu=...;
+	// ks=...;
+	// Ce=...;
+
+	// >>> Initialise elastic strain (for cases with initial stresses without displacements, e.g. tunnels)
+	if (inst==real(0) && lam==real(0)) {
+        const Stensor4 Se=invert(Ce);
+        eel=(Se*sig);
+    }
+}
+
+// >>>>>>>>>>>>>>>>>>>>>
+// 6. Elastic Prediction
+// <<<<<<<<<<<<<<<<<<<<<
+
+@Predictor{
+	
+	// >>> 6.1 Compute the elastic trial stress
+	StressStensor sigel(lambda*trace(eel+deto)*Stensor::Id()+2.*mu*(eel+deto));
+
+	// >>> 6.2 Compute the invariants of sigel
+	// const StressStensor sdel=...;
+	// const stress J2el=...;
+	// const stress I1el=...;
+
+    // >>> 6.3 Plastic MC criterion - condition for plasticity
+	// const stress RFel=sqrt(...);
+	// b=RFel+...>real(0);
+
+}
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>
+// 7. Update the stress tensor
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+@ComputeStress{
+	sig=lambda*trace(eel)*StrainStensor::Id()+2.*mu*eel;
+}
+
+// >>>>>>>>>>>>>>>>>>>>>
+// 8. Plastic correction
+// <<<<<<<<<<<<<<<<<<<<<
+
+@Integrator{
+	
+	// >>> 8.1 Integration if plastic loading
+	if (b){
+
+		// >>>>>> 8.1.1 Compute the invariants of sig
+		// const StressStensor sd=...;
+		// const stress J2=...;
+		// const stress I1=...;
+		
+		// >>>>>> 8.1.2 Compute the plastic criterion
+		// const stress RF=sqrt(...); // For the plastic criterion
+		// const stress RG=sqrt(...); // For the plastic flow function
+		// const stress F=...;        // The plastic criterion
+
+		// >>>>>> 8.1.3 Compute the plastic flow direction
+		// const real dG_dI1=...;
+		// const real dG_dJ2=...;
+		// const Stensor nG=...;
+		// nGtmp=nG;
+
+		// >>>>>> 8.1.4 Equations to be solved
+		// feel=...;
+		// flam=...;
+		
+		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Comment this block if "@Algorithm NewtonRaphson_NumericalJacobian" >>>>>>>>>>>>>>>>
+
+		// >>>>>> 8.1.5 Jacobian
+
+		// >>>>>>>>> 8.1.5.1 Some tools
+		// >>>>>>>>>>>> Compute dnG_dsig
+		// const real dG_ddJ2=...;
+		// const Stensor4 dnG_dsig=...;
+		// >>>>>>>>>>>> Compute dFp_dsig
+		// const real dF_dI1=...;
+		// const real dF_dJ2=...;
+		// const Stensor dF_dsig=...;
+		
+		// >>>>>>>>> 8.1.5.2 First line
+		// dfeel_ddeel=...;
+		// dfeel_ddlam=...;
+		
+		// >>>>>>>>> 8.1.5.3 Second line
+		// dflam_ddeel=...;
+		// dflam_ddlam=...;
+
+		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		
+	}
+
+	// >>> 8.2 Elasticity
+	else {
+
+		// feel=...;
+		// flam=...;
+
+	}
+}
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// 9. Update Auxilliary State Variables
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+@UpdateAuxiliaryStateVariables{
+	inst+=dt;
+	niter=iter;
+	if (dlam>0) {
+		// ip=...;
+		// evp+=...;
+		// gap+=...;
+	} else {
+		// ip=...;
+	}
+
+}
+
+// >>>>>>>>>>>>>>>>>>>>
+// 10. Tangent Operator
+// <<<<<<<<<<<<<<<<<<<<
+
+@TangentOperator{
+	if((smt==ELASTIC)||(smt==SECANTOPERATOR)) {
+		computeElasticStiffness<N,Type>::exe(Dt,lambda,mu);
+	}
+	else if (smt==CONSISTENTTANGENTOPERATOR) {
+		Stensor4 Je;
+		getPartialJacobianInvert(Je);
+		Dt=Ce*Je;
+	} 
+	else {
+		return false;
+	}
+}
