@@ -8,7 +8,7 @@ DEBUT(PAR_LOT='NON')
 ### >>> Compile the MFront source file <<<
 ### <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-CREA_LIB_MFRONT(...)
+# CREA_LIB_MFRONT(...)
 
 ### >>>>>>>>>>>>
 ### >>> Mesh <<<
@@ -53,7 +53,7 @@ MODMEC1=AFFE_MODELE(INFO=1,
 ### >>> Material <<<
 ### <<<<<<<<<<<<<<<<
 
-SOL=DEFI_MATERIAU(...)
+# SOL=DEFI_MATERIAU(...)
 
 CHMAT=AFFE_MATERIAU(MAILLAGE=MAILLAGE,
                     AFFE=_F(GROUP_MA="GrFaceAll",
@@ -117,7 +117,7 @@ RESU0=STAT_NON_LINE(MODELE=MODMEC1,
                     CHAM_MATER=CHMAT,
                     EXCIT=(_F(CHARGE=DDLIMP0,),
                            _F(CHARGE=PESE,),),
-                    COMPORTEMENT=(_F(...),),
+                    # COMPORTEMENT=(_F(...),),
                     SOLVEUR=_F(METHODE="MUMPS"),
                     INCREMENT=_F(LIST_INST=TEMPS,
                                  INST_FIN=TEQ,),
@@ -151,7 +151,7 @@ RESU1=STAT_NON_LINE(MODELE=MODMEC1,
                            _F(CHARGE=PESE,),
                            _F(CHARGE=DDLIMP1,
                               FONC_MULT=FEVOL,),),
-                    COMPORTEMENT=(_F(...),),
+                    # COMPORTEMENT=(_F(...),),
                     ETAT_INIT=_F(SIGM=SIEF0,
                                  VARI=VARI0,),
                     INCREMENT=_F(LIST_INST=DEFLIST,
@@ -171,8 +171,6 @@ RESU1=STAT_NON_LINE(MODELE=MODMEC1,
 RESU1=CALC_CHAMP(reuse=RESU1,
                 RESULTAT=RESU1,
                 MODELE=MODMEC1,
-                GROUP_MA=("GrFaceAll"),
-                CRITERES=('EPEQ_ELGA','SIEQ_ELGA'),
                 FORCE=('FORC_NODA'),)
 
 TAB_F=POST_RELEVE_T(ACTION=_F(INTITULE="TAB_F",
@@ -188,36 +186,17 @@ IMPR_TABLE(FORMAT='TABLEAU',
            TABLE=TAB_F,
            UNITE=8,)
 
+### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+### >>> IMPR_RESU if necessary <<<
+### <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 IMPR_RESU(FORMAT='MED',
-          UNITE=80,
+          UNITE=81,
           RESU=(_F(RESULTAT=RESU1,
                    TOUT="OUI",
-                   NOM_CHAM="DEPL",
-                   IMPR_NOM_VARI='NON',),
-                _F(RESULTAT=RESU1,
-                   TOUT="OUI",
-                   NOM_CHAM="FORC_NODA",
-                   IMPR_NOM_VARI='NON',),
-                _F(RESULTAT=RESU1,
-                   TOUT="OUI",
-                   NOM_CHAM="SIEF_ELGA",
-                   IMPR_NOM_VARI='NON',),
-                _F(RESULTAT=RESU1,
-                   TOUT="OUI",
                    NOM_CHAM="VARI_ELGA",
-                   IMPR_NOM_VARI='NON',),
-                _F(RESULTAT=RESU1,
-                   TOUT="OUI",
-                   NOM_CHAM="EPEQ_ELGA",
                    IMPR_NOM_VARI='NON',
-                   NOM_CMP=("INVA_2","PRIN_1","PRIN_2","PRIN_3"),),
-                _F(RESULTAT=RESU1,
-                   TOUT="OUI",
-                   NOM_CHAM="SIEQ_ELGA",
-                   IMPR_NOM_VARI='NON',
-                   NOM_CMP=("VMIS"),),),)
+                   INST=(TEQ,TF),
+                   NOM_CMP=("V5","V6","V7","V8","V9","V10"),),),)
 
 FIN()
-
-
-
