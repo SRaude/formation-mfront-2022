@@ -74,9 +74,11 @@ hc.setEntryName("HardeningCoef");
 // <<<<<<<<<<<<<<<<<
 
 @StateVariable strain lam; // Plastic multiplier
-@StateVariable strain gap; // Equivalent plastic strain
 lam.setEntryName("PlastMultiplier");
-gap.setEntryName("EquiPlastStrain");
+
+// >>> Define a new state variable "gap" with the name "EquiPlastStrain" for the isotropic hardening
+// @StateVariable ... ...; // Equivalent plastic strain
+// gap....("...");
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // 4. Auxilliary state variables
@@ -142,7 +144,7 @@ inst.setEntryName("Time");
 
 	// >>> 6.3 Plastic MC criterion - condition for plasticity
 	const stress RFel=sqrt(J2el*KFm*KFm+at*at*sin(phir)*sin(phir));
-	b=RFel+I1el*sin(phir)/3.-coh*(1.+hc*gap)*cos(phir)>real(0);
+	// b=RFel+I1el*sin(phir)/3.-...*cos(phir)>real(0);
 
 }
 
@@ -171,7 +173,7 @@ inst.setEntryName("Time");
 		// >>>>>> 8.1.2 Compute the plastic criterion
 		const stress RF=sqrt(J2*KFm*KFm+at*at*sin(phir)*sin(phir));         // For the plastic criterion
 		const stress RG=sqrt(J2*KGm*KGm+aG*aG*sin(psir)*sin(psir));         // For the plastic flow function
-		const stress F=RF+I1*sin(phir)/3.-coh*(1.+hc*(gap+dgap))*cos(phir); // The plastic criterion
+		// const stress F=RF+I1*sin(phir)/3.-...*cos(phir); // The plastic criterion
 
 		// >>>>>> 8.1.3 Compute the plastic flow direction
 		const real dG_dI1=sin(psir)/3.;
@@ -181,7 +183,7 @@ inst.setEntryName("Time");
 		// >>>>>> 8.1.4 Equations to be solved
 		feel=deel-deto+dlam*nG;
 		flam=F/young;
-		fgap=dgap-dlam*sqrt(2.*deviator(nG)|deviator(nG)/3.);
+		// fgap=...;
 		
 		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Comment this block if "@Algorithm NewtonRaphson_NumericalJacobian" >>>>>>>>>>>>>>>>
 
@@ -196,22 +198,22 @@ inst.setEntryName("Time");
 		const real dF_dJ2=.5*KFm*KFm/max(RF,local_zero_tolerance);
 		const Stensor dF_dsig=dF_dI1*Stensor::Id()+dF_dJ2*sd;
 		// >>>>>>>>>>>> Compute dF_ddgap
-		const real dF_ddgap=-coh*hc*cos(phir);
+		// const real dF_ddgap=...;
 		
 		// >>>>>>>>> 8.1.5.2 First line
 		dfeel_ddeel=Stensor4::Id()+dlam*(dnG_dsig*Ce);
 		dfeel_ddlam=nG;
-		dfeel_ddgap=Stensor(real(0));
+		// dfeel_ddgap=...;
 		
 		// >>>>>>>>> 8.1.5.3 Second line
 		dflam_ddeel=(dF_dsig|Ce)/young;
 		dflam_ddlam=real(0);
-		dflam_ddgap=dF_ddgap/young;
+		// dflam_ddgap=...;
 
 		// >>>>>>>>> 8.1.5.4 Third line
 		dfgap_ddeel=-dlam*sqrt(2./3.)*((deviator(nG)|dnG_dsig)|Ce);
 		dfgap_ddlam=-sqrt(2.*deviator(nG)|deviator(nG)/3.);
-		dfgap_ddgap=real(1);
+		// dfgap_ddgap=...;
 
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		
@@ -222,7 +224,7 @@ inst.setEntryName("Time");
 
 		feel=deel-deto;
 		flam=dlam;
-		fgap=dgap;
+        // fgap=...;
 
 	}
 }
