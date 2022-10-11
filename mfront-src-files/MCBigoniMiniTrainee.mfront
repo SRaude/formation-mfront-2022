@@ -100,10 +100,6 @@ niter.setEntryName("LocalNewtonIter");
 // 5. Init. local variables
 // <<<<<<<<<<<<<<<<<<<<<<<<
 
-@Includes{
-	#include"TFEL/Material/Lame.hxx"
-}
-
 @InitLocalVariables{
 	
 	local_zero_tolerance=real(1e-12);

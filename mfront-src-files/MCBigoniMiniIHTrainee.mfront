@@ -54,20 +54,21 @@ hc.setEntryName("HardeningCoef");
 // 2. Local Variables
 // <<<<<<<<<<<<<<<<<<
 
-@LocalVariable bool b;                    // True if plastic loading
-@LocalVariable real local_zero_tolerance; // Local zero tolerance
-@LocalVariable real pi;                   // Real pi=3.14....
-@LocalVariable real phir;                 // Friction angle in radians
-@LocalVariable real psir;                 // Dilation angle in radians
-@LocalVariable real thetaFm;              // Plastic criterion: Lode angle for which the radius of the MC criterion reach a minimum
-@LocalVariable real thetaGm;              // Plastic flow function: Lode angle for which the radius of the MC flow function reach a minimum
-@LocalVariable real KFm;                  // Value of the function KF(theta) for Theta=thetaFm
-@LocalVariable real KGm;                  // Value of the function KG(theta) for Theta=thetaGm
-@LocalVariable stress aG;                 // at*tan(phi)/tan(psi) (in the plastic flow function)
-@LocalVariable Stensor4 Ce;               // Elastic stiffness tensor
-@LocalVariable stress lambda;             // First Lame modulus
-@LocalVariable stress mu;                 // Shear modulus
-@LocalVariable stress ks;                 // Bulk modulus
+@LocalVariable bool b;                       // True if plastic loading
+@LocalVariable real local_zero_tolerance;    // Local zero tolerance
+@LocalVariable stress slocal_zero_tolerance; // Local zero tolerance for stresses
+@LocalVariable real pi;                      // Real pi=3.14....
+@LocalVariable real phir;                    // Friction angle in radians
+@LocalVariable real psir;                    // Dilation angle in radians
+@LocalVariable real thetaFm;                 // Plastic criterion: Lode angle for which the radius of the MC criterion reach a minimum
+@LocalVariable real thetaGm;                 // Plastic flow function: Lode angle for which the radius of the MC flow function reach a minimum
+@LocalVariable real KFm;                     // Value of the function KF(theta) for Theta=thetaFm
+@LocalVariable real KGm;                     // Value of the function KG(theta) for Theta=thetaGm
+@LocalVariable stress aG;                    // at*tan(phi)/tan(psi) (in the plastic flow function)
+@LocalVariable Stensor4 Ce;                  // Elastic stiffness tensor
+@LocalVariable stress lambda;                // First Lame modulus
+@LocalVariable stress mu;                    // Shear modulus
+@LocalVariable stress ks;                    // Bulk modulus
 
 // >>>>>>>>>>>>>>>>>
 // 3. State Variable
@@ -98,13 +99,9 @@ inst.setEntryName("Time");
 // 5. Init. local variables
 // <<<<<<<<<<<<<<<<<<<<<<<<
 
-@Includes{
-	#include"TFEL/Material/Lame.hxx"
-}
-
 @InitLocalVariables{
-	using namespace tfel::material::lame;
 	local_zero_tolerance=real(1e-12);
+	slocal_zero_tolerance=young*local_zero_tolerance;
 	// >>> Convert the FrictionAngle and the DilationAngle to radians
 	pi=4.*atan(1.);
 	phir=phi*pi/180.;
@@ -139,7 +136,7 @@ inst.setEntryName("Time");
 
 	// >>> 6.2 Compute the invariants of sigel
 	const StressStensor sdel=deviator(sigel);
-	const stress J2el=.5*(sdel|sdel);
+	const real J2el=.5*(sdel|sdel);
 	const stress I1el=trace(sigel);
 
 	// >>> 6.3 Plastic MC criterion - condition for plasticity
@@ -167,7 +164,7 @@ inst.setEntryName("Time");
 
 		// >>>>>> 8.1.1 Compute the invariants of sig
 		const StressStensor sd=deviator(sig);
-		const stress J2=.5*(sd|sd);
+		const real J2=.5*(sd|sd);
 		const stress I1=trace(sig);
 		
 		// >>>>>> 8.1.2 Compute the plastic criterion

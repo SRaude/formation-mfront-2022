@@ -94,10 +94,6 @@ inst.setEntryName("Time");
 // 5. Init. local variables
 // <<<<<<<<<<<<<<<<<<<<<<<<
 
-@Includes{
-	#include"TFEL/Material/Lame.hxx"
-}
-
 @InitLocalVariables{
 	local_zero_tolerance=real(1e-12);
 	slocal_zero_tolerance=young*local_zero_tolerance;
