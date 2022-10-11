@@ -34,9 +34,6 @@
 #include"TFEL/Math/ST2toST2/ST2toST2View.hxx"
 #include"TFEL/Material/ModellingHypothesis.hxx"
 
-#line 98 "MCBigoniMini.mfront"
-#include"TFEL/Material/Lame.hxx"
-
 #include"MFront/Aster/Aster.hxx"
 
 namespace tfel{

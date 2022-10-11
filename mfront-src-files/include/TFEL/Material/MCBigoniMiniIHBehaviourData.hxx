@@ -34,9 +34,6 @@
 #include"TFEL/Math/ST2toST2/ST2toST2View.hxx"
 #include"TFEL/Material/ModellingHypothesis.hxx"
 
-#line 100 "MCBigoniMiniIH.mfront"
-#include"TFEL/Material/Lame.hxx"
-
 #include"MFront/Aster/Aster.hxx"
 
 namespace tfel{
@@ -135,17 +132,17 @@ real at;
 real hc;
 
 StrainStensor eel;
-#line 76 "MCBigoniMiniIH.mfront"
-strain lam;
 #line 77 "MCBigoniMiniIH.mfront"
+strain lam;
+#line 78 "MCBigoniMiniIH.mfront"
 strain gap;
-#line 85 "MCBigoniMiniIH.mfront"
-real niter;
 #line 86 "MCBigoniMiniIH.mfront"
-real ip;
+real niter;
 #line 87 "MCBigoniMiniIH.mfront"
-strain evp;
+real ip;
 #line 88 "MCBigoniMiniIH.mfront"
+strain evp;
+#line 89 "MCBigoniMiniIH.mfront"
 real inst;
 temperature T;
 

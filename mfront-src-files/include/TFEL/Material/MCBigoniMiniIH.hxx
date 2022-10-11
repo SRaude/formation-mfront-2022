@@ -55,9 +55,6 @@
 #include"TFEL/Math/Stensor/StensorFromTinyMatrixRowView2.hxx"
 #include"TFEL/Math/Vector/TinyVectorOfStensorFromTinyVectorView.hxx"
 #include"TFEL/Math/Vector/TinyVectorOfStensorFromTinyVectorViewIO.hxx"
-#line 100 "MCBigoniMiniIH.mfront"
-#include"TFEL/Material/Lame.hxx"
-
 #include"MFront/Aster/Aster.hxx"
 
 namespace tfel{
@@ -208,9 +205,9 @@ private :
 
 
 typename tfel::math::StensorFromTinyVectorView<N,2+StensorSize,0,real>::type deel;
-#line 76 "MCBigoniMiniIH.mfront"
-real& dlam;
 #line 77 "MCBigoniMiniIH.mfront"
+real& dlam;
+#line 78 "MCBigoniMiniIH.mfront"
 real& dgap;
 
 #line 57 "MCBigoniMiniIH.mfront"
@@ -218,28 +215,30 @@ bool b;
 #line 58 "MCBigoniMiniIH.mfront"
 real local_zero_tolerance;
 #line 59 "MCBigoniMiniIH.mfront"
-real pi;
+stress slocal_zero_tolerance;
 #line 60 "MCBigoniMiniIH.mfront"
-real phir;
+real pi;
 #line 61 "MCBigoniMiniIH.mfront"
-real psir;
+real phir;
 #line 62 "MCBigoniMiniIH.mfront"
-real thetaFm;
+real psir;
 #line 63 "MCBigoniMiniIH.mfront"
-real thetaGm;
+real thetaFm;
 #line 64 "MCBigoniMiniIH.mfront"
-real KFm;
+real thetaGm;
 #line 65 "MCBigoniMiniIH.mfront"
-real KGm;
+real KFm;
 #line 66 "MCBigoniMiniIH.mfront"
-stress aG;
+real KGm;
 #line 67 "MCBigoniMiniIH.mfront"
-Stensor4 Ce;
+stress aG;
 #line 68 "MCBigoniMiniIH.mfront"
-stress lambda;
+Stensor4 Ce;
 #line 69 "MCBigoniMiniIH.mfront"
-stress mu;
+stress lambda;
 #line 70 "MCBigoniMiniIH.mfront"
+stress mu;
+#line 71 "MCBigoniMiniIH.mfront"
 stress ks;
 
 real theta;
@@ -357,7 +356,7 @@ void computeThermodynamicForces(){
 using namespace std;
 using namespace tfel::math;
 using std::vector;
-#line 154 "MCBigoniMiniIH.mfront"
+#line 151 "MCBigoniMiniIH.mfront"
 this->sig=this->lambda*trace((this->eel+(this->theta)*(this->deel)))*StrainStensor::Id()+2.*this->mu*(this->eel+(this->theta)*(this->deel));
 } // end of MCBigoniMiniIH::computeThermodynamicForces
 
@@ -365,7 +364,7 @@ void computeFinalThermodynamicForces(){
 using namespace std;
 using namespace tfel::math;
 using std::vector;
-#line 154 "MCBigoniMiniIH.mfront"
+#line 151 "MCBigoniMiniIH.mfront"
 this->sig=this->lambda*trace(this->eel)*StrainStensor::Id()+2.*this->mu*this->eel;
 } // end of MCBigoniMiniIH::computeFinalThermodynamicForces
 
@@ -390,21 +389,21 @@ this->gap += this->dgap;
 void updateAuxiliaryStateVariables(){
 using namespace std;
 using namespace tfel::math;
-#line 235 "MCBigoniMiniIH.mfront"
+#line 232 "MCBigoniMiniIH.mfront"
 this->inst+=this->dt;
-#line 236 "MCBigoniMiniIH.mfront"
+#line 233 "MCBigoniMiniIH.mfront"
 this->niter=iter;
-#line 237 "MCBigoniMiniIH.mfront"
+#line 234 "MCBigoniMiniIH.mfront"
 if (this->dlam>0) {
-#line 238 "MCBigoniMiniIH.mfront"
+#line 235 "MCBigoniMiniIH.mfront"
 this->ip=1;
-#line 239 "MCBigoniMiniIH.mfront"
+#line 236 "MCBigoniMiniIH.mfront"
 this->evp+=this->dlam*sin(this->psir);
-#line 240 "MCBigoniMiniIH.mfront"
+#line 237 "MCBigoniMiniIH.mfront"
 } else {
-#line 241 "MCBigoniMiniIH.mfront"
+#line 238 "MCBigoniMiniIH.mfront"
 this->ip=0;
-#line 242 "MCBigoniMiniIH.mfront"
+#line 239 "MCBigoniMiniIH.mfront"
 }
 }
 
@@ -487,41 +486,41 @@ void initialize(){
 using namespace std;
 using namespace tfel::math;
 using std::vector;
-#line 104 "MCBigoniMiniIH.mfront"
-using namespace tfel::material::lame;
-#line 105 "MCBigoniMiniIH.mfront"
+#line 101 "MCBigoniMiniIH.mfront"
 this->local_zero_tolerance=real(1e-12);
-#line 107 "MCBigoniMiniIH.mfront"
+#line 102 "MCBigoniMiniIH.mfront"
+this->slocal_zero_tolerance=this->young*this->local_zero_tolerance;
+#line 104 "MCBigoniMiniIH.mfront"
 this->pi=4.*atan(1.);
-#line 108 "MCBigoniMiniIH.mfront"
+#line 105 "MCBigoniMiniIH.mfront"
 this->phir=this->phi*this->pi/180.;
-#line 109 "MCBigoniMiniIH.mfront"
+#line 106 "MCBigoniMiniIH.mfront"
 this->psir=this->psi*this->pi/180.;
-#line 111 "MCBigoniMiniIH.mfront"
+#line 108 "MCBigoniMiniIH.mfront"
 this->thetaFm=atan(-sin(this->phir)/sqrt(3.));
-#line 112 "MCBigoniMiniIH.mfront"
+#line 109 "MCBigoniMiniIH.mfront"
 this->thetaGm=atan(-sin(this->psir)/sqrt(3.));
-#line 113 "MCBigoniMiniIH.mfront"
+#line 110 "MCBigoniMiniIH.mfront"
 this->KFm=(cos(this->thetaFm)-sin(this->phir)*sin(this->thetaFm)/sqrt(3.));
-#line 114 "MCBigoniMiniIH.mfront"
+#line 111 "MCBigoniMiniIH.mfront"
 this->KGm=(cos(this->thetaGm)-sin(this->psir)*sin(this->thetaGm)/sqrt(3.));
-#line 116 "MCBigoniMiniIH.mfront"
+#line 113 "MCBigoniMiniIH.mfront"
 this->aG=this->at*tan(this->phir)/tan(this->psir);
-#line 118 "MCBigoniMiniIH.mfront"
+#line 115 "MCBigoniMiniIH.mfront"
 this->lambda=computeLambda(this->young,this->nu);
-#line 119 "MCBigoniMiniIH.mfront"
+#line 116 "MCBigoniMiniIH.mfront"
 this->mu=computeMu(this->young,this->nu);
-#line 120 "MCBigoniMiniIH.mfront"
+#line 117 "MCBigoniMiniIH.mfront"
 this->ks=this->lambda+2.*this->mu/3.;
-#line 121 "MCBigoniMiniIH.mfront"
+#line 118 "MCBigoniMiniIH.mfront"
 this->Ce=3.*this->ks*Stensor4::J()+2.*this->mu*Stensor4::K();
-#line 123 "MCBigoniMiniIH.mfront"
+#line 120 "MCBigoniMiniIH.mfront"
 if (this->inst==real(0) && this->lam==real(0)) {
-#line 124 "MCBigoniMiniIH.mfront"
+#line 121 "MCBigoniMiniIH.mfront"
 const Stensor4 Se=invert(this->Ce);
-#line 125 "MCBigoniMiniIH.mfront"
+#line 122 "MCBigoniMiniIH.mfront"
 this->eel=(Se*this->sig);
-#line 126 "MCBigoniMiniIH.mfront"
+#line 123 "MCBigoniMiniIH.mfront"
 }
 }
 
@@ -574,17 +573,17 @@ using namespace std;
 using namespace tfel::math;
 tfel::raise_if(smflag!=MechanicalBehaviour<MechanicalBehaviourBase::STANDARDSTRAINBASEDBEHAVIOUR,hypothesis,Type,false>::STANDARDTANGENTOPERATOR,
 "invalid tangent operator flag");
-#line 136 "MCBigoniMiniIH.mfront"
+#line 133 "MCBigoniMiniIH.mfront"
 StressStensor sigel(this->lambda*trace(this->eel+this->deto)*Stensor::Id()+2.*this->mu*(this->eel+this->deto));
-#line 139 "MCBigoniMiniIH.mfront"
+#line 136 "MCBigoniMiniIH.mfront"
 const StressStensor sdel=deviator(sigel);
-#line 140 "MCBigoniMiniIH.mfront"
-const stress J2el=.5*(sdel|sdel);
-#line 141 "MCBigoniMiniIH.mfront"
+#line 137 "MCBigoniMiniIH.mfront"
+const real J2el=.5*(sdel|sdel);
+#line 138 "MCBigoniMiniIH.mfront"
 const stress I1el=trace(sigel);
-#line 144 "MCBigoniMiniIH.mfront"
+#line 141 "MCBigoniMiniIH.mfront"
 const stress RFel=sqrt(J2el*this->KFm*this->KFm+this->at*this->at*sin(this->phir)*sin(this->phir));
-#line 145 "MCBigoniMiniIH.mfront"
+#line 142 "MCBigoniMiniIH.mfront"
 this->b=RFel+I1el*sin(this->phir)/3.-this->coh*(1.+this->hc*this->gap)*cos(this->phir)>real(0);
 auto error = real{};
 bool converged=false;
@@ -686,73 +685,73 @@ this->jacobian(idx,idx)= real(1);
 }
 // setting f values to zeros
 this->fzeros = this->zeros;
-#line 164 "MCBigoniMiniIH.mfront"
+#line 161 "MCBigoniMiniIH.mfront"
 if ((this->b)){
-#line 167 "MCBigoniMiniIH.mfront"
+#line 164 "MCBigoniMiniIH.mfront"
 const StressStensor sd=deviator((this->sig));
-#line 168 "MCBigoniMiniIH.mfront"
-const stress J2=.5*(sd|sd);
-#line 169 "MCBigoniMiniIH.mfront"
+#line 165 "MCBigoniMiniIH.mfront"
+const real J2=.5*(sd|sd);
+#line 166 "MCBigoniMiniIH.mfront"
 const stress I1=trace((this->sig));
-#line 172 "MCBigoniMiniIH.mfront"
+#line 169 "MCBigoniMiniIH.mfront"
 const stress RF=sqrt(J2*(this->KFm)*(this->KFm)+(this->at)*(this->at)*sin((this->phir))*sin((this->phir)));
-#line 173 "MCBigoniMiniIH.mfront"
+#line 170 "MCBigoniMiniIH.mfront"
 const stress RG=sqrt(J2*(this->KGm)*(this->KGm)+(this->aG)*(this->aG)*sin((this->psir))*sin((this->psir)));
-#line 174 "MCBigoniMiniIH.mfront"
+#line 171 "MCBigoniMiniIH.mfront"
 const stress F=RF+I1*sin((this->phir))/3.-(this->coh)*(1.+(this->hc)*((this->gap)+(this->dgap)))*cos((this->phir));
-#line 177 "MCBigoniMiniIH.mfront"
+#line 174 "MCBigoniMiniIH.mfront"
 const real dG_dI1=sin((this->psir))/3.;
-#line 178 "MCBigoniMiniIH.mfront"
-const real dG_dJ2=.5*(this->KGm)*(this->KGm)/max(RG,(this->local_zero_tolerance));
-#line 179 "MCBigoniMiniIH.mfront"
+#line 175 "MCBigoniMiniIH.mfront"
+const real dG_dJ2=.5*(this->KGm)*(this->KGm)/max(RG,(this->slocal_zero_tolerance));
+#line 176 "MCBigoniMiniIH.mfront"
 const Stensor nG=dG_dI1*Stensor::Id()+dG_dJ2*sd;
-#line 182 "MCBigoniMiniIH.mfront"
+#line 179 "MCBigoniMiniIH.mfront"
 feel=(this->deel)-(this->deto)+(this->dlam)*nG;
-#line 183 "MCBigoniMiniIH.mfront"
+#line 180 "MCBigoniMiniIH.mfront"
 flam=F/(this->young);
-#line 184 "MCBigoniMiniIH.mfront"
+#line 181 "MCBigoniMiniIH.mfront"
 fgap=(this->dgap)-(this->dlam)*sqrt(2.*deviator(nG)|deviator(nG)/3.);
-#line 192 "MCBigoniMiniIH.mfront"
+#line 189 "MCBigoniMiniIH.mfront"
 const real dG_ddJ2=-.5*(this->KGm)*(this->KGm)*dG_dJ2/max(RG,(this->local_zero_tolerance))/max(RG,(this->local_zero_tolerance));
-#line 193 "MCBigoniMiniIH.mfront"
+#line 190 "MCBigoniMiniIH.mfront"
 const Stensor4 dnG_dsig=dG_ddJ2*(sd^sd)+dG_dJ2*Stensor4::K();
-#line 195 "MCBigoniMiniIH.mfront"
+#line 192 "MCBigoniMiniIH.mfront"
 const real dF_dI1=sin((this->phir))/3.;
-#line 196 "MCBigoniMiniIH.mfront"
-const real dF_dJ2=.5*(this->KFm)*(this->KFm)/max(RF,(this->local_zero_tolerance));
-#line 197 "MCBigoniMiniIH.mfront"
+#line 193 "MCBigoniMiniIH.mfront"
+const real dF_dJ2=.5*(this->KFm)*(this->KFm)/max(RF,(this->slocal_zero_tolerance));
+#line 194 "MCBigoniMiniIH.mfront"
 const Stensor dF_dsig=dF_dI1*Stensor::Id()+dF_dJ2*sd;
-#line 199 "MCBigoniMiniIH.mfront"
+#line 196 "MCBigoniMiniIH.mfront"
 const real dF_ddgap=-(this->coh)*(this->hc)*cos((this->phir));
-#line 202 "MCBigoniMiniIH.mfront"
+#line 199 "MCBigoniMiniIH.mfront"
 dfeel_ddeel=Stensor4::Id()+(this->dlam)*(dnG_dsig*(this->Ce));
-#line 203 "MCBigoniMiniIH.mfront"
+#line 200 "MCBigoniMiniIH.mfront"
 dfeel_ddlam=nG;
-#line 204 "MCBigoniMiniIH.mfront"
+#line 201 "MCBigoniMiniIH.mfront"
 dfeel_ddgap=Stensor(real(0));
-#line 207 "MCBigoniMiniIH.mfront"
+#line 204 "MCBigoniMiniIH.mfront"
 dflam_ddeel=(dF_dsig|(this->Ce))/(this->young);
-#line 208 "MCBigoniMiniIH.mfront"
+#line 205 "MCBigoniMiniIH.mfront"
 dflam_ddlam=real(0);
-#line 209 "MCBigoniMiniIH.mfront"
+#line 206 "MCBigoniMiniIH.mfront"
 dflam_ddgap=dF_ddgap/(this->young);
-#line 212 "MCBigoniMiniIH.mfront"
+#line 209 "MCBigoniMiniIH.mfront"
 dfgap_ddeel=-(this->dlam)*sqrt(2./3.)*((deviator(nG)|dnG_dsig)|(this->Ce));
-#line 213 "MCBigoniMiniIH.mfront"
+#line 210 "MCBigoniMiniIH.mfront"
 dfgap_ddlam=-sqrt(2.*deviator(nG)|deviator(nG)/3.);
-#line 214 "MCBigoniMiniIH.mfront"
+#line 211 "MCBigoniMiniIH.mfront"
 dfgap_ddgap=real(1);
-#line 218 "MCBigoniMiniIH.mfront"
+#line 215 "MCBigoniMiniIH.mfront"
 }
-#line 221 "MCBigoniMiniIH.mfront"
+#line 218 "MCBigoniMiniIH.mfront"
 else {
-#line 223 "MCBigoniMiniIH.mfront"
+#line 220 "MCBigoniMiniIH.mfront"
 feel=(this->deel)-(this->deto);
-#line 224 "MCBigoniMiniIH.mfront"
+#line 221 "MCBigoniMiniIH.mfront"
 flam=(this->dlam);
-#line 225 "MCBigoniMiniIH.mfront"
+#line 222 "MCBigoniMiniIH.mfront"
 fgap=(this->dgap);
-#line 227 "MCBigoniMiniIH.mfront"
+#line 224 "MCBigoniMiniIH.mfront"
 }
 static_cast<void>(dfeel_ddeel); /* suppress potential warnings */
 static_cast<void>(dfeel_ddlam); /* suppress potential warnings */
@@ -826,27 +825,27 @@ MCBigoniMiniIH& behaviour;
 const tfel::math::TinyPermutation<2+StensorSize>& permutation;
 }; // end of struct GetPartialJacobianInvert
 GetPartialJacobianInvert getPartialJacobianInvert(*this, jacobian_permutation);
-#line 251 "MCBigoniMiniIH.mfront"
+#line 248 "MCBigoniMiniIH.mfront"
 if((smt==ELASTIC)||(smt==SECANTOPERATOR)) {
-#line 252 "MCBigoniMiniIH.mfront"
+#line 249 "MCBigoniMiniIH.mfront"
 computeElasticStiffness<N,Type>::exe((this->Dt),(this->lambda),(this->mu));
-#line 253 "MCBigoniMiniIH.mfront"
+#line 250 "MCBigoniMiniIH.mfront"
 }
-#line 254 "MCBigoniMiniIH.mfront"
+#line 251 "MCBigoniMiniIH.mfront"
 else if (smt==CONSISTENTTANGENTOPERATOR) {
-#line 255 "MCBigoniMiniIH.mfront"
+#line 252 "MCBigoniMiniIH.mfront"
 Stensor4 Je;
-#line 256 "MCBigoniMiniIH.mfront"
+#line 253 "MCBigoniMiniIH.mfront"
 getPartialJacobianInvert(Je);
-#line 257 "MCBigoniMiniIH.mfront"
+#line 254 "MCBigoniMiniIH.mfront"
 (this->Dt)=(this->Ce)*Je;
-#line 258 "MCBigoniMiniIH.mfront"
+#line 255 "MCBigoniMiniIH.mfront"
 }
-#line 259 "MCBigoniMiniIH.mfront"
+#line 256 "MCBigoniMiniIH.mfront"
 else {
-#line 260 "MCBigoniMiniIH.mfront"
+#line 257 "MCBigoniMiniIH.mfront"
 return false;
-#line 261 "MCBigoniMiniIH.mfront"
+#line 258 "MCBigoniMiniIH.mfront"
 }
 return true;
 }

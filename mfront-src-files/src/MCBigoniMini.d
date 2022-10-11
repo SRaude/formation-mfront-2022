@@ -363,7 +363,6 @@ MCBigoniMini.o MCBigoniMini.d : MCBigoniMini.cxx /usr/include/stdc-predef.h \
  /usr/include/c++/6/vector /usr/include/c++/6/bits/stl_uninitialized.h \
  /usr/include/c++/6/bits/stl_vector.h \
  /usr/include/c++/6/bits/stl_bvector.h /usr/include/c++/6/bits/vector.tcc \
- /opt/salome_meca/Salome-V2021-s9/prerequisites/Mfront-TFEL340/include/TFEL-3.4.0/TFEL/Material/Lame.hxx \
  /opt/salome_meca/Salome-V2021-s9/prerequisites/Mfront-TFEL340/include/TFEL-3.4.0/MFront/Aster/Aster.hxx \
  ../include/TFEL/Material/MCBigoniMiniIntegrationData.hxx \
  ../include/TFEL/Material/MCBigoniMini.hxx \
@@ -387,6 +386,7 @@ MCBigoniMini.o MCBigoniMini.d : MCBigoniMini.cxx /usr/include/stdc-predef.h \
  /opt/salome_meca/Salome-V2021-s9/prerequisites/Mfront-TFEL340/include/TFEL-3.4.0/TFEL/Math/Quantity/qtOperations.ixx \
  /opt/salome_meca/Salome-V2021-s9/prerequisites/Mfront-TFEL340/include/TFEL-3.4.0/TFEL/Material/IsotropicPlasticity.hxx \
  /opt/salome_meca/Salome-V2021-s9/prerequisites/Mfront-TFEL340/include/TFEL-3.4.0/TFEL/Material/IsotropicPlasticity.ixx \
+ /opt/salome_meca/Salome-V2021-s9/prerequisites/Mfront-TFEL340/include/TFEL-3.4.0/TFEL/Material/Lame.hxx \
  /opt/salome_meca/Salome-V2021-s9/prerequisites/Mfront-TFEL340/include/TFEL-3.4.0/TFEL/Material/Hosford1972YieldCriterion.hxx \
  /opt/salome_meca/Salome-V2021-s9/prerequisites/Mfront-TFEL340/include/TFEL-3.4.0/TFEL/Material/Hosford1972YieldCriterion.ixx \
  /opt/salome_meca/Salome-V2021-s9/prerequisites/Mfront-TFEL340/include/TFEL-3.4.0/TFEL/Math/Vector/tvectorIO.hxx \
