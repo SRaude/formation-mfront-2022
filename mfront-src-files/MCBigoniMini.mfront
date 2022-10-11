@@ -98,8 +98,8 @@ inst.setEntryName("Time");
 }
 
 @InitLocalVariables{
-	using namespace tfel::material::lame;
 	local_zero_tolerance=real(1e-12);
+	slocal_zero_tolerance=young*local_zero_tolerance;
 	// >>> Convert the FrictionAngle and the DilationAngle to radians
 	pi=4.*atan(1.);
 	phir=phi*pi/180.;
@@ -134,7 +134,7 @@ inst.setEntryName("Time");
 
 	// >>> 6.2 Compute the invariants of sigel
 	const StressStensor sdel=deviator(sigel);
-	const stress J2el=.5*(sdel|sdel);
+	const real J2el=.5*(sdel|sdel);
 	const stress I1el=trace(sigel);
 
 	// >>> 6.3 Plastic MC criterion - condition for plasticity
@@ -162,7 +162,7 @@ inst.setEntryName("Time");
 
 		// >>>>>> 8.1.1 Compute the invariants of sig
 		const StressStensor sd=deviator(sig);
-		const stress J2=.5*(sd|sd);
+		const real J2=.5*(sd|sd);
 		const stress I1=trace(sig);
 		
 		// >>>>>> 8.1.2 Compute the plastic criterion
@@ -172,7 +172,7 @@ inst.setEntryName("Time");
 
 		// >>>>>> 8.1.3 Compute the plastic flow direction
 		const real dG_dI1=sin(psir)/3.;
-		const real dG_dJ2=.5*KGm*KGm/max(RG,local_zero_tolerance);
+		const real dG_dJ2=.5*KGm*KGm/max(RG,slocal_zero_tolerance);
 		const Stensor nG=dG_dI1*Stensor::Id()+dG_dJ2*sd;
 		nGtmp=nG;
 
@@ -186,11 +186,11 @@ inst.setEntryName("Time");
 
 		// >>>>>>>>> 8.1.5.1 Some tools
 		// >>>>>>>>>>>> Compute dnG_dsig
-		const real dG_ddJ2=-.5*KGm*KGm*dG_dJ2/max(RG,local_zero_tolerance)/max(RG,local_zero_tolerance);
+		const real dG_ddJ2=-.5*KGm*KGm*dG_dJ2/max(RG,local_zero_tolerance)/max(RG,slocal_zero_tolerance);
 		const Stensor4 dnG_dsig=dG_ddJ2*(sd^sd)+dG_dJ2*Stensor4::K();
 		// >>>>>>>>>>>> Compute dFp_dsig
 		const real dF_dI1=sin(phir)/3.;
-		const real dF_dJ2=.5*KFm*KFm/max(RF,local_zero_tolerance);
+		const real dF_dJ2=.5*KFm*KFm/max(RF,slocal_zero_tolerance);
 		const Stensor dF_dsig=dF_dI1*Stensor::Id()+dF_dJ2*sd;
 		
 		// >>>>>>>>> 8.1.5.2 First line
