@@ -34,7 +34,7 @@
 #include"TFEL/Math/ST2toST2/ST2toST2View.hxx"
 #include"TFEL/Material/ModellingHypothesis.hxx"
 
-#line 97 "MCBigoniMini.mfront"
+#line 98 "MCBigoniMini.mfront"
 #include"TFEL/Material/Lame.hxx"
 
 #include"MFront/Aster/Aster.hxx"
@@ -133,17 +133,17 @@ stress coh;
 real at;
 
 StrainStensor eel;
-#line 73 "MCBigoniMini.mfront"
+#line 74 "MCBigoniMini.mfront"
 real lam;
-#line 80 "MCBigoniMini.mfront"
-real niter;
 #line 81 "MCBigoniMini.mfront"
-real ip;
+real niter;
 #line 82 "MCBigoniMini.mfront"
-strain evp;
+real ip;
 #line 83 "MCBigoniMini.mfront"
-strain gap;
+strain evp;
 #line 84 "MCBigoniMini.mfront"
+strain gap;
+#line 85 "MCBigoniMini.mfront"
 real inst;
 temperature T;
 
